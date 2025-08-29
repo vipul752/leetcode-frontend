@@ -1,0 +1,10 @@
+@import "tailwindcss";
+@plugin "daisyui";
+
+html,
+body,
+#root {
+  height: 100%;
+  background-color: #000000; /* black background */
+  color: #e5e7eb; /* light gray text */
+}
