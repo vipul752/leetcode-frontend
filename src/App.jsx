@@ -6,6 +6,10 @@ import { checkAuth } from "./authSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import AdminPanel from "./pages/AdminPanel";
+import ProblemPage from "./pages/ProblemPage";
+import Admin from "./pages/Admin";
+import AdminPanelDelete from "./pages/AdminPanelDelete";
+import AdminPanelUpdate from "./pages/AdminPanelUpdate";
 
 function App() {
   const { isAuthenticated, loading } = useSelector((state) => state.auth);
@@ -41,7 +45,21 @@ function App() {
           path="/signup"
           element={isAuthenticated ? <Navigate to="/" /> : <SignUp />}
         />
-        <Route path="/admin" element={<AdminPanel />} />
+        {/* <Route
+          path="/admin"
+          element={
+            isAuthenticated && user?.role == "admin" ? (
+              <AdminPanel />
+            ) : (
+              <Navigate to="/" />
+            )
+          }
+        /> */}
+        <Route path="/admin" element={<Admin />} />
+        <Route path="/admin/create" element={<AdminPanel />} />
+        <Route path="/problem/:problemId" element={<ProblemPage />} />
+        <Route path="/admin/delete" element={<AdminPanelDelete />} />
+        <Route path="/admin/update" element={<AdminPanelUpdate />} />
       </Routes>
     </div>
   );
