@@ -97,7 +97,7 @@ const AdminPanel = () => {
     } catch (error) {
       alert(
         `Error creating problem: ${
-          error.response?.data?.message || error.message
+          error.response?.data?.message || error.message || console.error(error)
         }`
       );
     }

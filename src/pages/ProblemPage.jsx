@@ -6,7 +6,7 @@ import ChatAI from "../components/ChatAI.jsx";
 
 const ProblemPage = () => {
   const [problem, setProblem] = useState(null);
-  const [selectedLanguage, setSelectedLanguage] = useState("cpp");
+  const [selectedLanguage, setSelectedLanguage] = useState("c++");
   const [code, setCode] = useState("");
   const [runLoading, setRunLoading] = useState(false);
   const [submitLoading, setSubmitLoading] = useState(false);
@@ -290,159 +290,174 @@ const ProblemPage = () => {
       <div className="flex min-h-96 ">
         {/* Left Panel - Problem Description */}
         <div className="w-1/2 border-r border-slate-800 flex flex-col bg-slate-950/30">
-          {/* Left Tabs */}
-          <div className="bg-slate-900/30 border-b border-slate-800">
-            <div className="flex">
-              {[
-                { key: "description", label: "Description", icon: "📝" },
-                { key: "solutions", label: "Solutions", icon: "💡" },
-                { key: "editorial", label: "Editorial", icon: "📖" },
-                { key: "submissions", label: "Submissions", icon: "📊" },
-                { key: "chatAI", label: "Chat AI", icon: "🤖" },
-              ].map((tab) => (
-                <button
-                  key={tab.key}
-                  onClick={() => setActiveLeftTab(tab.key)}
-                  className={`px-4 py-3 text-sm font-medium border-b-2 transition-all duration-200 flex items-center space-x-2 ${
+    
+                <div className="bg-slate-900/30 border-b border-slate-800">
+                <div className="flex">
+                  {[
+                  { key: "description", label: "Description", icon: "📝" },
+                  { key: "solutions", label: "Solutions", icon: "💡" },
+                  { key: "editorial", label: "Editorial", icon: "📖" },
+                  { key: "submissions", label: "Submissions", icon: "📊" },
+                  { key: "chatAI", label: "Chat AI", icon: "🤖" },
+                  ].map((tab) => (
+                  <button
+                    key={tab.key}
+                    onClick={() => setActiveLeftTab(tab.key)}
+                    className={`px-4 py-3 text-sm font-medium border-b-2 transition-all duration-200 flex items-center space-x-2 ${
                     activeLeftTab === tab.key
                       ? "border-amber-500 text-amber-400 bg-amber-500/5"
                       : "border-transparent text-slate-400 hover:text-white hover:bg-slate-800/30"
-                  }`}
-                >
-                  <span>{tab.icon}</span>
-                  <span>{tab.label}</span>
-                </button>
-              ))}
-            </div>
-          </div>
+                    }`}
+                  >
+                    <span>{tab.icon}</span>
+                    <span>{tab.label}</span>
+                  </button>
+                  ))}
+                </div>
+                </div>
 
-          <div className="flex-1 overflow-y-auto">
-            {activeLeftTab === "description" && (
-              <div className="p-6 space-y-6">
-                {problem ? (
-                  <>
+                <div className="flex-1 overflow-y-auto">
+                {activeLeftTab === "description" && (
+                  <div className="p-6 space-y-6">
+                  {problem ? (
+                    <>
                     <div className="flex items-center space-x-4">
                       <h1 className="text-xl font-bold text-white">
-                        {problem?.title || `Problem ${problemId}`}
+                      {problem?.title || `Problem ${problemId}`}
                       </h1>
                       {problem?.difficulty && (
-                        <span
-                          className={`px-3 py-1 text-xs font-semibold rounded-full border ${getDifficultyBadgeColor(
-                            problem.difficulty
-                          )}`}
-                        >
-                          {problem.difficulty}
-                        </span>
+                      <span
+                        className={`px-3 py-1 text-xs font-semibold rounded-full border ${getDifficultyBadgeColor(
+                        problem.difficulty
+                        )}`}
+                      >
+                        {problem.difficulty}
+                      </span>
                       )}
                     </div>
 
+                    {/* Problem Description */}
+                    {problem.description && (
+                      <div className="bg-slate-900/50 rounded-xl p-5 border border-slate-800">
+                      <h3 className="text-lg font-bold mb-4 text-white flex items-center">
+                        <span className="mr-2">📝</span>
+                        Problem Description
+                      </h3>
+                      <div className="prose prose-slate max-w-none">
+                        <p className="text-slate-300 leading-relaxed text-sm whitespace-pre-wrap">
+                        {problem.description}
+                        </p>
+                      </div>
+                      </div>
+                    )}
+
                     {problem.visibleTestcase &&
                       problem.visibleTestcase.length > 0 && (
-                        <div>
-                          <h3 className="text-lg font-bold mb-4 text-white flex items-center">
-                            <span className="mr-2">✨</span>
-                            Examples
-                          </h3>
-                          <div className="space-y-4">
-                            {problem.visibleTestcase.map((testcase, index) => (
-                              <div
-                                key={index}
-                                className="bg-slate-900/50 rounded-xl p-5 border border-slate-800 hover:border-slate-700 transition-all duration-200"
-                              >
-                                <div className="mb-3">
-                                  <span className="text-sm font-semibold text-amber-400 bg-amber-500/10 px-2 py-1 rounded-full">
-                                    Example {index + 1}
-                                  </span>
-                                </div>
-                                <div className="space-y-3">
-                                  <div>
-                                    <span className="text-sm font-semibold text-slate-300 mb-1 block">
-                                      Input:
-                                    </span>
-                                    <pre className="bg-slate-950 p-3 rounded-lg text-sm overflow-x-auto text-emerald-400 border border-slate-800">
-                                      {testcase.input}
-                                    </pre>
-                                  </div>
-                                  <div>
-                                    <span className="text-sm font-semibold text-slate-300 mb-1 block">
-                                      Output:
-                                    </span>
-                                    <pre className="bg-slate-950 p-3 rounded-lg text-sm overflow-x-auto text-blue-400 border border-slate-800">
-                                      {testcase.output}
-                                    </pre>
-                                  </div>
-                                  {testcase.explanation && (
-                                    <div>
-                                      <span className="text-sm font-semibold text-slate-300 mb-1 block">
-                                        Explanation:
-                                      </span>
-                                      <p className="text-slate-300 text-sm bg-slate-800/30 p-3 rounded-lg">
-                                        {testcase.explanation}
-                                      </p>
-                                    </div>
-                                  )}
-                                </div>
-                              </div>
-                            ))}
+                      <div>
+                        <h3 className="text-lg font-bold mb-4 text-white flex items-center">
+                        <span className="mr-2">✨</span>
+                        Examples
+                        </h3>
+                        <div className="space-y-4">
+                        {problem.visibleTestcase.map((testcase, index) => (
+                          <div
+                          key={index}
+                          className="bg-slate-900/50 rounded-xl p-5 border border-slate-800 hover:border-slate-700 transition-all duration-200"
+                          >
+                          <div className="mb-3">
+                            <span className="text-sm font-semibold text-amber-400 bg-amber-500/10 px-2 py-1 rounded-full">
+                            Example {index + 1}
+                            </span>
                           </div>
+                          <div className="space-y-3">
+                            <div>
+                            <span className="text-sm font-semibold text-slate-300 mb-1 block">
+                              Input:
+                            </span>
+                            <pre className="bg-slate-950 p-3 rounded-lg text-sm overflow-x-auto text-emerald-400 border border-slate-800">
+                              {testcase.input}
+                            </pre>
+                            </div>
+                            <div>
+                            <span className="text-sm font-semibold text-slate-300 mb-1 block">
+                              Output:
+                            </span>
+                            <pre className="bg-slate-950 p-3 rounded-lg text-sm overflow-x-auto text-blue-400 border border-slate-800">
+                              {testcase.output}
+                            </pre>
+                            </div>
+                            {testcase.explanation && (
+                            <div>
+                              <span className="text-sm font-semibold text-slate-300 mb-1 block">
+                              Explanation:
+                              </span>
+                              <p className="text-slate-300 text-sm bg-slate-800/30 p-3 rounded-lg">
+                              {testcase.explanation}
+                              </p>
+                            </div>
+                            )}
+                          </div>
+                          </div>
+                        ))}
                         </div>
+                      </div>
                       )}
-                  </>
-                ) : (
-                  <div className="text-center py-12">
+                    </>
+                  ) : (
+                    <div className="text-center py-12">
                     <div className="text-6xl mb-4">❌</div>
                     <div className="text-slate-400 text-lg">
                       Problem not found
                     </div>
+                    </div>
+                  )}
                   </div>
                 )}
-              </div>
-            )}
 
-            {activeLeftTab === "solutions" && (
-              <div className="p-6">
-                <div className="flex items-center justify-between mb-6">
-                  <h3 className="text-xl font-bold text-white flex items-center">
+                {activeLeftTab === "solutions" && (
+                  <div className="p-6">
+                  <div className="flex items-center justify-between mb-6">
+                    <h3 className="text-xl font-bold text-white flex items-center">
                     <span className="mr-2">💡</span>
                     Reference Solutions
-                  </h3>
-                  <span className="text-sm text-slate-400 bg-slate-800/50 px-3 py-1 rounded-full">
+                    </h3>
+                    <span className="text-sm text-slate-400 bg-slate-800/50 px-3 py-1 rounded-full">
                     {problem?.referenceSolution?.length || 0} solution
                     {(problem?.referenceSolution?.length || 0) !== 1 ? "s" : ""}
-                  </span>
-                </div>
-
-                {initialLoading ? (
-                  <div className="flex justify-center py-12">
-                    <div className="animate-spin rounded-full h-8 w-8 border-2 border-slate-700 border-t-amber-500"></div>
+                    </span>
                   </div>
-                ) : problem?.referenceSolution?.length > 0 ? (
-                  <div className="space-y-4">
+
+                  {initialLoading ? (
+                    <div className="flex justify-center py-12">
+                    <div className="animate-spin rounded-full h-8 w-8 border-2 border-slate-700 border-t-amber-500"></div>
+                    </div>
+                  ) : problem?.referenceSolution?.length > 0 ? (
+                    <div className="space-y-4">
                     {problem.referenceSolution.map((solution, index) => (
                       <div
-                        key={index}
-                        className="bg-slate-900/50 rounded-xl p-5 border border-slate-800 hover:border-slate-700 transition-all duration-200 group"
+                      key={index}
+                      className="bg-slate-900/50 rounded-xl p-5 border border-slate-800 hover:border-slate-700 transition-all duration-200 group"
                       >
-                        <div className="flex items-center justify-between mb-4">
-                          <div className="flex items-center space-x-3">
-                            <span className="text-xl">
-                              {getLanguageIcon(solution.language)}
-                            </span>
-                            <div>
-                              <h4 className="font-semibold text-2xl mb-2 text-white">
-                                {solution.language}
-                              </h4>
-                              <p className="textarea-xs text-slate-400">
-                                Solution
-                              </p>
-                            </div>
-                          </div>
-                          <div className="flex items-center space-x-3">
-                            <span className="px-2 py-1 text-xs font-semibold rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20">
-                              Reference
-                            </span>
-                            <button
-                              onClick={() => {
+                      <div className="flex items-center justify-between mb-4">
+                        <div className="flex items-center space-x-3">
+                        <span className="text-xl">
+                          {getLanguageIcon(solution.language)}
+                        </span>
+                        <div>
+                          <h4 className="font-semibold text-2xl mb-2 text-white">
+                          {solution.language}
+                          </h4>
+                          <p className="textarea-xs text-slate-400">
+                          Solution
+                          </p>
+                        </div>
+                        </div>
+                        <div className="flex items-center space-x-3">
+                        <span className="px-2 py-1 text-xs font-semibold rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20">
+                          Reference
+                        </span>
+                        <button
+                          onClick={() => {
                                 setCode(solution.completeCode);
                                 const langMap = {
                                   cpp: "c++",
