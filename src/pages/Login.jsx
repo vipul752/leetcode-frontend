@@ -6,7 +6,6 @@ import { useNavigate } from "react-router";
 import { loginUser } from "../authSlice";
 import { useEffect, useState } from "react";
 
-// ✅ Login schema (no firstName needed)
 const loginSchema = z.object({
   email: z.string().email("Please enter a valid email"),
   password: z.string().min(8, "Password should be at least 8 characters"),
@@ -89,6 +88,15 @@ function Login() {
             Login
           </button>
         </form>
+
+        <div className="mt-6 text-center">
+          <p className="text-sm text-gray-400">
+            Don't have an account?{" "}
+            <a href="/signup" className="text-white font-semibold">
+              Sign up
+            </a>
+          </p>
+        </div>
       </div>
     </div>
   );

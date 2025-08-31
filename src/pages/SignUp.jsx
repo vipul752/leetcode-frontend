@@ -112,6 +112,14 @@ function SignUp() {
             Create an account
           </button>
         </form>
+        <div className="mt-6 text-center">
+          <p className="text-sm text-gray-400">
+            Already have an account?{" "}
+            <a href="/login" className="text-white font-semibold">
+              Log in
+            </a>
+          </p>
+        </div>
       </div>
     </div>
   );

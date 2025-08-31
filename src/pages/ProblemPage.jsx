@@ -2,10 +2,11 @@ import { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router";
 import axiosClient from "../utils/axiosClient";
 import Editor from "@monaco-editor/react";
+import ChatAI from "../components/ChatAI.jsx";
 
 const ProblemPage = () => {
   const [problem, setProblem] = useState(null);
-  const [selectedLanguage, setSelectedLanguage] = useState("c++");
+  const [selectedLanguage, setSelectedLanguage] = useState("cpp");
   const [code, setCode] = useState("");
   const [runLoading, setRunLoading] = useState(false);
   const [submitLoading, setSubmitLoading] = useState(false);
@@ -54,8 +55,8 @@ const ProblemPage = () => {
 
   const getLanguageForMonaco = (lang) => {
     switch (lang) {
-      case "c++":
-        return "cpp";
+      case "cpp":
+        return "c++";
       case "python":
         return "python";
       case "java":
@@ -63,7 +64,7 @@ const ProblemPage = () => {
       case "javascript":
         return "javascript";
       default:
-        return "c++";
+        return lang;
     }
   };
 
@@ -114,6 +115,13 @@ const ProblemPage = () => {
     fetchSubmissions();
   }, [problemId]);
 
+  const languageMap = {
+    cpp: "c++",
+    java: "java",
+    javascript: "javascript",
+    python: "python",
+  };
+
   useEffect(() => {
     const fetchProblem = async () => {
       setInitialLoading(true);
@@ -121,44 +129,27 @@ const ProblemPage = () => {
         const response = await axiosClient.get(
           `/problem/getProblem/${problemId}`
         );
+
+        const initialCode = response.data.startCode.find(
+          (sc) => sc.language === languageMap[selectedLanguage]
+        )?.initialCode;
+
         setProblem(response.data);
-
-        // Set initial code based on selected language
-        const languageMap = {
-          cpp: "c++",
-          python: "Python",
-          java: "Java",
-          javascript: "JavaScript",
-        };
-
-        const initialCode =
-          response.data.startCode?.find(
-            (sc) => sc.language === languageMap[selectedLanguage]
-          )?.initialCode || "// Start coding here...";
-
         setCode(initialCode);
-        setInitialLoading(false);
       } catch (error) {
         console.error("Error fetching problem:", error);
+      } finally {
         setInitialLoading(false);
       }
     };
     fetchProblem();
-  }, [problemId]);
+  }, [problemId, selectedLanguage]);
 
   useEffect(() => {
     if (problem) {
-      const languageMap = {
-        cpp: "c++",
-        python: "Python",
-        java: "Java",
-        javascript: "JavaScript",
-      };
-
-      const initialCode =
-        problem.startCode?.find(
-          (sc) => sc.language === languageMap[selectedLanguage]
-        )?.initialCode || "// Start coding here...";
+      const initialCode = problem.startCode?.find(
+        (sc) => sc.language === languageMap[selectedLanguage]
+      )?.initialCode;
 
       setCode(initialCode);
     }
@@ -171,7 +162,7 @@ const ProblemPage = () => {
   }, [activeLeftTab, problemId]);
 
   const handleEditorChange = (value) => {
-    setCode(value || "");
+    setCode(value);
   };
 
   const handleEditorDidMount = (editor) => {
@@ -292,11 +283,11 @@ const ProblemPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="h-full bg-black text-white">
       {/* Header */}
 
       {/* Main Content */}
-      <div className="flex h-[calc(100vh-80px)]">
+      <div className="flex min-h-96 ">
         {/* Left Panel - Problem Description */}
         <div className="w-1/2 border-r border-slate-800 flex flex-col bg-slate-950/30">
           {/* Left Tabs */}
@@ -307,6 +298,7 @@ const ProblemPage = () => {
                 { key: "solutions", label: "Solutions", icon: "💡" },
                 { key: "editorial", label: "Editorial", icon: "📖" },
                 { key: "submissions", label: "Submissions", icon: "📊" },
+                { key: "chatAI", label: "Chat AI", icon: "🤖" },
               ].map((tab) => (
                 <button
                   key={tab.key}
@@ -453,10 +445,10 @@ const ProblemPage = () => {
                               onClick={() => {
                                 setCode(solution.completeCode);
                                 const langMap = {
-                                  "c++": "c++",
-                                  Python: "python",
-                                  Java: "java",
-                                  JavaScript: "javascript",
+                                  cpp: "c++",
+                                  python: "python",
+                                  java: "java",
+                                  javascript: "javascript",
                                 };
                                 setSelectedLanguage(
                                   langMap[solution.language] || "cpp"
@@ -950,6 +942,44 @@ const ProblemPage = () => {
                 )}
               </div>
             )}
+
+            {activeLeftTab === "chatAI" && (
+              <div className="h-full flex flex-col bg-gradient-to-br from-gray-900 via-gray-800 to-black p-4">
+                {/* Header Section */}
+                <div className="text-center mb-6">
+                  <div className="relative inline-block mb-4">
+                    <div className="absolute inset-0 bg-gradient-to-r from-purple-600/20 to-blue-600/20 rounded-full blur-xl"></div>
+                  </div>
+                  <div className="">
+                    <h2 className="text-3xl font-bold bg-gradient-to-r from-purple-400 via-blue-400 to-cyan-400 bg-clip-text text-transparent">
+                      AI Chat Assistant
+                    </h2>
+
+                    <div className="flex items-center justify-center space-x-2 text-sm text-slate-500">
+                      <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                      <span>Ready to help with your coding questions</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Chat Component Container */}
+                <div className="flex-1 flex items-center justify-center">
+                  <div className="w-full max-w-5xl h-full min-h-[600px] relative">
+                    {/* Background decoration */}
+                    <div className="absolute inset-0 bg-gradient-to-r from-purple-900/10 to-blue-900/10 rounded-2xl"></div>
+                    <div className="absolute top-0 left-1/4 w-32 h-32 bg-purple-600/10 rounded-full blur-3xl"></div>
+                    <div className="absolute bottom-0 right-1/4 w-32 h-32 bg-blue-600/10 rounded-full blur-3xl"></div>
+
+                    {/* Chat Component */}
+                    <div className="relative z-10 h-full">
+                      <ChatAI problem={problem} />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Footer */}
+              </div>
+            )}
           </div>
         </div>
 
@@ -1005,7 +1035,7 @@ const ProblemPage = () => {
                       onChange={(e) => handleLanguageChange(e.target.value)}
                       className="bg-slate-800 text-white border border-slate-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent"
                     >
-                      <option value="c++"> C++</option>
+                      <option value="cpp"> C++</option>
                       <option value="python">Python</option>
                       <option value="java">Java</option>
                       <option value="javascript">JavaScript</option>
