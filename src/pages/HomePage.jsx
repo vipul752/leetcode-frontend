@@ -214,12 +214,11 @@ const HomePage = () => {
                 </button>
               )}
 
-              {user && user.role === 'admin' && (
+              {user && user.role === "admin" && (
                 <button
                   onClick={() => navigate("/admin")}
                   className="px-4 py-2 bg-slate-900 text-white rounded-xl font-medium transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-red-500/30 flex items-center space-x-2"
                 >
-                  
                   <span>Admin</span>
                 </button>
               )}
@@ -252,26 +251,65 @@ const HomePage = () => {
                 </button>
                 <div className="absolute right-0 mt-2 w-48 bg-gray-800/95 backdrop-blur-md border border-gray-700/50 rounded-xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
                   <div className="p-2">
-                    <button
-                      onClick={handleLogout}
-                      className="w-full text-left px-4 py-3 text-red-400 hover:bg-red-500/10 hover:text-red-300 rounded-lg transition-all duration-200 flex items-center space-x-2"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth={2}
-                        stroke="currentColor"
-                        className="w-4 h-4"
+                    <div className="space-y-1">
+                      <button
+                        onClick={() => navigate("/profile")}
+                        className="w-full text-left px-4 py-3 text-gray-300 hover:bg-purple-500/10 hover:text-purple-300 rounded-xl transition-all duration-200 flex items-center space-x-3 group/item"
                       >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9"
-                        />
-                      </svg>
-                      <span>Logout</span>
-                    </button>
+                        <div className="w-8 h-8 bg-gray-700/50 group-hover/item:bg-purple-500/20 rounded-lg flex items-center justify-center transition-colors duration-200">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            strokeWidth={2}
+                            stroke="currentColor"
+                            className="w-4 h-4"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"
+                            />
+                          </svg>
+                        </div>
+                        <div className="flex flex-col">
+                          <span className="font-medium">Profile</span>
+                          <span className="text-xs text-gray-500">
+                            View and edit profile
+                          </span>
+                        </div>
+                      </button>
+
+                      <div className="border-t border-gray-700/50 my-2"></div>
+
+                      <button
+                        onClick={handleLogout}
+                        className="w-full text-left px-4 py-3 text-red-400 hover:bg-red-500/10 hover:text-red-300 rounded-xl transition-all duration-200 flex items-center space-x-3 group/item"
+                      >
+                        <div className="w-8 h-8 bg-gray-700/50 group-hover/item:bg-red-500/20 rounded-lg flex items-center justify-center transition-colors duration-200">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            strokeWidth={2}
+                            stroke="currentColor"
+                            className="w-4 h-4"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9"
+                            />
+                          </svg>
+                        </div>
+                        <div className="flex flex-col">
+                          <span className="font-medium">Logout</span>
+                          <span className="text-xs text-gray-500">
+                            Sign out of your account
+                          </span>
+                        </div>
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>

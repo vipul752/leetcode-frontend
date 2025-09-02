@@ -11,6 +11,7 @@ import Admin from "./pages/Admin";
 import AdminPanelDelete from "./pages/AdminPanelDelete";
 import AdminPanelUpdate from "./pages/AdminPanelUpdate";
 import AdminVideo from "./pages/AdminVideo";
+import Profile from "./components/Profile";
 
 function App() {
   const { isAuthenticated, loading } = useSelector((state) => state.auth);
@@ -62,6 +63,7 @@ function App() {
         <Route path="/admin/delete" element={<AdminPanelDelete />} />
         <Route path="/admin/update" element={<AdminPanelUpdate />} />
         <Route path="/admin/video" element={<AdminVideo />} />
+        <Route path="/profile" element={<Profile />} />
       </Routes>
     </div>
   );
