@@ -33,9 +33,11 @@ const AdminPanelUpdate = () => {
     try {
       setUpdating(true);
       setError(null);
+      console.log(id);
 
       const response = await axiosClient.put(
-        `/problem/update/${id}`
+        `/problem/update/${id}`,
+        updatedData
       );
 
       setProblems(
@@ -295,7 +297,7 @@ const AdminPanelUpdate = () => {
                             {problem.title || "Untitled Problem"}
                           </h3>
                           <span className="ml-3 text-sm text-gray-500">
-                            ID: {problem.id}
+                            ID: {problem._id}
                           </span>
                         </div>
 
@@ -409,7 +411,7 @@ const AdminPanelUpdate = () => {
                 <EditForm
                   problem={editingProblem}
                   onSave={(updatedData) =>
-                    handleUpdate(editingProblem.id, updatedData)
+                    handleUpdate(editingProblem._id, updatedData)
                   }
                   onCancel={() => setEditingProblem(null)}
                   updating={updating}
@@ -428,7 +430,6 @@ const EditForm = ({ problem, onSave, onCancel, updating }) => {
     title: problem.title || "",
     difficulty: problem.difficulty || "Easy",
     tags: problem.tags || "",
-    status: problem.status || "draft",
     description: problem.description || "",
     solution: problem.solution || "",
   });

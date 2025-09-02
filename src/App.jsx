@@ -10,6 +10,7 @@ import ProblemPage from "./pages/ProblemPage";
 import Admin from "./pages/Admin";
 import AdminPanelDelete from "./pages/AdminPanelDelete";
 import AdminPanelUpdate from "./pages/AdminPanelUpdate";
+import AdminVideo from "./pages/AdminVideo";
 
 function App() {
   const { isAuthenticated, loading } = useSelector((state) => state.auth);
@@ -48,7 +49,7 @@ function App() {
         {/* <Route
           path="/admin"
           element={
-            isAuthenticated && user?.role == "admin" ? (
+            isAuthenticated && user.role == "admin" ? (
               <AdminPanel />
             ) : (
               <Navigate to="/" />
@@ -60,6 +61,7 @@ function App() {
         <Route path="/problem/:problemId" element={<ProblemPage />} />
         <Route path="/admin/delete" element={<AdminPanelDelete />} />
         <Route path="/admin/update" element={<AdminPanelUpdate />} />
+        <Route path="/admin/video" element={<AdminVideo />} />
       </Routes>
     </div>
   );

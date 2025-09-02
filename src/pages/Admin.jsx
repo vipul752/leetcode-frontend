@@ -80,6 +80,31 @@ const Admin = () => {
       glowColor: "shadow-red-500/50",
       route: "/admin/delete",
     },
+    {
+      id: "Video",
+      title: "Video Solutions",
+      description:
+        "Upload and manage video editorial solutions for coding problems",
+      icon: (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          strokeWidth={2}
+          stroke="currentColor"
+          className="w-8 h-8"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="m15.75 10.5 4.72-4.72a.75.75 0 0 1 1.28.53v11.38a.75.75 0 0 1-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25h-9A2.25 2.25 0 0 0 2.25 7.5v9a2.25 2.25 0 0 0 2.25 2.25Z"
+          />
+        </svg>
+      ),
+      gradient: "from-purple-500 to-indigo-600",
+      glowColor: "shadow-purple-500/30 hover:shadow-purple-400/40",
+      route: "/admin/video",
+    },
   ];
 
   return (

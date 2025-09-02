@@ -214,6 +214,16 @@ const HomePage = () => {
                 </button>
               )}
 
+              {user && user.role === 'admin' && (
+                <button
+                  onClick={() => navigate("/admin")}
+                  className="px-4 py-2 bg-slate-900 text-white rounded-xl font-medium transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-red-500/30 flex items-center space-x-2"
+                >
+                  
+                  <span>Admin</span>
+                </button>
+              )}
+
               {/* User Dropdown */}
               <div className="relative group">
                 <button className="flex items-center space-x-3 bg-gray-800/50 hover:bg-gray-800/80 rounded-xl px-4 py-2 border border-gray-700/50 hover:border-gray-600/50 transition-all duration-300">
