@@ -7,7 +7,7 @@ import Editorial from "../components/Editorial.jsx";
 
 const ProblemPage = () => {
   const [problem, setProblem] = useState(null);
-  const [selectedLanguage, setSelectedLanguage] = useState("c++");
+  const [selectedLanguage, setSelectedLanguage] = useState("java");
   const [code, setCode] = useState("");
   const [runLoading, setRunLoading] = useState(false);
   const [submitLoading, setSubmitLoading] = useState(false);

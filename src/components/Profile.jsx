@@ -44,7 +44,7 @@ function Profile() {
   const handleUpdateProfile = async (e) => {
     e.preventDefault();
     try {
-      const { data } = await axiosClient.put("/auth/updateProfile", editForm);
+      const { data } = await axiosClient.put("/user/updateProfile", editForm);
       setUserProfile(data.profile);
       setIsEditing(false);
     } catch (error) {
