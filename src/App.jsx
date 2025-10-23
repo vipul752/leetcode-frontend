@@ -12,6 +12,10 @@ import AdminPanelDelete from "./pages/AdminPanelDelete";
 import AdminPanelUpdate from "./pages/AdminPanelUpdate";
 import AdminVideo from "./pages/AdminVideo";
 import Profile from "./components/Profile";
+import ContestPage from "./pages/ContestPage";
+import ContestProblems from "./pages/ContestProblemPage";
+import Contests from "./pages/Contest";
+import MyContest from "./pages/MyContest";
 
 function App() {
   const { isAuthenticated, loading } = useSelector((state) => state.auth);
@@ -64,6 +68,13 @@ function App() {
         <Route path="/admin/update" element={<AdminPanelUpdate />} />
         <Route path="/admin/video" element={<AdminVideo />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/contest" element={<Contests />} />
+        <Route path="/contest/:contestId" element={<ContestPage />} />
+        <Route
+          path="/contest/:contestId/problems"
+          element={<ContestProblems />}
+        />
+        <Route path="my-contests" element={<MyContest />} />
       </Routes>
     </div>
   );
