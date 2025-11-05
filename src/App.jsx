@@ -16,9 +16,11 @@ import ContestPage from "./pages/ContestPage";
 import ContestProblems from "./pages/ContestProblemPage";
 import Contests from "./pages/Contest";
 import MyContest from "./pages/MyContest";
+import ChallengePage from "./pages/Challenge";
 
 function App() {
   const { isAuthenticated, loading } = useSelector((state) => state.auth);
+  const user = useSelector((state) => state.auth.user);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -75,6 +77,10 @@ function App() {
           element={<ContestProblems />}
         />
         <Route path="my-contests" element={<MyContest />} />
+        <Route
+          path="/challenge"
+          element={user?._id && <ChallengePage userId={user._id} />}
+        />
       </Routes>
     </div>
   );
