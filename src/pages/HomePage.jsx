@@ -160,14 +160,13 @@ const HomePage = () => {
                     />
                   </svg>
                 </div>
-                <span className="text-3xl font-bold bg-gradient-to-r from-white via-gray-100 to-gray-300 bg-clip-text text-transparent group-hover:from-purple-400 group-hover:to-blue-400 transition-all duration-300">
+                <span className="text-3xl mr-4  font-bold bg-gradient-to-r from-white via-gray-100 to-gray-300 bg-clip-text text-transparent group-hover:from-purple-400 group-hover:to-blue-400 transition-all duration-300">
                   LeetCode
                 </span>
               </NavLink>
             </div>
 
             <div className="flex items-center space-x-6">
-
               <button
                 onClick={() => navigate("/contest")}
                 className="relative px-6 py-3 bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white rounded-xl font-semibold transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-indigo-500/40 flex items-center space-x-2 group overflow-hidden"
@@ -190,7 +189,8 @@ const HomePage = () => {
                 <span className="relative z-10">Contest</span>
                 <div className="absolute top-0 right-0 w-2 h-2 bg-yellow-400 rounded-full animate-ping"></div>
               </button>
-               <button
+
+              <button
                 onClick={() => navigate("/challenge")}
                 className="relative px-6 py-3 bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white rounded-xl font-semibold transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-indigo-500/40 flex items-center space-x-2 group overflow-hidden"
               >
@@ -211,6 +211,32 @@ const HomePage = () => {
                 </svg>
                 <span className="relative z-10">Challenge</span>
                 <div className="absolute top-0 right-0 w-2 h-2 bg-yellow-400 rounded-full animate-ping"></div>
+              </button>
+
+              <button
+                onClick={() => navigate("/ai-interview")}
+                className="relative px-6 py-1 bg-gradient-to-r from-purple-600 via-pink-600 to-cyan-600 hover:from-purple-500 hover:via-pink-500 hover:to-cyan-500 text-white rounded-xl font-semibold transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-purple-500/50 flex items-center space-x-2 group overflow-hidden"
+              >
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-1000"></div>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={2}
+                  stroke="currentColor"
+                  className="w-5 h-5 group-hover:scale-110 transition-transform duration-300"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="m15.75 10.5 4.72-4.72a.75.75 0 0 1 1.28.53v11.38a.75.75 0 0 1-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25h-9A2.25 2.25 0 0 0 2.25 7.5v9a2.25 2.25 0 0 0 2.25 2.25Z"
+                  />
+                </svg>
+                <span className="relative z-10">AI Interview</span>
+                <div className="absolute top-0 right-0 w-2 h-2 bg-cyan-400 rounded-full animate-ping"></div>
+                <div className="absolute -top-1 -right-1 bg-gradient-to-r from-yellow-400 to-orange-400 text-[10px] font-black px-1.5 py-0.5 rounded-full animate-pulse">
+                  NEW
+                </div>
               </button>
               {/* Enhanced Quick Stats */}
               {user && (
@@ -267,8 +293,6 @@ const HomePage = () => {
                   <span>Admin</span>
                 </button>
               )}
-
-
 
               {/* User Dropdown */}
               <div className="relative group">

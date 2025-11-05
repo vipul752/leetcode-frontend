@@ -17,6 +17,7 @@ import ContestProblems from "./pages/ContestProblemPage";
 import Contests from "./pages/Contest";
 import MyContest from "./pages/MyContest";
 import ChallengePage from "./pages/Challenge";
+import AiInterviewVideo from "./pages/AiInterview";
 
 function App() {
   const { isAuthenticated, loading } = useSelector((state) => state.auth);
@@ -81,6 +82,7 @@ function App() {
           path="/challenge"
           element={user?._id && <ChallengePage userId={user._id} />}
         />
+        <Route path="/ai-interview" element={<AiInterviewVideo />} />
       </Routes>
     </div>
   );
