@@ -18,6 +18,7 @@ import Contests from "./pages/Contest";
 import MyContest from "./pages/MyContest";
 import ChallengePage from "./pages/Challenge";
 import AiInterviewVideo from "./pages/AiInterview";
+import Landing from "./pages/Landing";
 
 function App() {
   const { isAuthenticated, loading } = useSelector((state) => state.auth);
@@ -42,17 +43,18 @@ function App() {
   return (
     <div className="min-h-screen w-full bg-black text-gray-200">
       <Routes>
+        <Route path="/" element={<Landing />} />
         <Route
-          path="/"
+          path="/home"
           element={isAuthenticated ? <HomePage /> : <Navigate to="/login" />}
         />
         <Route
           path="/login"
-          element={isAuthenticated ? <Navigate to="/" /> : <Login />}
+          element={isAuthenticated ? <Navigate to="/home" /> : <Login />}
         />
         <Route
           path="/signup"
-          element={isAuthenticated ? <Navigate to="/" /> : <SignUp />}
+          element={isAuthenticated ? <Navigate to="/home" /> : <SignUp />}
         />
         {/* <Route
           path="/admin"

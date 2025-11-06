@@ -14,7 +14,6 @@ import {
   VideoOff,
 } from "lucide-react";
 import axiosClient from "../utils/axiosClient";
-import { useNavigate } from "react-router";
 
 const AiInterviewVideo = () => {
   const [session, setSession] = useState(null);
@@ -27,7 +26,6 @@ const AiInterviewVideo = () => {
   const messagesEndRef = useRef(null);
   const timerRef = useRef(null);
   const recognitionRef = useRef(null);
-
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -93,8 +91,8 @@ const AiInterviewVideo = () => {
       .replace(/  +/g, " ");
 
     const msg = new SpeechSynthesisUtterance(naturalText);
+    
     msg.lang = "en-US";
-
     msg.pitch = 1.05; 
     msg.rate = 0.9;
     msg.volume = 0.95; 
