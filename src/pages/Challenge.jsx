@@ -336,60 +336,68 @@ const ChallengePage = ({ userId }) => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-black to-slate-900 text-gray-100 p-6 relative overflow-hidden">
-      {/* Animated Background Effects */}
-      <div className="fixed inset-0 pointer-events-none">
-        <div className="absolute top-0 -left-4 w-96 h-96 bg-purple-600/10 rounded-full blur-[120px] animate-pulse"></div>
-        <div className="absolute bottom-0 right-0 w-96 h-96 bg-cyan-600/10 rounded-full blur-[120px] animate-pulse delay-1000"></div>
-        <div className="absolute top-1/2 left-1/2 w-96 h-96 bg-blue-600/10 rounded-full blur-[120px] animate-pulse delay-500"></div>
+    <div className="min-h-screen bg-gradient-to-br from-white via-gray-50 to-blue-50 relative overflow-hidden">
+      {/* Animated background */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute -top-40 -right-40 w-96 h-96 bg-purple-200/30 rounded-full blur-3xl animate-pulse"></div>
+        <div
+          className="absolute top-1/2 -left-40 w-96 h-96 bg-cyan-200/30 rounded-full blur-3xl animate-pulse"
+          style={{ animationDelay: "2s" }}
+        ></div>
+        <div
+          className="absolute -bottom-40 right-1/3 w-96 h-96 bg-blue-200/30 rounded-full blur-3xl animate-pulse"
+          style={{ animationDelay: "4s" }}
+        ></div>
       </div>
 
       {/* Header */}
-      <header className="max-w-7xl mx-auto flex justify-between items-center mb-10 pb-6 border-b border-white/10 backdrop-blur-sm relative z-10">
-        <div className="flex items-center gap-4">
-          <div className="relative">
-            <div className="absolute inset-0 bg-gradient-to-r from-cyan-500 to-purple-600 rounded-xl blur-lg opacity-50 animate-pulse"></div>
-            <div className="relative bg-gradient-to-br from-slate-900 to-slate-800 p-3 rounded-xl border border-cyan-500/30">
-              <Target className="w-8 h-8 text-cyan-400" />
-            </div>
-          </div>
-          <div>
-            <h1 className="text-4xl font-black bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 bg-clip-text text-transparent drop-shadow-2xl">
-              CodeArena
-            </h1>
-            <p className="text-xs text-gray-500 font-medium tracking-wider">
-              1v1 CODING BATTLE
-            </p>
-          </div>
-        </div>
-        {roomState === "running" && (
+      <header className="sticky top-0 z-20 bg-white/80 backdrop-blur-xl border-b border-gray-200 shadow-sm">
+        <div className="max-w-7xl mx-auto px-8 py-6 flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <div className="relative group">
-              <div className="absolute -inset-1 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-2xl blur opacity-30 group-hover:opacity-50 transition duration-300 animate-pulse"></div>
-              <div className="relative flex items-center gap-3 bg-gradient-to-br from-slate-900 to-slate-800 border border-cyan-500/30 px-6 py-4 rounded-2xl">
-                <Clock className="w-6 h-6 text-cyan-400 animate-pulse" />
-                <div className="flex flex-col">
-                  <span className="text-xs text-gray-400 font-medium">
-                    TIME LEFT
-                  </span>
-                  <span className="font-mono text-2xl font-black bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent tabular-nums">
-                    {formatTime(timer)}
-                  </span>
-                </div>
+            <div className="relative">
+              <div className="absolute inset-0 bg-gradient-to-r from-cyan-500 to-purple-600 rounded-xl blur-md opacity-30"></div>
+              <div className="relative bg-gradient-to-br from-white to-gray-100 p-3 rounded-xl border border-purple-200 shadow-md">
+                <Target className="w-8 h-8 text-purple-600" />
               </div>
             </div>
-            <button
-              onClick={() => window.location.reload()}
-              className="relative group overflow-hidden bg-gradient-to-r from-red-600 to-rose-600 text-white px-6 py-4 rounded-2xl font-bold text-sm transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-red-500/50"
-            >
-              <span className="relative z-10 flex items-center gap-2">
-                <Zap className="w-4 h-4" />
-                Leave Arena
-              </span>
-              <div className="absolute inset-0 bg-gradient-to-r from-red-700 to-rose-700 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-            </button>
+            <div>
+              <h1 className="text-4xl font-black bg-gradient-to-r from-cyan-600 via-blue-600 to-purple-600 bg-clip-text text-transparent">
+                CodeArena
+              </h1>
+              <p className="text-xs text-gray-600 font-medium tracking-wider">
+                1v1 CODING BATTLE
+              </p>
+            </div>
           </div>
-        )}
+          {roomState === "running" && (
+            <div className="flex items-center gap-4">
+              <div className="relative group">
+                <div className="absolute -inset-1 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-2xl blur opacity-30 group-hover:opacity-50 transition duration-300 animate-pulse"></div>
+                <div className="relative flex items-center gap-3 bg-gradient-to-br from-white to-gray-50 border border-cyan-300 px-6 py-4 rounded-2xl shadow-md">
+                  <Clock className="w-6 h-6 text-cyan-600 animate-pulse" />
+                  <div className="flex flex-col">
+                    <span className="text-xs text-gray-600 font-medium">
+                      TIME LEFT
+                    </span>
+                    <span className="font-mono text-2xl font-black bg-gradient-to-r from-cyan-600 to-blue-600 bg-clip-text text-transparent tabular-nums">
+                      {formatTime(timer)}
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <button
+                onClick={() => window.location.reload()}
+                className="relative group overflow-hidden bg-gradient-to-r from-red-600 to-rose-600 text-white px-6 py-4 rounded-2xl font-bold text-sm transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-red-500/30"
+              >
+                <span className="relative z-10 flex items-center gap-2">
+                  <Zap className="w-4 h-4" />
+                  Leave Arena
+                </span>
+                <div className="absolute inset-0 bg-gradient-to-r from-red-700 to-rose-700 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              </button>
+            </div>
+          )}
+        </div>
       </header>
 
       {/* Main */}
@@ -400,67 +408,67 @@ const ChallengePage = ({ userId }) => {
           {problem && (
             <div className="group relative">
               <div className="absolute -inset-1 bg-gradient-to-r from-cyan-500 via-blue-500 to-purple-600 rounded-3xl blur opacity-20 group-hover:opacity-30 transition duration-500"></div>
-              <div className="relative bg-gradient-to-br from-slate-900/95 to-slate-800/95 backdrop-blur-xl border border-white/10 rounded-3xl p-8 shadow-2xl">
+              <div className="relative bg-white/90 backdrop-blur-xl border border-gray-200 rounded-3xl p-8 shadow-md">
                 <div className="flex items-start gap-4 mb-6">
                   <div className="flex-shrink-0">
-                    <div className="w-12 h-12 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-2xl flex items-center justify-center shadow-lg shadow-cyan-500/50">
+                    <div className="w-12 h-12 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-2xl flex items-center justify-center shadow-md">
                       <Code className="w-6 h-6 text-white" />
                     </div>
                   </div>
                   <div className="flex-1">
                     <div className="flex items-center gap-3 mb-2">
-                      <h2 className="text-3xl font-black text-transparent bg-gradient-to-r from-cyan-300 via-blue-400 to-purple-500 bg-clip-text">
+                      <h2 className="text-3xl font-black text-transparent bg-gradient-to-r from-cyan-600 via-blue-600 to-purple-600 bg-clip-text">
                         {problem.title}
                       </h2>
-                      <span className="px-3 py-1 text-xs font-bold bg-gradient-to-r from-orange-500/20 to-red-500/20 border border-orange-500/30 text-orange-400 rounded-full">
+                      <span className="px-3 py-1 text-xs font-bold bg-gradient-to-r from-orange-400/20 to-red-400/20 border border-orange-400/40 text-orange-600 rounded-full">
                         {problem.difficulty || "MEDIUM"}
                       </span>
                     </div>
-                    <p className="text-gray-300 leading-relaxed text-lg">
+                    <p className="text-gray-700 leading-relaxed text-lg">
                       {problem.description}
                     </p>
                   </div>
                 </div>
 
                 <div className="space-y-4 mt-6">
-                  <h3 className="text-sm font-bold text-cyan-400 uppercase tracking-wider flex items-center gap-2">
-                    <div className="w-6 h-0.5 bg-gradient-to-r from-cyan-400 to-transparent"></div>
+                  <h3 className="text-sm font-bold text-cyan-600 uppercase tracking-wider flex items-center gap-2">
+                    <div className="w-6 h-0.5 bg-gradient-to-r from-cyan-500 to-transparent"></div>
                     Test Cases
                   </h3>
                   {problem.visibleTestcase?.map((t, i) => (
                     <div key={i} className="group/test relative">
-                      <div className="absolute -inset-0.5 bg-gradient-to-r from-green-500/20 to-blue-500/20 rounded-2xl blur opacity-0 group-hover/test:opacity-100 transition duration-300"></div>
-                      <div className="relative bg-slate-950/50 border border-white/5 p-6 rounded-2xl hover:border-cyan-500/30 transition-all duration-300">
+                      <div className="absolute -inset-0.5 bg-gradient-to-r from-green-400/20 to-blue-400/20 rounded-2xl blur opacity-0 group-hover/test:opacity-100 transition duration-300"></div>
+                      <div className="relative bg-gray-50/80 border border-gray-200 p-6 rounded-2xl hover:border-cyan-400/50 transition-all duration-300">
                         <div className="flex items-center gap-2 mb-3">
-                          <div className="w-8 h-8 bg-gradient-to-br from-cyan-500/20 to-blue-500/20 border border-cyan-500/30 rounded-lg flex items-center justify-center">
-                            <span className="text-cyan-400 font-bold text-sm">
+                          <div className="w-8 h-8 bg-gradient-to-br from-cyan-100 to-blue-100 border border-cyan-400/40 rounded-lg flex items-center justify-center">
+                            <span className="text-cyan-700 font-bold text-sm">
                               #{i + 1}
                             </span>
                           </div>
-                          <span className="text-xs text-gray-400 font-semibold uppercase tracking-wider">
+                          <span className="text-xs text-gray-600 font-semibold uppercase tracking-wider">
                             Test Case
                           </span>
                         </div>
                         <div className="space-y-4">
                           <div>
                             <div className="flex items-center gap-2 mb-2">
-                              <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-                              <span className="text-xs font-bold text-green-400 uppercase tracking-wider">
+                              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                              <span className="text-xs font-bold text-green-700 uppercase tracking-wider">
                                 Input
                               </span>
                             </div>
-                            <pre className="text-green-300 font-mono text-sm bg-black/40 p-4 rounded-xl border border-green-500/20 overflow-x-auto">
+                            <pre className="text-green-800 font-mono text-sm bg-green-50 p-4 rounded-xl border border-green-300/40 overflow-x-auto">
                               {t.input}
                             </pre>
                           </div>
                           <div>
                             <div className="flex items-center gap-2 mb-2">
-                              <div className="w-2 h-2 bg-blue-400 rounded-full animate-pulse"></div>
-                              <span className="text-xs font-bold text-blue-400 uppercase tracking-wider">
+                              <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
+                              <span className="text-xs font-bold text-blue-700 uppercase tracking-wider">
                                 Expected Output
                               </span>
                             </div>
-                            <pre className="text-blue-300 font-mono text-sm bg-black/40 p-4 rounded-xl border border-blue-500/20 overflow-x-auto">
+                            <pre className="text-blue-800 font-mono text-sm bg-blue-50 p-4 rounded-xl border border-blue-300/40 overflow-x-auto">
                               {t.output}
                             </pre>
                           </div>
@@ -477,17 +485,17 @@ const ChallengePage = ({ userId }) => {
           {problem && (
             <div className="group relative">
               <div className="absolute -inset-1 bg-gradient-to-r from-purple-500 via-pink-500 to-cyan-500 rounded-3xl blur opacity-20 group-hover:opacity-30 transition duration-500"></div>
-              <div className="relative bg-gradient-to-br from-slate-900/95 to-slate-800/95 backdrop-blur-xl border border-white/10 rounded-3xl p-8 shadow-2xl">
+              <div className="relative bg-white/90 backdrop-blur-xl border border-gray-200 rounded-3xl p-8 shadow-md">
                 <div className="flex justify-between items-center mb-6">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-600 rounded-xl flex items-center justify-center shadow-lg shadow-purple-500/50">
+                    <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-600 rounded-xl flex items-center justify-center shadow-md">
                       <Code className="w-5 h-5 text-white" />
                     </div>
                     <div>
-                      <h3 className="text-xl font-black text-transparent bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text">
+                      <h3 className="text-xl font-black text-transparent bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text">
                         Code Editor
                       </h3>
-                      <p className="text-xs text-gray-500 font-medium">
+                      <p className="text-xs text-gray-600 font-medium">
                         Write your solution
                       </p>
                     </div>
@@ -497,7 +505,7 @@ const ChallengePage = ({ userId }) => {
                     <select
                       value={language}
                       onChange={(e) => setLanguage(e.target.value)}
-                      className="relative bg-slate-950 border border-white/10 text-gray-200 rounded-xl px-5 py-3 text-sm font-bold focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 transition-all duration-300 cursor-pointer hover:border-cyan-500/50 appearance-none pr-10"
+                      className="relative bg-white border border-gray-300 text-gray-900 rounded-xl px-5 py-3 text-sm font-bold focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 transition-all duration-300 cursor-pointer hover:border-cyan-500/50 appearance-none pr-10"
                       style={{
                         backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2306b6d4'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E")`,
                         backgroundRepeat: "no-repeat",
@@ -505,16 +513,16 @@ const ChallengePage = ({ userId }) => {
                         backgroundSize: "1.25rem",
                       }}
                     >
-                      <option value="cpp" className="bg-slate-900">
+                      <option value="cpp" className="bg-white">
                         C++
                       </option>
-                      <option value="java" className="bg-slate-900">
+                      <option value="java" className="bg-white">
                         Java
                       </option>
-                      <option value="python" className="bg-slate-900">
+                      <option value="python" className="bg-white">
                         Python
                       </option>
-                      <option value="javascript" className="bg-slate-900">
+                      <option value="javascript" className="bg-white">
                         JavaScript
                       </option>
                     </select>
@@ -526,7 +534,7 @@ const ChallengePage = ({ userId }) => {
                   <textarea
                     value={code}
                     onChange={(e) => setCode(e.target.value)}
-                    className="relative w-full h-96 bg-black/60 border border-white/10 rounded-2xl p-6 font-mono text-sm text-gray-200 focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 transition-all duration-300 placeholder-gray-600 resize-none leading-relaxed"
+                    className="relative w-full h-96 bg-gray-50/80 border border-gray-300 rounded-2xl p-6 font-mono text-sm text-gray-900 focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 transition-all duration-300 placeholder-gray-500 resize-none leading-relaxed"
                     placeholder="// Start coding your solution here..."
                     spellCheck="false"
                   ></textarea>
@@ -536,7 +544,7 @@ const ChallengePage = ({ userId }) => {
                   <button
                     onClick={runCode}
                     disabled={isRunning}
-                    className="group/run relative flex-1 overflow-hidden bg-gradient-to-r from-blue-600 to-cyan-600 text-white py-5 rounded-2xl font-bold text-base transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl hover:shadow-blue-500/50 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+                    className="group/run relative flex-1 overflow-hidden bg-gradient-to-r from-blue-600 to-cyan-600 text-white py-5 rounded-2xl font-bold text-base transition-all duration-300 hover:scale-[1.02] hover:shadow-lg hover:shadow-blue-500/30 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
                   >
                     <span className="relative z-10 flex items-center justify-center gap-3">
                       {isRunning ? (
@@ -556,7 +564,7 @@ const ChallengePage = ({ userId }) => {
                   <button
                     onClick={submitCode}
                     disabled={isSubmitting}
-                    className="group/submit relative flex-1 overflow-hidden bg-gradient-to-r from-green-600 to-emerald-600 text-white py-5 rounded-2xl font-bold text-base transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl hover:shadow-green-500/50 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+                    className="group/submit relative flex-1 overflow-hidden bg-gradient-to-r from-green-600 to-emerald-600 text-white py-5 rounded-2xl font-bold text-base transition-all duration-300 hover:scale-[1.02] hover:shadow-lg hover:shadow-green-500/30 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
                   >
                     <span className="relative z-10 flex items-center justify-center gap-3">
                       {isSubmitting ? (
@@ -585,19 +593,19 @@ const ChallengePage = ({ userId }) => {
           {roomState === "idle" && (
             <div className="group relative">
               <div className="absolute -inset-1 bg-gradient-to-r from-cyan-500 to-purple-600 rounded-3xl blur opacity-30 group-hover:opacity-50 transition duration-500"></div>
-              <div className="relative bg-gradient-to-br from-slate-900/95 to-slate-800/95 backdrop-blur-xl border border-white/10 rounded-3xl p-8 shadow-2xl">
+              <div className="relative bg-white/90 backdrop-blur-xl border border-gray-200 rounded-3xl p-8 shadow-md">
                 <div className="flex items-center gap-3 mb-8">
                   <div className="relative">
                     <div className="absolute inset-0 bg-gradient-to-r from-cyan-500 to-purple-600 rounded-2xl blur-lg animate-pulse"></div>
-                    <div className="relative w-14 h-14 bg-gradient-to-br from-cyan-500 to-purple-600 rounded-2xl flex items-center justify-center shadow-xl">
+                    <div className="relative w-14 h-14 bg-gradient-to-br from-cyan-500 to-purple-600 rounded-2xl flex items-center justify-center shadow-md">
                       <Shield className="w-7 h-7 text-white" />
                     </div>
                   </div>
                   <div>
-                    <h3 className="font-black text-2xl text-transparent bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text">
+                    <h3 className="font-black text-2xl text-transparent bg-gradient-to-r from-cyan-600 to-purple-600 bg-clip-text">
                       Battle Arena
                     </h3>
-                    <p className="text-xs text-gray-500 font-medium">
+                    <p className="text-xs text-gray-600 font-medium">
                       Choose your destiny
                     </p>
                   </div>
@@ -605,7 +613,7 @@ const ChallengePage = ({ userId }) => {
 
                 <button
                   onClick={createRoom}
-                  className="group/create relative w-full overflow-hidden bg-gradient-to-r from-cyan-600 to-blue-600 text-white py-5 rounded-2xl hover:scale-[1.02] transition-all duration-300 shadow-xl shadow-cyan-500/30 hover:shadow-cyan-500/50 mb-6"
+                  className="group/create relative w-full overflow-hidden bg-gradient-to-r from-cyan-600 to-blue-600 text-white py-5 rounded-2xl hover:scale-[1.02] transition-all duration-300 shadow-md shadow-cyan-500/20 hover:shadow-cyan-500/40 mb-6"
                 >
                   <span className="relative z-10 flex items-center justify-center gap-3 font-bold text-base">
                     <Zap className="w-5 h-5" />
@@ -618,21 +626,21 @@ const ChallengePage = ({ userId }) => {
                   <div className="absolute -inset-2 bg-gradient-to-r from-purple-500/20 to-pink-500/20 rounded-2xl blur opacity-0 focus-within:opacity-100 transition duration-300"></div>
                   <div className="relative space-y-4">
                     <div className="flex items-center gap-3 mb-4">
-                      <div className="flex-1 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
-                      <span className="text-xs text-gray-500 font-bold uppercase tracking-wider">
+                      <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent"></div>
+                      <span className="text-xs text-gray-600 font-bold uppercase tracking-wider">
                         Or Join
                       </span>
-                      <div className="flex-1 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
+                      <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent"></div>
                     </div>
                     <input
                       value={roomId}
                       onChange={(e) => setRoomId(e.target.value)}
                       placeholder="Enter Battle Code"
-                      className="w-full bg-slate-950/50 border border-white/10 text-gray-200 rounded-2xl px-5 py-4 font-mono text-center text-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-300 placeholder-gray-600 tracking-widest uppercase"
+                      className="w-full bg-gray-50/80 border border-gray-300 text-gray-900 rounded-2xl px-5 py-4 font-mono text-center text-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-300 placeholder-gray-500 tracking-widest uppercase"
                     />
                     <button
                       onClick={joinRoom}
-                      className="group/join relative w-full overflow-hidden bg-gradient-to-r from-green-600 to-emerald-600 text-white py-5 rounded-2xl hover:scale-[1.02] transition-all duration-300 shadow-xl shadow-green-500/30 hover:shadow-green-500/50"
+                      className="group/join relative w-full overflow-hidden bg-gradient-to-r from-green-600 to-emerald-600 text-white py-5 rounded-2xl hover:scale-[1.02] transition-all duration-300 shadow-md shadow-green-500/20 hover:shadow-green-500/40"
                     >
                       <span className="relative z-10 flex items-center justify-center gap-3 font-bold text-base">
                         <Users className="w-5 h-5" />
@@ -650,44 +658,44 @@ const ChallengePage = ({ userId }) => {
           {roomState === "waiting" && (
             <div className="group relative">
               <div className="absolute -inset-1 bg-gradient-to-r from-cyan-500 via-purple-500 to-pink-500 rounded-3xl blur opacity-40 animate-pulse"></div>
-              <div className="relative bg-gradient-to-br from-slate-900/95 to-slate-800/95 backdrop-blur-xl border border-white/10 rounded-3xl p-10 text-center shadow-2xl">
+              <div className="relative bg-white/90 backdrop-blur-xl border border-gray-200 rounded-3xl p-10 text-center shadow-md">
                 <div className="mb-8">
                   <div className="relative w-24 h-24 mx-auto mb-6">
                     <div
                       className="absolute inset-0 bg-gradient-to-r from-cyan-500 via-purple-500 to-pink-500 rounded-full animate-spin"
                       style={{ animationDuration: "3s" }}
                     ></div>
-                    <div className="absolute inset-1 bg-slate-900 rounded-full"></div>
+                    <div className="absolute inset-1 bg-white rounded-full"></div>
                     <div className="absolute inset-0 flex items-center justify-center">
-                      <div className="w-20 h-20 bg-gradient-to-br from-cyan-500 to-purple-600 rounded-full flex items-center justify-center shadow-xl animate-pulse">
+                      <div className="w-20 h-20 bg-gradient-to-br from-cyan-500 to-purple-600 rounded-full flex items-center justify-center shadow-md animate-pulse">
                         <Users className="w-10 h-10 text-white" />
                       </div>
                     </div>
                   </div>
-                  <h3 className="text-2xl font-black text-transparent bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text mb-3">
+                  <h3 className="text-2xl font-black text-transparent bg-gradient-to-r from-cyan-600 to-purple-600 bg-clip-text mb-3">
                     Waiting for Opponent
                   </h3>
-                  <p className="text-gray-400 text-sm font-medium">
+                  <p className="text-gray-600 text-sm font-medium">
                     Share this code to start the epic battle
                   </p>
                 </div>
 
                 <div className="relative group/code">
                   <div className="absolute -inset-1 bg-gradient-to-r from-cyan-500 to-purple-600 rounded-2xl blur opacity-50 group-hover/code:opacity-75 transition duration-300"></div>
-                  <div className="relative bg-slate-950/80 border border-cyan-500/30 rounded-2xl p-6">
+                  <div className="relative bg-gray-50/80 border border-cyan-400/40 rounded-2xl p-6">
                     <div className="flex items-center justify-center gap-4">
-                      <code className="text-3xl font-mono font-black text-transparent bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-400 bg-clip-text tracking-[0.5em] animate-pulse">
+                      <code className="text-3xl font-mono font-black text-transparent bg-gradient-to-r from-cyan-600 via-blue-600 to-purple-600 bg-clip-text tracking-[0.5em] animate-pulse">
                         {joinedRoom}
                       </code>
                       <button
                         onClick={copyRoomId}
-                        className="group/copy p-4 bg-gradient-to-br from-slate-800 to-slate-900 border border-white/10 rounded-xl hover:border-cyan-500/50 transition-all duration-300 hover:scale-110"
+                        className="group/copy p-4 bg-gradient-to-br from-white to-gray-100 border border-gray-200 rounded-xl hover:border-cyan-500/50 transition-all duration-300 hover:scale-110 shadow-sm"
                         title={copied ? "Copied!" : "Copy code"}
                       >
                         {copied ? (
-                          <Check className="w-6 h-6 text-green-400" />
+                          <Check className="w-6 h-6 text-green-600" />
                         ) : (
-                          <Copy className="w-6 h-6 text-cyan-400 group-hover/copy:text-cyan-300" />
+                          <Copy className="w-6 h-6 text-cyan-600 group-hover/copy:text-cyan-500" />
                         )}
                       </button>
                     </div>
@@ -696,15 +704,15 @@ const ChallengePage = ({ userId }) => {
 
                 <div className="mt-6 flex items-center justify-center gap-2">
                   <div
-                    className="w-2 h-2 bg-cyan-400 rounded-full animate-bounce"
+                    className="w-2 h-2 bg-cyan-500 rounded-full animate-bounce"
                     style={{ animationDelay: "0ms" }}
                   ></div>
                   <div
-                    className="w-2 h-2 bg-blue-400 rounded-full animate-bounce"
+                    className="w-2 h-2 bg-blue-500 rounded-full animate-bounce"
                     style={{ animationDelay: "150ms" }}
                   ></div>
                   <div
-                    className="w-2 h-2 bg-purple-400 rounded-full animate-bounce"
+                    className="w-2 h-2 bg-purple-500 rounded-full animate-bounce"
                     style={{ animationDelay: "300ms" }}
                   ></div>
                 </div>
@@ -715,16 +723,16 @@ const ChallengePage = ({ userId }) => {
           {/* Logs */}
           <div className="group relative">
             <div className="absolute -inset-1 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-3xl blur opacity-20 group-hover:opacity-30 transition duration-500"></div>
-            <div className="relative bg-gradient-to-br from-slate-900/95 to-slate-800/95 backdrop-blur-xl border border-white/10 rounded-3xl p-6 shadow-2xl flex flex-col h-[500px]">
-              <div className="flex items-center gap-3 mb-6 pb-4 border-b border-white/10">
-                <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-cyan-600 rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/50">
+            <div className="relative bg-white/90 backdrop-blur-xl border border-gray-200 rounded-3xl p-6 shadow-md flex flex-col h-[500px]">
+              <div className="flex items-center gap-3 mb-6 pb-4 border-b border-gray-200">
+                <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-cyan-600 rounded-xl flex items-center justify-center shadow-md">
                   <AlertCircle className="w-5 h-5 text-white" />
                 </div>
                 <div>
-                  <h3 className="font-black text-lg text-transparent bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text">
+                  <h3 className="font-black text-lg text-transparent bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text">
                     Activity Feed
                   </h3>
-                  <p className="text-xs text-gray-500 font-medium">
+                  <p className="text-xs text-gray-600 font-medium">
                     Real-time updates
                   </p>
                 </div>
@@ -734,10 +742,10 @@ const ChallengePage = ({ userId }) => {
                 {messages.length === 0 ? (
                   <div className="flex items-center justify-center h-full">
                     <div className="text-center">
-                      <div className="w-16 h-16 mx-auto mb-4 bg-slate-800/50 rounded-full flex items-center justify-center">
-                        <AlertCircle className="w-8 h-8 text-gray-600" />
+                      <div className="w-16 h-16 mx-auto mb-4 bg-gray-100 rounded-full flex items-center justify-center">
+                        <AlertCircle className="w-8 h-8 text-gray-400" />
                       </div>
-                      <p className="text-gray-600 text-sm font-medium">
+                      <p className="text-gray-500 text-sm font-medium">
                         No activity yet
                       </p>
                     </div>
@@ -748,41 +756,41 @@ const ChallengePage = ({ userId }) => {
                       key={i}
                       className={`group/msg relative p-4 rounded-xl backdrop-blur-sm transition-all duration-300 hover:scale-[1.02] ${
                         m.type === "error"
-                          ? "bg-red-500/10 border border-red-500/30 hover:border-red-500/50"
+                          ? "bg-red-100/80 border border-red-300/50 hover:border-red-400/70"
                           : m.type === "success"
-                          ? "bg-green-500/10 border border-green-500/30 hover:border-green-500/50"
+                          ? "bg-green-100/80 border border-green-300/50 hover:border-green-400/70"
                           : m.type === "warning"
-                          ? "bg-yellow-500/10 border border-yellow-500/30 hover:border-yellow-500/50"
+                          ? "bg-yellow-100/80 border border-yellow-300/50 hover:border-yellow-400/70"
                           : m.type === "system"
-                          ? "bg-purple-500/10 border border-purple-500/30 hover:border-purple-500/50"
-                          : "bg-blue-500/10 border border-blue-500/30 hover:border-blue-500/50"
+                          ? "bg-purple-100/80 border border-purple-300/50 hover:border-purple-400/70"
+                          : "bg-blue-100/80 border border-blue-300/50 hover:border-blue-400/70"
                       }`}
                     >
                       <div className="flex items-start gap-3">
                         <div
                           className={`flex-shrink-0 w-2 h-2 rounded-full mt-1.5 ${
                             m.type === "error"
-                              ? "bg-red-400 shadow-lg shadow-red-500/50"
+                              ? "bg-red-500 shadow-md shadow-red-500/30"
                               : m.type === "success"
-                              ? "bg-green-400 shadow-lg shadow-green-500/50 animate-pulse"
+                              ? "bg-green-500 shadow-md shadow-green-500/30 animate-pulse"
                               : m.type === "warning"
-                              ? "bg-yellow-400 shadow-lg shadow-yellow-500/50"
+                              ? "bg-yellow-500 shadow-md shadow-yellow-500/30"
                               : m.type === "system"
-                              ? "bg-purple-400 shadow-lg shadow-purple-500/50"
-                              : "bg-blue-400 shadow-lg shadow-blue-500/50"
+                              ? "bg-purple-500 shadow-md shadow-purple-500/30"
+                              : "bg-blue-500 shadow-md shadow-blue-500/30"
                           }`}
                         ></div>
                         <p
                           className={`flex-1 text-sm font-medium leading-relaxed ${
                             m.type === "error"
-                              ? "text-red-300"
+                              ? "text-red-700"
                               : m.type === "success"
-                              ? "text-green-300"
+                              ? "text-green-700"
                               : m.type === "warning"
-                              ? "text-yellow-300"
+                              ? "text-yellow-700"
                               : m.type === "system"
-                              ? "text-purple-300"
-                              : "text-blue-300"
+                              ? "text-purple-700"
+                              : "text-blue-700"
                           }`}
                         >
                           {m.text}
@@ -804,7 +812,7 @@ const ChallengePage = ({ userId }) => {
           width: 8px;
         }
         .custom-scrollbar::-webkit-scrollbar-track {
-          background: rgba(15, 23, 42, 0.5);
+          background: rgba(243, 244, 246, 0.8);
           border-radius: 10px;
         }
         .custom-scrollbar::-webkit-scrollbar-thumb {
@@ -812,7 +820,7 @@ const ChallengePage = ({ userId }) => {
           border-radius: 10px;
         }
         .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-          background: linear-gradient(to bottom, #22d3ee, #60a5fa, #a78bfa);
+          background: linear-gradient(to bottom, #0891b2, #2563eb, #7c3aed);
         }
       `}</style>
     </div>

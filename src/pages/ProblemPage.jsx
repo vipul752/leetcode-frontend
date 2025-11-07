@@ -25,13 +25,13 @@ const ProblemPage = () => {
   const getDifficultyBadgeColor = (difficulty) => {
     switch (difficulty) {
       case "Easy":
-        return "bg-emerald-500/10 text-emerald-400 border-emerald-500/20";
+        return "bg-emerald-100 text-emerald-700 border-emerald-300";
       case "Medium":
-        return "bg-amber-500/10 text-amber-400 border-amber-500/20";
+        return "bg-amber-100 text-amber-700 border-amber-300";
       case "Hard":
-        return "bg-rose-500/10 text-rose-400 border-rose-500/20";
+        return "bg-rose-100 text-rose-700 border-rose-300";
       default:
-        return "bg-slate-500/10 text-slate-400 border-slate-500/20";
+        return "bg-gray-100 text-gray-700 border-gray-300";
     }
   };
 
@@ -228,10 +228,10 @@ const ProblemPage = () => {
 
   if (initialLoading) {
     return (
-      <div className="flex justify-center items-center min-h-screen bg-black">
+      <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-white via-gray-50 to-blue-50">
         <div className="flex flex-col items-center space-y-4">
-          <div className="animate-spin rounded-full h-12 w-12 border-2 border-slate-700 border-t-amber-500"></div>
-          <p className="text-slate-400 animate-pulse">Loading problem...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-2 border-gray-300 border-t-purple-600"></div>
+          <p className="text-gray-600 animate-pulse">Loading problem...</p>
         </div>
       </div>
     );
@@ -240,19 +240,19 @@ const ProblemPage = () => {
   const getStatusStyles = (status) => {
     switch (status) {
       case "Accepted":
-        return "text-emerald-400 bg-emerald-400/10 border-emerald-400/30";
+        return "text-emerald-700 bg-emerald-100 border-emerald-300";
       case "Wrong":
       case "Wrong Answer":
-        return "text-red-400 bg-red-400/10 border-red-400/30";
+        return "text-red-700 bg-red-100 border-red-300";
       case "Error":
       case "Runtime Error":
-        return "text-orange-400 bg-orange-400/10 border-orange-400/30";
+        return "text-orange-700 bg-orange-100 border-orange-300";
       case "Time Limit Exceeded":
-        return "text-yellow-400 bg-yellow-400/10 border-yellow-400/30";
+        return "text-yellow-700 bg-yellow-100 border-yellow-300";
       case "Compilation Error":
-        return "text-purple-400 bg-purple-400/10 border-purple-400/30";
+        return "text-purple-700 bg-purple-100 border-purple-300";
       default:
-        return "text-blue-400 bg-blue-400/10 border-blue-400/30";
+        return "text-blue-700 bg-blue-100 border-blue-300";
     }
   };
 
@@ -284,14 +284,14 @@ const ProblemPage = () => {
   };
 
   return (
-    <div className="h-max bg-black text-white">
+    <div className="h-max bg-gradient-to-br from-white via-gray-50 to-blue-50 text-gray-900">
       {/* Header */}
 
       {/* Main Content */}
       <div className="flex h-screen ">
         {/* Left Panel - Problem Description */}
-        <div className="w-1/2 border-r border-slate-800 flex flex-col bg-slate-950/30">
-          <div className="bg-slate-900/30 border-b border-slate-800">
+        <div className="w-1/2 border-r border-gray-200 flex flex-col bg-white/50 backdrop-blur-sm">
+          <div className="bg-white/80 border-b border-gray-200 backdrop-blur-sm">
             <div className="flex">
               {[
                 { key: "description", label: "Description", icon: "📝" },
@@ -305,8 +305,8 @@ const ProblemPage = () => {
                   onClick={() => setActiveLeftTab(tab.key)}
                   className={`px-4 py-3 text-sm font-medium border-b-2 transition-all duration-200 flex items-center space-x-2 ${
                     activeLeftTab === tab.key
-                      ? "border-amber-500 text-amber-400 bg-amber-500/5"
-                      : "border-transparent text-slate-400 hover:text-white hover:bg-slate-800/30"
+                      ? "border-purple-500 text-purple-700 bg-purple-50"
+                      : "border-transparent text-gray-600 hover:text-gray-900 hover:bg-gray-100"
                   }`}
                 >
                   <span>{tab.icon}</span>
@@ -322,7 +322,7 @@ const ProblemPage = () => {
                 {problem ? (
                   <>
                     <div className="flex items-center space-x-4">
-                      <h1 className="text-xl font-bold text-white">
+                      <h1 className="text-xl font-bold text-black">
                         {problem?.title || `Problem ${problemId}`}
                       </h1>
                       {problem?.difficulty && (
@@ -338,13 +338,13 @@ const ProblemPage = () => {
 
                     {/* Problem Description */}
                     {problem.description && (
-                      <div className="bg-slate-900/50 rounded-xl p-5 border border-slate-800">
-                        <h3 className="text-lg font-bold mb-4 text-white flex items-center">
+                      <div className="bg-white/80 rounded-xl p-5 border border-gray-200 shadow-sm">
+                        <h3 className="text-lg font-bold mb-4 text-gray-900 flex items-center">
                           <span className="mr-2">📝</span>
                           Problem Description
                         </h3>
-                        <div className="prose prose-slate max-w-none">
-                          <p className="text-slate-300 leading-relaxed text-sm whitespace-pre-wrap">
+                        <div className="prose prose-gray max-w-none">
+                          <p className="text-gray-700 leading-relaxed text-sm whitespace-pre-wrap">
                             {problem.description}
                           </p>
                         </div>
@@ -354,7 +354,7 @@ const ProblemPage = () => {
                     {problem.visibleTestcase &&
                       problem.visibleTestcase.length > 0 && (
                         <div>
-                          <h3 className="text-lg font-bold mb-4 text-white flex items-center">
+                          <h3 className="text-lg font-bold mb-4 text-gray-900 flex items-center">
                             <span className="mr-2">✨</span>
                             Examples
                           </h3>
@@ -362,7 +362,7 @@ const ProblemPage = () => {
                             {problem.visibleTestcase.map((testcase, index) => (
                               <div
                                 key={index}
-                                className="bg-slate-900/50 rounded-xl p-5 border border-slate-800 hover:border-slate-700 transition-all duration-200"
+                                className="bg-white/80 rounded-xl p-5 border border-gray-200 hover:border-purple-300 transition-all duration-200 shadow-sm hover:shadow-md"
                               >
                                 <div className="mb-3">
                                   <span className="text-sm font-semibold text-amber-400 bg-amber-500/10 px-2 py-1 rounded-full">
@@ -371,27 +371,27 @@ const ProblemPage = () => {
                                 </div>
                                 <div className="space-y-3">
                                   <div>
-                                    <span className="text-sm font-semibold text-slate-300 mb-1 block">
+                                    <span className="text-sm font-semibold text-gray-700 mb-1 block">
                                       Input:
                                     </span>
-                                    <pre className="bg-slate-950 p-3 rounded-lg text-sm overflow-x-auto text-emerald-400 border border-slate-800">
+                                    <pre className="bg-gray-50 p-3 rounded-lg text-sm overflow-x-auto text-emerald-700 border border-gray-200">
                                       {testcase.input}
                                     </pre>
                                   </div>
                                   <div>
-                                    <span className="text-sm font-semibold text-slate-300 mb-1 block">
+                                    <span className="text-sm font-semibold text-gray-700 mb-1 block">
                                       Output:
                                     </span>
-                                    <pre className="bg-slate-950 p-3 rounded-lg text-sm overflow-x-auto text-blue-400 border border-slate-800">
+                                    <pre className="bg-gray-50 p-3 rounded-lg text-sm overflow-x-auto text-blue-700 border border-gray-200">
                                       {testcase.output}
                                     </pre>
                                   </div>
                                   {testcase.explanation && (
                                     <div>
-                                      <span className="text-sm font-semibold text-slate-300 mb-1 block">
+                                      <span className="text-sm font-semibold text-gray-700 mb-1 block">
                                         Explanation:
                                       </span>
-                                      <p className="text-slate-300 text-sm bg-slate-800/30 p-3 rounded-lg">
+                                      <p className="text-gray-700 text-sm bg-gray-50 p-3 rounded-lg">
                                         {testcase.explanation}
                                       </p>
                                     </div>
@@ -406,7 +406,7 @@ const ProblemPage = () => {
                 ) : (
                   <div className="text-center py-12">
                     <div className="text-6xl mb-4">❌</div>
-                    <div className="text-slate-400 text-lg">
+                    <div className="text-gray-600 text-lg">
                       Problem not found
                     </div>
                   </div>
@@ -417,11 +417,11 @@ const ProblemPage = () => {
             {activeLeftTab === "solutions" && (
               <div className="p-6">
                 <div className="flex items-center justify-between mb-6">
-                  <h3 className="text-xl font-bold text-white flex items-center">
+                  <h3 className="text-xl font-bold text-gray-900 flex items-center">
                     <span className="mr-2">💡</span>
                     Reference Solutions
                   </h3>
-                  <span className="text-sm text-slate-400 bg-slate-800/50 px-3 py-1 rounded-full">
+                  <span className="text-sm text-gray-700 bg-gray-100 px-3 py-1 rounded-full border border-gray-200">
                     {problem?.referenceSolution?.length || 0} solution
                     {(problem?.referenceSolution?.length || 0) !== 1 ? "s" : ""}
                   </span>
@@ -429,14 +429,14 @@ const ProblemPage = () => {
 
                 {initialLoading ? (
                   <div className="flex justify-center py-12">
-                    <div className="animate-spin rounded-full h-8 w-8 border-2 border-slate-700 border-t-amber-500"></div>
+                    <div className="animate-spin rounded-full h-8 w-8 border-2 border-gray-300 border-t-purple-600"></div>
                   </div>
                 ) : problem?.referenceSolution?.length > 0 ? (
                   <div className="space-y-4">
                     {problem.referenceSolution.map((solution, index) => (
                       <div
                         key={index}
-                        className="bg-slate-900/50 rounded-xl p-5 border border-slate-800 hover:border-slate-700 transition-all duration-200 group"
+                        className="bg-white/80 rounded-xl p-5 border border-gray-200 hover:border-purple-300 transition-all duration-200 group shadow-sm"
                       >
                         <div className="flex items-center justify-between mb-4">
                           <div className="flex items-center space-x-3">
@@ -444,16 +444,16 @@ const ProblemPage = () => {
                               {getLanguageIcon(solution.language)}
                             </span>
                             <div>
-                              <h4 className="font-semibold text-2xl mb-2 text-white">
+                              <h4 className="font-semibold text-2xl mb-2 text-gray-900">
                                 {solution.language}
                               </h4>
-                              <p className="textarea-xs text-slate-400">
+                              <p className="textarea-xs text-gray-600">
                                 Solution
                               </p>
                             </div>
                           </div>
                           <div className="flex items-center space-x-3">
-                            <span className="px-2 py-1 text-xs font-semibold rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20">
+                            <span className="px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-700 border border-blue-200">
                               Reference
                             </span>
                             <button
@@ -470,7 +470,7 @@ const ProblemPage = () => {
                                 );
                                 setActiveRightTab("code");
                               }}
-                              className="opacity-0 group-hover:opacity-100 bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 px-3 py-1 rounded-lg text-xs font-medium transition-all duration-200"
+                              className="opacity-0 group-hover:opacity-100 bg-purple-100 hover:bg-purple-200 text-purple-700 px-3 py-1 rounded-lg text-xs font-medium transition-all duration-200 shadow-sm"
                             >
                               Load
                             </button>
@@ -478,7 +478,7 @@ const ProblemPage = () => {
                         </div>
 
                         <details className="group">
-                          <summary className="cursor-pointer text-xs text-slate-400 hover:text-amber-400 transition-colors duration-200 flex items-center">
+                          <summary className="cursor-pointer text-xs text-gray-600 hover:text-purple-700 transition-colors duration-200 flex items-center">
                             <span className="mr-3"></span>
                             View Code
                             <svg
@@ -494,7 +494,7 @@ const ProblemPage = () => {
                             </svg>
                           </summary>
                           <div className="mt-3">
-                            <pre className="bg-slate-950 p-4 rounded-lg text-sm overflow-x-auto text-slate-300 border border-slate-800 max-h-64">
+                            <pre className="bg-gray-50 p-4 rounded-lg text-sm overflow-x-auto text-gray-800 border border-gray-200 max-h-64">
                               <code>{solution.completeCode}</code>
                             </pre>
                           </div>
@@ -505,10 +505,10 @@ const ProblemPage = () => {
                 ) : (
                   <div className="text-center py-12">
                     <div className="text-6xl mb-4">💡</div>
-                    <div className="text-slate-400 text-lg mb-2">
+                    <div className="text-gray-600 text-lg mb-2">
                       No reference solutions available
                     </div>
-                    <div className="text-slate-500 text-sm">
+                    <div className="text-gray-600 text-sm">
                       Reference solutions will appear here when available.
                     </div>
                   </div>
@@ -528,9 +528,9 @@ const ProblemPage = () => {
                   </div>
                 ) : (
                   <div className="flex flex-col items-center justify-center py-20 text-center">
-                    <div className="w-20 h-20 bg-gray-800/50 rounded-full flex items-center justify-center mb-4 border border-gray-700">
+                    <div className="w-20 h-20 bg-white/80 rounded-full flex items-center justify-center mb-4 border border-gray-200 shadow-sm">
                       <svg
-                        className="w-10 h-10 text-gray-500"
+                        className="w-10 h-10 text-gray-400"
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
@@ -543,10 +543,10 @@ const ProblemPage = () => {
                         />
                       </svg>
                     </div>
-                    <h3 className="text-lg font-medium text-gray-300 mb-2">
+                    <h3 className="text-lg font-medium text-gray-900 mb-2">
                       Editorial Not Available
                     </h3>
-                    <p className="text-gray-500 text-sm">
+                    <p className="text-gray-600 text-sm">
                       This problem doesn't have an editorial video yet.
                     </p>
                   </div>
@@ -560,14 +560,14 @@ const ProblemPage = () => {
                 <div className="mb-8">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-3">
-                      <div className="p-3 bg-indigo-500/10 rounded-xl border border-indigo-500/20">
+                      <div className="p-3 bg-indigo-100 rounded-xl border border-indigo-200">
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           fill="none"
                           viewBox="0 0 24 24"
                           strokeWidth={2}
                           stroke="currentColor"
-                          className="w-6 h-6 text-indigo-400"
+                          className="w-6 h-6 text-indigo-700"
                         >
                           <path
                             strokeLinecap="round"
@@ -577,21 +577,21 @@ const ProblemPage = () => {
                         </svg>
                       </div>
                       <div>
-                        <h2 className="text-2xl font-bold text-white bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+                        <h2 className="text-2xl font-bold bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
                           Submission History
                         </h2>
-                        <p className="text-gray-400 text-sm mt-1">
+                        <p className="text-gray-600 text-sm mt-1">
                           Track your coding journey and progress
                         </p>
                       </div>
                     </div>
 
                     {submissions.length > 0 && (
-                      <div className="bg-gray-800/50 rounded-xl px-4 py-2 border border-gray-700/50">
-                        <div className="text-xs text-gray-400 uppercase tracking-wide">
+                      <div className="bg-white/80 rounded-xl px-4 py-2 border border-gray-200 shadow-sm">
+                        <div className="text-xs text-gray-600 uppercase tracking-wide">
                           Total Submissions
                         </div>
-                        <div className="text-2xl font-bold text-white">
+                        <div className="text-2xl font-bold text-gray-900">
                           {submissions.length}
                         </div>
                       </div>
@@ -601,17 +601,17 @@ const ProblemPage = () => {
 
                 {/* Content */}
                 {!submissions.length ? (
-                  <div className="bg-gray-800/30 backdrop-blur-sm rounded-2xl border border-gray-700/30 p-16">
+                  <div className="bg-white/80 backdrop-blur-sm rounded-2xl border border-gray-200 p-16 shadow-sm">
                     <div className="text-center">
                       <div className="mb-6">
-                        <div className="w-24 h-24 mx-auto bg-gradient-to-br from-indigo-500/20 to-purple-500/20 rounded-2xl flex items-center justify-center border border-indigo-500/20">
+                        <div className="w-24 h-24 mx-auto bg-gradient-to-br from-indigo-100 to-purple-100 rounded-2xl flex items-center justify-center border border-indigo-200">
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
                             fill="none"
                             viewBox="0 0 24 24"
                             strokeWidth={1.5}
                             stroke="currentColor"
-                            className="w-12 h-12 text-indigo-400"
+                            className="w-12 h-12 text-indigo-600"
                           >
                             <path
                               strokeLinecap="round"
@@ -621,15 +621,15 @@ const ProblemPage = () => {
                           </svg>
                         </div>
                       </div>
-                      <h3 className="text-xl font-semibold text-gray-300 mb-3">
+                      <h3 className="text-xl font-semibold text-gray-900 mb-3">
                         No Submissions Yet
                       </h3>
-                      <p className="text-gray-500 max-w-md mx-auto leading-relaxed">
+                      <p className="text-gray-600 max-w-md mx-auto leading-relaxed">
                         Start solving problems to see your submission history
                         here. Your journey begins with a single submission!
                       </p>
                       <div className="mt-8">
-                        <div className="inline-flex items-center space-x-2 bg-indigo-500/10 text-indigo-400 px-4 py-2 rounded-xl border border-indigo-500/20">
+                        <div className="inline-flex items-center space-x-2 bg-indigo-100 text-indigo-700 px-4 py-2 rounded-xl border border-indigo-200">
                           <svg
                             className="w-4 h-4"
                             fill="none"
@@ -651,13 +651,13 @@ const ProblemPage = () => {
                     </div>
                   </div>
                 ) : (
-                  <div className="bg-gray-800/30 backdrop-blur-sm rounded-2xl border border-gray-700/30 overflow-hidden">
+                  <div className="bg-white/80 backdrop-blur-sm rounded-2xl border border-gray-200 overflow-hidden shadow-sm">
                     {/* Table Header */}
-                    <div className="bg-gradient-to-r from-gray-800/80 to-gray-700/50 border-b border-gray-700/50">
+                    <div className="bg-gradient-to-r from-gray-50 to-gray-100 border-b border-gray-200">
                       <div className="grid grid-cols-6 gap-4 p-6">
-                        <div className="text-gray-300 font-semibold text-sm uppercase tracking-wide flex items-center">
+                        <div className="text-gray-700 font-semibold text-sm uppercase tracking-wide flex items-center">
                           <svg
-                            className="w-4 h-4 mr-2 text-indigo-400"
+                            className="w-4 h-4 mr-2 text-indigo-600"
                             fill="none"
                             stroke="currentColor"
                             viewBox="0 0 24 24"
@@ -671,9 +671,9 @@ const ProblemPage = () => {
                           </svg>
                           Status
                         </div>
-                        <div className="text-gray-300 font-semibold text-sm uppercase tracking-wide flex items-center">
+                        <div className="text-gray-700 font-semibold text-sm uppercase tracking-wide flex items-center">
                           <svg
-                            className="w-4 h-4 mr-2 text-purple-400"
+                            className="w-4 h-4 mr-2 text-purple-600"
                             fill="none"
                             stroke="currentColor"
                             viewBox="0 0 24 24"
@@ -687,9 +687,9 @@ const ProblemPage = () => {
                           </svg>
                           Language
                         </div>
-                        <div className="text-gray-300 font-semibold text-sm uppercase tracking-wide flex items-center">
+                        <div className="text-gray-700 font-semibold text-sm uppercase tracking-wide flex items-center">
                           <svg
-                            className="w-4 h-4 mr-2 text-yellow-400"
+                            className="w-4 h-4 mr-2 text-yellow-600"
                             fill="none"
                             stroke="currentColor"
                             viewBox="0 0 24 24"
@@ -703,9 +703,9 @@ const ProblemPage = () => {
                           </svg>
                           Runtime
                         </div>
-                        <div className="text-gray-300 font-semibold text-sm uppercase tracking-wide flex items-center">
+                        <div className="text-gray-700 font-semibold text-sm uppercase tracking-wide flex items-center">
                           <svg
-                            className="w-4 h-4 mr-2 text-blue-400"
+                            className="w-4 h-4 mr-2 text-blue-600"
                             fill="none"
                             stroke="currentColor"
                             viewBox="0 0 24 24"
@@ -719,9 +719,9 @@ const ProblemPage = () => {
                           </svg>
                           Memory
                         </div>
-                        <div className="text-gray-300 font-semibold text-sm uppercase tracking-wide flex items-center">
+                        <div className="text-gray-700 font-semibold text-sm uppercase tracking-wide flex items-center">
                           <svg
-                            className="w-4 h-4 mr-2 text-green-400"
+                            className="w-4 h-4 mr-2 text-green-600"
                             fill="none"
                             stroke="currentColor"
                             viewBox="0 0 24 24"
@@ -735,9 +735,9 @@ const ProblemPage = () => {
                           </svg>
                           Tests Passed
                         </div>
-                        <div className="text-gray-300 font-semibold text-sm uppercase tracking-wide flex items-center">
+                        <div className="text-gray-700 font-semibold text-sm uppercase tracking-wide flex items-center">
                           <svg
-                            className="w-4 h-4 mr-2 text-pink-400"
+                            className="w-4 h-4 mr-2 text-pink-600"
                             fill="none"
                             stroke="currentColor"
                             viewBox="0 0 24 24"
@@ -755,11 +755,11 @@ const ProblemPage = () => {
                     </div>
 
                     {/* Table Body */}
-                    <div className="divide-y divide-gray-700/30">
+                    <div className="divide-y divide-gray-200">
                       {submissions.map((submission, index) => (
                         <div
                           key={submission._id}
-                          className="grid grid-cols-6 gap-4 p-6 hover:bg-gray-800/40 transition-all duration-300 group"
+                          className="grid grid-cols-6 gap-4 p-6 hover:bg-gray-50 transition-all duration-300 group"
                         >
                           {/* Status */}
                           <div className="flex items-center">
@@ -835,11 +835,11 @@ const ProblemPage = () => {
 
                           {/* Language */}
                           <div className="flex items-center">
-                            <div className="flex items-center ml-4 bg-gray-700/30 px-2 py-2 rounded-xl border border-gray-600/30 group-hover:border-gray-500/50 transition-all duration-300">
+                            <div className="flex items-center ml-4 bg-gray-100 px-2 py-2 rounded-xl border border-gray-200 group-hover:border-gray-300 transition-all duration-300">
                               <span className="text-lg ">
                                 {getLanguageIcon(submission.language)}
                               </span>
-                              <span className="text-gray-200 font-medium text-sm">
+                              <span className="text-gray-900 font-medium text-sm">
                                 {submission.language}
                               </span>
                             </div>
@@ -847,14 +847,14 @@ const ProblemPage = () => {
 
                           {/* Runtime */}
                           <div className="flex items-center">
-                            <div className="bg-yellow-400/10 text-yellow-300 px-3 py-2 rounded-xl border border-yellow-400/20 font-mono text-sm font-semibold">
+                            <div className="bg-yellow-100 text-yellow-700 px-3 py-2 rounded-xl border border-yellow-200 font-mono text-sm font-semibold">
                               {formatRuntime(submission.runtime)}
                             </div>
                           </div>
 
                           {/* Memory */}
                           <div className="flex items-center">
-                            <div className="bg-blue-400/10 text-blue-300 px-3 py-2 rounded-xl border border-blue-400/20 font-mono text-sm font-semibold">
+                            <div className="bg-blue-100 text-blue-700 px-3 py-2 rounded-xl border border-blue-200 font-mono text-sm font-semibold">
                               {formatMemory(submission.memory)}
                             </div>
                           </div>
@@ -862,11 +862,11 @@ const ProblemPage = () => {
                           {/* Tests Passed */}
                           <div className="flex items-center">
                             <div className="flex items-center space-x-2">
-                              <div className="bg-green-400/10 text-green-300 px-3 py-2 rounded-xl border border-green-400/20 font-semibold text-sm">
+                              <div className="bg-green-100 text-green-700 px-3 py-2 rounded-xl border border-green-200 font-semibold text-sm">
                                 {submission.testCasesPassed || "0/0"}
                               </div>
                               {submission.status === "Accepted" && (
-                                <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                                <div className="w-2 h-2 bg-green-600 rounded-full animate-pulse"></div>
                               )}
                             </div>
                           </div>
@@ -874,10 +874,10 @@ const ProblemPage = () => {
                           {/* Submitted At */}
                           <div className="flex items-center justify-between">
                             <div className="space-y-1">
-                              <div className="text-gray-300 font-medium text-sm">
+                              <div className="text-gray-900 font-medium text-sm">
                                 {formatDate(submission.createdAt)}
                               </div>
-                              <div className="text-gray-500 text-xs font-mono">
+                              <div className="text-gray-600 text-xs font-mono">
                                 {new Date(
                                   submission.createdAt
                                 ).toLocaleTimeString()}
@@ -915,7 +915,7 @@ const ProblemPage = () => {
                               {/* Hover Code Preview */}
                               <div
                                 className="absolute left-0 mt-2 hidden group-hover:block z-50 
-    bg-gray-900 text-green-400 p-4 rounded-lg shadow-lg 
+    bg-gray-50 text-gray-800 p-4 rounded-lg shadow-lg border border-gray-200
     max-w-md w-[400px] overflow-x-auto"
                               >
                                 <pre className="text-sm">
@@ -930,7 +930,7 @@ const ProblemPage = () => {
 
                     {/* Stats Footer */}
                     {submissions.length > 0 && (
-                      <div className="bg-gradient-to-r from-gray-800/50 to-gray-700/30 border-t border-gray-700/30 p-6">
+                      <div className="bg-white p-6">
                         <div className="grid grid-cols-3 gap-6">
                           <div className="text-center">
                             <div className="text-2xl font-bold text-emerald-400 mb-1">
@@ -940,7 +940,7 @@ const ProblemPage = () => {
                                 ).length
                               }
                             </div>
-                            <div className="text-gray-400 text-sm">
+                            <div className="text-gray-600 text-sm">
                               Accepted
                             </div>
                           </div>
@@ -985,19 +985,19 @@ const ProblemPage = () => {
             )}
 
             {activeLeftTab === "chatAI" && (
-              <div className="h-full flex flex-col bg-gradient-to-br from-gray-900 via-gray-800 to-black p-4">
+              <div className="h-full flex flex-col bg-gradient-to-br from-white via-gray-50 to-blue-50 p-4">
                 {/* Header Section */}
                 <div className="text-center mb-6">
                   <div className="relative inline-block mb-4">
-                    <div className="absolute inset-0 bg-gradient-to-r from-purple-600/20 to-blue-600/20 rounded-full blur-xl"></div>
+                    <div className="absolute inset-0 bg-gradient-to-r from-purple-200/30 to-blue-200/30 rounded-full blur-xl"></div>
                   </div>
                   <div className="">
-                    <h2 className="text-3xl font-bold bg-gradient-to-r from-purple-400 via-blue-400 to-cyan-400 bg-clip-text text-transparent">
+                    <h2 className="text-3xl font-bold bg-gradient-to-r from-purple-600 via-blue-600 to-cyan-600 bg-clip-text text-transparent">
                       AI Chat Assistant
                     </h2>
 
-                    <div className="flex items-center justify-center space-x-2 text-sm text-slate-500">
-                      <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                    <div className="flex items-center justify-center space-x-2 text-sm text-gray-600">
+                      <div className="w-2 h-2 bg-green-600 rounded-full animate-pulse"></div>
                       <span>Ready to help with your coding questions</span>
                     </div>
                   </div>
@@ -1007,9 +1007,9 @@ const ProblemPage = () => {
                 <div className="flex-1 flex items-center justify-center">
                   <div className="w-full max-w-5xl h-full min-h-[600px] relative">
                     {/* Background decoration */}
-                    <div className="absolute inset-0 bg-gradient-to-r from-purple-900/10 to-blue-900/10 rounded-2xl"></div>
-                    <div className="absolute top-0 left-1/4 w-32 h-32 bg-purple-600/10 rounded-full blur-3xl"></div>
-                    <div className="absolute bottom-0 right-1/4 w-32 h-32 bg-blue-600/10 rounded-full blur-3xl"></div>
+                    <div className="absolute inset-0 bg-gradient-to-r from-purple-100/20 to-blue-100/20 rounded-2xl"></div>
+                    <div className="absolute top-0 left-1/4 w-32 h-32 bg-purple-200/20 rounded-full blur-3xl"></div>
+                    <div className="absolute bottom-0 right-1/4 w-32 h-32 bg-blue-200/20 rounded-full blur-3xl"></div>
 
                     {/* Chat Component */}
                     <div className="relative z-10 h-full">
@@ -1025,9 +1025,9 @@ const ProblemPage = () => {
         </div>
 
         {/* Right Panel - Code Editor */}
-        <div className="w-1/2 flex flex-col bg-slate-950/30">
+        <div className="w-1/2 flex flex-col bg-white/50 backdrop-blur-sm">
           {/* Right Tabs */}
-          <div className="bg-slate-900/30 border-b border-slate-800">
+          <div className="bg-white/80 border-b border-gray-200 backdrop-blur-sm">
             <div className="flex">
               {[
                 { key: "code", label: "Code", icon: "" },
@@ -1039,8 +1039,8 @@ const ProblemPage = () => {
                   onClick={() => setActiveRightTab(tab.key)}
                   className={`px-4 py-3 text-sm font-medium border-b-2 transition-all duration-200 flex items-center space-x-2 ${
                     activeRightTab === tab.key
-                      ? "border-amber-500 text-amber-400 bg-amber-500/5"
-                      : "border-transparent text-slate-400 hover:text-white hover:bg-slate-800/30"
+                      ? "border-purple-500 text-purple-700 bg-purple-50"
+                      : "border-transparent text-gray-600 hover:text-gray-900 hover:bg-gray-100"
                   }`}
                 >
                   <span>{tab.icon}</span>
@@ -1069,12 +1069,12 @@ const ProblemPage = () => {
             {activeRightTab === "code" && (
               <>
                 {/* Language Selector and Action Buttons */}
-                <div className="bg-slate-900/30 px-4 py-3 flex items-center justify-between border-b border-slate-800">
+                <div className="bg-white/80 px-4 py-3 flex items-center justify-between border-b border-gray-200 backdrop-blur-sm">
                   <div className="flex items-center space-x-4">
                     <select
                       value={selectedLanguage}
                       onChange={(e) => handleLanguageChange(e.target.value)}
-                      className="bg-slate-800 text-white border border-slate-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                      className="bg-white text-gray-900 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent shadow-sm"
                     >
                       <option value="cpp"> C++</option>
                       <option value="python">Python</option>
@@ -1086,32 +1086,32 @@ const ProblemPage = () => {
                     <button
                       onClick={handleRun}
                       disabled={runLoading || submitLoading}
-                      className="bg-slate-700 hover:bg-slate-600 disabled:opacity-50 disabled:cursor-not-allowed text-white px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 flex items-center space-x-2"
+                      className="bg-gray-700 hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed text-white px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 flex items-center space-x-2 shadow-sm"
                     >
                       {runLoading ? (
                         <>
-                          <div className="animate-spin rounded-full h-4 w-4 border-2 border-slate-500 border-t-white"></div>
+                          <div className="animate-spin rounded-full h-4 w-4 border-2 border-gray-400 border-t-white"></div>
                           <span>Running...</span>
                         </>
                       ) : (
                         <>
-                          <span>Run</span>
+                          <span>▶ Run</span>
                         </>
                       )}
                     </button>
                     <button
                       onClick={handleSubmitCode}
                       disabled={submitLoading || runLoading}
-                      className="bg-amber-600 hover:bg-amber-500 disabled:opacity-50 disabled:cursor-not-allowed text-white px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 flex items-center space-x-2"
+                      className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 disabled:opacity-50 disabled:cursor-not-allowed text-white px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 flex items-center space-x-2 shadow-md"
                     >
                       {submitLoading ? (
                         <>
-                          <div className="animate-spin rounded-full h-4 w-4 border-2 border-amber-300 border-t-white"></div>
+                          <div className="animate-spin rounded-full h-4 w-4 border-2 border-purple-300 border-t-white"></div>
                           <span>Submitting...</span>
                         </>
                       ) : (
                         <>
-                          <span>Submit</span>
+                          <span>✓ Submit</span>
                         </>
                       )}
                     </button>
@@ -1119,14 +1119,14 @@ const ProblemPage = () => {
                 </div>
 
                 {/* Code Editor */}
-                <div className="flex-1 bg-slate-950">
+                <div className="flex-1 bg-white border-t border-gray-200">
                   <Editor
                     height="100%"
                     language={getLanguageForMonaco(selectedLanguage)}
                     value={code}
                     onChange={handleEditorChange}
                     onMount={handleEditorDidMount}
-                    theme="vs-dark"
+                    theme="light"
                     options={{
                       fontSize: 14,
                       minimap: { enabled: false },
@@ -1175,19 +1175,19 @@ const ProblemPage = () => {
                       </div>
                       {runResult.runTime !== undefined && (
                         <div className="grid grid-cols-2 gap-4 mt-4">
-                          <div className="bg-slate-900/50 p-4 rounded-lg">
-                            <div className="text-sm text-slate-400 mb-1">
+                          <div className="bg-white/80 p-4 rounded-lg shadow-sm border border-gray-200">
+                            <div className="text-sm text-gray-600 mb-1">
                               Runtime
                             </div>
-                            <div className="text-xl font-bold text-white">
+                            <div className="text-xl font-bold text-gray-900">
                               {runResult.runTime.toFixed(3)}ms
                             </div>
                           </div>
-                          <div className="bg-slate-900/50 p-4 rounded-lg">
-                            <div className="text-sm text-slate-400 mb-1">
+                          <div className="bg-white/80 p-4 rounded-lg shadow-sm border border-gray-200">
+                            <div className="text-sm text-gray-600 mb-1">
                               Memory
                             </div>
-                            <div className="text-xl font-bold text-white">
+                            <div className="text-xl font-bold text-gray-900">
                               {runResult.memory >= 1024
                                 ? `${(runResult.memory / 1024).toFixed(2)}MB`
                                 : `${runResult.memory}KB`}
@@ -1195,11 +1195,11 @@ const ProblemPage = () => {
                           </div>
                         </div>
                       )}
-                      <div className="bg-slate-900/50 p-4 rounded-lg mt-4">
-                        <div className="text-sm text-slate-400 mb-1">
+                      <div className="bg-white/80 p-4 rounded-lg mt-4 shadow-sm border border-gray-200">
+                        <div className="text-sm text-gray-600 mb-1">
                           Test Cases
                         </div>
-                        <div className="text-lg font-bold text-white">
+                        <div className="text-lg font-bold text-gray-900">
                           {runResult.passedTestCases || 0}/
                           {runResult.totalTestCases || 0} passed
                         </div>
@@ -1211,10 +1211,10 @@ const ProblemPage = () => {
                         {runResult.testCases.map((testCase, index) => (
                           <div
                             key={index}
-                            className="bg-slate-900/50 rounded-xl p-5 border border-slate-800 hover:border-slate-700 transition-all duration-200"
+                            className="bg-white/80 rounded-xl p-5 border border-gray-200 hover:border-purple-300 transition-all duration-200 shadow-sm"
                           >
                             <div className="flex items-center justify-between mb-4">
-                              <h4 className="font-bold text-white">
+                              <h4 className="font-bold text-gray-900">
                                 Test Case {index + 1}
                               </h4>
                               <div className="flex items-center">
@@ -1238,30 +1238,30 @@ const ProblemPage = () => {
                             </div>
                             <div className="space-y-3 text-sm">
                               <div>
-                                <span className="text-slate-400 font-medium">
+                                <span className="text-gray-700 font-medium">
                                   Input:
                                 </span>
-                                <pre className="bg-slate-950 p-3 rounded-lg mt-1 overflow-x-auto text-emerald-400 border border-slate-800">
+                                <pre className="bg-gray-50 p-3 rounded-lg mt-1 overflow-x-auto text-emerald-700 border border-gray-200">
                                   {testCase.input}
                                 </pre>
                               </div>
                               <div>
-                                <span className="text-slate-400 font-medium">
+                                <span className="text-gray-700 font-medium">
                                   Expected:
                                 </span>
-                                <pre className="bg-slate-950 p-3 rounded-lg mt-1 overflow-x-auto text-blue-400 border border-slate-800">
+                                <pre className="bg-gray-50 p-3 rounded-lg mt-1 overflow-x-auto text-blue-700 border border-gray-200">
                                   {testCase.expectedOutput}
                                 </pre>
                               </div>
                               <div>
-                                <span className="text-slate-400 font-medium">
+                                <span className="text-gray-700 font-medium">
                                   Your Output:
                                 </span>
                                 <pre
                                   className={`p-3 rounded-lg mt-1 overflow-x-auto border ${
                                     testCase.passed
-                                      ? "bg-slate-950 text-emerald-400 border-slate-800"
-                                      : "bg-rose-900/20 text-rose-400 border-rose-500/30"
+                                      ? "bg-gray-50 text-emerald-700 border-gray-200"
+                                      : "bg-rose-50 text-rose-700 border-rose-300"
                                   }`}
                                 >
                                   {testCase.output}
@@ -1269,10 +1269,10 @@ const ProblemPage = () => {
                               </div>
                               {testCase.error && (
                                 <div>
-                                  <span className="text-slate-400 font-medium">
+                                  <span className="text-gray-700 font-medium">
                                     Error:
                                   </span>
-                                  <pre className="bg-rose-900/20 p-3 rounded-lg mt-1 overflow-x-auto text-rose-400 border border-rose-500/30">
+                                  <pre className="bg-rose-50 p-3 rounded-lg mt-1 overflow-x-auto text-rose-700 border border-rose-300">
                                     {testCase.error}
                                   </pre>
                                 </div>
@@ -1284,7 +1284,7 @@ const ProblemPage = () => {
                     ) : (
                       <div className="text-center py-8">
                         <div className="text-4xl mb-3">📋</div>
-                        <div className="text-slate-400">
+                        <div className="text-gray-600">
                           No test cases available
                         </div>
                       </div>
@@ -1292,21 +1292,21 @@ const ProblemPage = () => {
 
                     {/* Summary */}
                     {runResult.testCases && (
-                      <div className="bg-slate-900/50 rounded-xl p-5 border border-slate-800">
-                        <h4 className="font-bold text-white mb-3 flex items-center">
+                      <div className="bg-white/80 rounded-xl p-5 border border-gray-200 shadow-sm">
+                        <h4 className="font-bold text-gray-900 mb-3 flex items-center">
                           <span className="mr-2">📊</span>
                           Summary
                         </h4>
                         <div className="grid grid-cols-3 gap-4 text-sm">
                           <div className="text-center">
-                            <div className="text-slate-400">Total</div>
-                            <div className="text-lg font-bold text-white">
+                            <div className="text-gray-600">Total</div>
+                            <div className="text-lg font-bold text-gray-900">
                               {runResult.testCases.length}
                             </div>
                           </div>
                           <div className="text-center">
-                            <div className="text-slate-400">Passed</div>
-                            <div className="text-lg font-bold text-emerald-400">
+                            <div className="text-gray-600">Passed</div>
+                            <div className="text-lg font-bold text-emerald-700">
                               {
                                 runResult.testCases.filter((tc) => tc.passed)
                                   .length
@@ -1314,8 +1314,8 @@ const ProblemPage = () => {
                             </div>
                           </div>
                           <div className="text-center">
-                            <div className="text-slate-400">Failed</div>
-                            <div className="text-lg font-bold text-rose-400">
+                            <div className="text-gray-600">Failed</div>
+                            <div className="text-lg font-bold text-rose-700">
                               {
                                 runResult.testCases.filter((tc) => !tc.passed)
                                   .length
@@ -1329,10 +1329,10 @@ const ProblemPage = () => {
                 ) : (
                   <div className="text-center py-16">
                     <div className="text-6xl mb-4">🧪</div>
-                    <div className="text-slate-400 text-lg mb-2">
+                    <div className="text-gray-600 text-lg mb-2">
                       Ready to Test
                     </div>
-                    <div className="text-slate-500 text-sm">
+                    <div className="text-gray-600 text-sm">
                       Run your code to see test case results here.
                     </div>
                   </div>
@@ -1373,21 +1373,21 @@ const ProblemPage = () => {
 
                       <div className="grid grid-cols-2 gap-4">
                         {submitResult.runTime !== undefined && (
-                          <div className="bg-slate-900/50 p-4 rounded-lg">
-                            <div className="text-sm text-slate-400 mb-1">
+                          <div className="bg-white/80 p-4 rounded-lg border border-gray-200 shadow-sm">
+                            <div className="text-sm text-gray-600 mb-1">
                               Runtime
                             </div>
-                            <div className="text-xl font-bold text-white">
+                            <div className="text-xl font-bold text-gray-900">
                               {submitResult.runTime.toFixed(3)}ms
                             </div>
                           </div>
                         )}
                         {submitResult.memory !== undefined && (
-                          <div className="bg-slate-900/50 p-4 rounded-lg">
-                            <div className="text-sm text-slate-400 mb-1">
+                          <div className="bg-white/80 p-4 rounded-lg border border-gray-200 shadow-sm">
+                            <div className="text-sm text-gray-600 mb-1">
                               Memory
                             </div>
-                            <div className="text-xl font-bold text-white">
+                            <div className="text-xl font-bold text-gray-900">
                               {submitResult.memory >= 1024
                                 ? `${(submitResult.memory / 1024).toFixed(2)}MB`
                                 : `${submitResult.memory}KB`}
@@ -1399,11 +1399,11 @@ const ProblemPage = () => {
                       {(submitResult.totalTestCases !== undefined ||
                         submitResult.passedTestCases !== undefined) && (
                         <div className="mt-4">
-                          <div className="bg-slate-900/50 p-4 rounded-lg">
-                            <div className="text-sm text-slate-400 mb-1">
+                          <div className="bg-white/80 p-4 rounded-lg border border-gray-200 shadow-sm">
+                            <div className="text-sm text-gray-600 mb-1">
                               Test Cases
                             </div>
-                            <div className="text-xl font-bold text-white">
+                            <div className="text-xl font-bold text-gray-900">
                               {submitResult.passedTestCases || 0} /{" "}
                               {submitResult.totalTestCases || 0} passed
                             </div>
@@ -1413,18 +1413,18 @@ const ProblemPage = () => {
 
                       {submitResult.errorMessage && (
                         <div className="mt-6">
-                          <div className="text-sm text-slate-400 mb-2 font-medium">
+                          <div className="text-sm text-gray-700 mb-2 font-medium">
                             Error:
                           </div>
-                          <pre className="bg-rose-900/20 p-4 rounded-lg overflow-x-auto text-rose-400 border border-rose-500/30">
+                          <pre className="bg-rose-50 p-4 rounded-lg overflow-x-auto text-rose-700 border border-rose-300">
                             {submitResult.errorMessage}
                           </pre>
                         </div>
                       )}
 
                       {submitResult.message && (
-                        <div className="mt-6 p-4 bg-slate-800/30 rounded-lg">
-                          <p className="text-slate-300">
+                        <div className="mt-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
+                          <p className="text-gray-700">
                             {submitResult.message}
                           </p>
                         </div>
@@ -1432,33 +1432,33 @@ const ProblemPage = () => {
                     </div>
 
                     {!submitResult.accepted && submitResult.failedTestCase && (
-                      <div className="bg-slate-900/50 rounded-xl p-5 border border-rose-500/30">
-                        <h4 className="font-bold mb-4 text-rose-400 flex items-center">
+                      <div className="bg-white/80 rounded-xl p-5 border border-rose-300 shadow-sm">
+                        <h4 className="font-bold mb-4 text-rose-700 flex items-center">
                           <span className="mr-2">❌</span>
                           Failed Test Case
                         </h4>
                         <div className="space-y-3 text-sm">
                           <div>
-                            <span className="text-slate-400 font-medium">
+                            <span className="text-gray-700 font-medium">
                               Input:
                             </span>
-                            <pre className="bg-slate-950 p-3 rounded-lg mt-1 overflow-x-auto text-emerald-400 border border-slate-800">
+                            <pre className="bg-gray-50 p-3 rounded-lg mt-1 overflow-x-auto text-emerald-700 border border-gray-200">
                               {submitResult.failedTestCase.input}
                             </pre>
                           </div>
                           <div>
-                            <span className="text-slate-400 font-medium">
+                            <span className="text-gray-700 font-medium">
                               Expected:
                             </span>
-                            <pre className="bg-slate-950 p-3 rounded-lg mt-1 overflow-x-auto text-blue-400 border border-slate-800">
+                            <pre className="bg-gray-50 p-3 rounded-lg mt-1 overflow-x-auto text-blue-700 border border-gray-200">
                               {submitResult.failedTestCase.expected}
                             </pre>
                           </div>
                           <div>
-                            <span className="text-slate-400 font-medium">
+                            <span className="text-gray-700 font-medium">
                               Your Output:
                             </span>
-                            <pre className="bg-rose-900/20 p-3 rounded-lg mt-1 overflow-x-auto text-rose-400 border border-rose-500/30">
+                            <pre className="bg-rose-50 p-3 rounded-lg mt-1 overflow-x-auto text-rose-700 border border-rose-300">
                               {submitResult.failedTestCase.output}
                             </pre>
                           </div>
@@ -1467,20 +1467,20 @@ const ProblemPage = () => {
                     )}
 
                     {/* Detailed submission info */}
-                    <div className="bg-slate-900/50 rounded-xl p-5 border border-slate-800">
-                      <h4 className="font-bold mb-4 text-white flex items-center">
+                    <div className="bg-white/80 rounded-xl p-5 border border-gray-200 shadow-sm">
+                      <h4 className="font-bold mb-4 text-gray-900 flex items-center">
                         <span className="mr-2">📋</span>
                         Submission Details
                       </h4>
                       <div className="grid grid-cols-2 gap-4 text-sm">
                         <div className="space-y-2">
                           <div className="flex justify-between">
-                            <span className="text-slate-400">Status:</span>
+                            <span className="text-gray-600">Status:</span>
                             <span
                               className={
                                 submitResult.accepted
-                                  ? "text-emerald-400"
-                                  : "text-rose-400"
+                                  ? "text-emerald-700"
+                                  : "text-rose-700"
                               }
                             >
                               {submitResult.status ||
@@ -1490,16 +1490,16 @@ const ProblemPage = () => {
                             </span>
                           </div>
                           <div className="flex justify-between">
-                            <span className="text-slate-400">Runtime:</span>
-                            <span className="text-white">
+                            <span className="text-gray-600">Runtime:</span>
+                            <span className="text-gray-900">
                               {submitResult.runTime !== undefined
                                 ? `${submitResult.runTime}ms`
                                 : "N/A"}
                             </span>
                           </div>
                           <div className="flex justify-between">
-                            <span className="text-slate-400">Memory:</span>
-                            <span className="text-white">
+                            <span className="text-gray-600">Memory:</span>
+                            <span className="text-gray-900">
                               {submitResult.memory !== undefined
                                 ? `${submitResult.memory}KB`
                                 : "N/A"}
@@ -1508,20 +1508,20 @@ const ProblemPage = () => {
                         </div>
                         <div className="space-y-2">
                           <div className="flex justify-between">
-                            <span className="text-slate-400">Total Tests:</span>
-                            <span className="text-white">
+                            <span className="text-gray-600">Total Tests:</span>
+                            <span className="text-gray-900">
                               {submitResult.totalTestCases ?? "N/A"}
                             </span>
                           </div>
                           <div className="flex justify-between">
-                            <span className="text-slate-400">Passed:</span>
-                            <span className="text-emerald-400">
+                            <span className="text-gray-600">Passed:</span>
+                            <span className="text-emerald-700">
                               {submitResult.passedTestCases ?? "N/A"}
                             </span>
                           </div>
                           <div className="flex justify-between">
-                            <span className="text-slate-400">Language:</span>
-                            <span className="text-white flex items-center">
+                            <span className="text-gray-600">Language:</span>
+                            <span className="text-gray-900 flex items-center">
                               <span className="mr-1">
                                 {getLanguageIcon(selectedLanguage)}
                               </span>
@@ -1535,10 +1535,10 @@ const ProblemPage = () => {
                 ) : (
                   <div className="text-center py-16">
                     <div className="text-6xl mb-4">🎯</div>
-                    <div className="text-slate-400 text-lg mb-2">
+                    <div className="text-gray-600 text-lg mb-2">
                       Ready to Submit
                     </div>
-                    <div className="text-slate-500 text-sm">
+                    <div className="text-gray-600 text-sm">
                       Submit your code to see results here.
                     </div>
                   </div>
@@ -1552,16 +1552,16 @@ const ProblemPage = () => {
       {/* Loading Overlay */}
       {(runLoading || submitLoading) && (
         <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50">
-          <div className="bg-slate-900 rounded-xl p-8 flex flex-col items-center space-y-4 border border-slate-800">
+          <div className="bg-white rounded-xl p-8 flex flex-col items-center space-y-4 border border-gray-200 shadow-lg">
             <div className="relative">
-              <div className="animate-spin rounded-full h-12 w-12 border-4 border-slate-700 border-t-amber-500"></div>
-              <div className="absolute inset-0 rounded-full h-12 w-12 border-4 border-transparent border-r-amber-300 animate-ping"></div>
+              <div className="animate-spin rounded-full h-12 w-12 border-4 border-gray-300 border-t-purple-600"></div>
+              <div className="absolute inset-0 rounded-full h-12 w-12 border-4 border-transparent border-r-purple-400 animate-ping"></div>
             </div>
             <div className="text-center">
-              <div className="text-white font-semibold text-lg">
+              <div className="text-gray-900 font-semibold text-lg">
                 {runLoading ? "Running Tests..." : "Submitting Solution..."}
               </div>
-              <div className="text-slate-400 text-sm">
+              <div className="text-gray-600 text-sm">
                 {runLoading
                   ? "Executing your code against test cases"
                   : "Evaluating your submission"}

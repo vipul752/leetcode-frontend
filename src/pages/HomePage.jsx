@@ -137,9 +137,9 @@ const HomePage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900">
+    <div className="min-h-screen bg-gradient-to-br from-white via-gray-50 to-blue-50">
       {/* Enhanced Navigation */}
-      <nav className="bg-gray-900/80 backdrop-blur-md border-b border-gray-800/50 shadow-2xl sticky top-0 z-50">
+      <nav className="bg-white/80 backdrop-blur-md border-b border-gray-200 shadow-sm sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
@@ -160,8 +160,8 @@ const HomePage = () => {
                     />
                   </svg>
                 </div>
-                <span className="text-3xl mr-4  font-bold bg-gradient-to-r from-white via-gray-100 to-gray-300 bg-clip-text text-transparent group-hover:from-purple-400 group-hover:to-blue-400 transition-all duration-300">
-                  LeetCode
+                <span className="text-3xl mr-4  font-bold bg-gradient-to-r from-gray-900 via-purple-600 to-blue-600 bg-clip-text text-transparent group-hover:from-purple-600 group-hover:to-blue-600 transition-all duration-300">
+                  CodeArena
                 </span>
               </NavLink>
             </div>
@@ -240,23 +240,23 @@ const HomePage = () => {
               </button>
               {/* Enhanced Quick Stats */}
               {user && (
-                <div className="hidden lg:flex items-center space-x-4 bg-gray-800/50 rounded-xl px-6 py-3 border border-gray-700/50">
+                <div className="hidden lg:flex items-center space-x-4 bg-white/80 rounded-xl px-6 py-3 border border-gray-200 shadow-sm">
                   <div className="flex items-center space-x-2">
-                    <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
-                    <span className="text-sm font-medium text-green-400">
+                    <div className="w-3 h-3 bg-green-600 rounded-full animate-pulse"></div>
+                    <span className="text-sm font-medium text-green-700">
                       {solvedCount}
                     </span>
-                    <span className="text-sm text-gray-400">solved</span>
+                    <span className="text-sm text-gray-600">solved</span>
                   </div>
-                  <div className="w-px h-5 bg-gray-600"></div>
+                  <div className="w-px h-5 bg-gray-300"></div>
                   <div className="flex items-center space-x-2">
-                    <span className="text-sm font-medium text-purple-400">
+                    <span className="text-sm font-medium text-purple-600">
                       {getStreakInfo()}
                     </span>
-                    <span className="text-sm text-gray-400">streak</span>
+                    <span className="text-sm text-gray-600">streak</span>
                   </div>
-                  <div className="w-px h-5 bg-gray-600"></div>
-                  <div className="text-sm font-medium text-blue-400">
+                  <div className="w-px h-5 bg-gray-300"></div>
+                  <div className="text-sm font-medium text-blue-600">
                     {getRankInfo().icon} {getRankInfo().rank}
                   </div>
                 </div>
@@ -266,7 +266,7 @@ const HomePage = () => {
               {user && (
                 <button
                   onClick={() => setShowStats(!showStats)}
-                  className="p-3 bg-gray-800/50 hover:bg-gray-800/80 rounded-xl border border-gray-700/50 hover:border-gray-600/50 transition-all duration-300 group"
+                  className="p-3 bg-white/80 hover:bg-white rounded-xl border border-gray-200 hover:border-purple-300 transition-all duration-300 group shadow-sm"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -274,7 +274,7 @@ const HomePage = () => {
                     viewBox="0 0 24 24"
                     strokeWidth={2}
                     stroke="currentColor"
-                    className="w-5 h-5 text-gray-400 group-hover:text-purple-400 transition-colors duration-300"
+                    className="w-5 h-5 text-gray-600 group-hover:text-purple-600 transition-colors duration-300"
                   >
                     <path
                       strokeLinecap="round"
@@ -288,7 +288,7 @@ const HomePage = () => {
               {user && user.role === "admin" && (
                 <button
                   onClick={() => navigate("/admin")}
-                  className="px-4 py-2 bg-slate-900 text-white rounded-xl font-medium transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-red-500/30 flex items-center space-x-2"
+                  className="px-4 py-2 bg-gray-900 text-white rounded-xl font-medium transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-red-500/30 flex items-center space-x-2"
                 >
                   <span>Admin</span>
                 </button>
@@ -296,13 +296,13 @@ const HomePage = () => {
 
               {/* User Dropdown */}
               <div className="relative group">
-                <button className="flex items-center space-x-3 bg-gray-800/50 hover:bg-gray-800/80 rounded-xl px-4 py-2 border border-gray-700/50 hover:border-gray-600/50 transition-all duration-300">
+                <button className="flex items-center space-x-3 bg-white/80 hover:bg-white rounded-xl px-4 py-2 border border-gray-200 hover:border-purple-300 transition-all duration-300 shadow-sm">
                   <div className="w-8 h-8 bg-gradient-to-r from-purple-500 to-blue-500 rounded-lg flex items-center justify-center">
                     <span className="text-white font-semibold text-sm">
                       {user?.firstName?.charAt(0) || "G"}
                     </span>
                   </div>
-                  <span className="text-white font-medium">
+                  <span className="text-gray-900 font-medium">
                     {user?.firstName || "Guest"}
                   </span>
                   <svg
@@ -311,7 +311,7 @@ const HomePage = () => {
                     viewBox="0 0 24 24"
                     strokeWidth={2}
                     stroke="currentColor"
-                    className="w-4 h-4 text-gray-400 group-hover:text-white transition-colors duration-300"
+                    className="w-4 h-4 text-gray-600 group-hover:text-gray-900 transition-colors duration-300"
                   >
                     <path
                       strokeLinecap="round"
@@ -320,14 +320,14 @@ const HomePage = () => {
                     />
                   </svg>
                 </button>
-                <div className="absolute right-0 mt-2 w-48 bg-gray-800/95 backdrop-blur-md border border-gray-700/50 rounded-xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
+                <div className="absolute right-0 mt-2 w-48 bg-white/95 backdrop-blur-md border border-gray-200 rounded-xl shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
                   <div className="p-2">
                     <div className="space-y-1">
                       <button
                         onClick={() => navigate("/profile")}
-                        className="w-full text-left px-4 py-3 text-gray-300 hover:bg-purple-500/10 hover:text-purple-300 rounded-xl transition-all duration-200 flex items-center space-x-3 group/item"
+                        className="w-full text-left px-4 py-3 text-gray-700 hover:bg-purple-50 hover:text-purple-700 rounded-xl transition-all duration-200 flex items-center space-x-3 group/item"
                       >
-                        <div className="w-8 h-8 bg-gray-700/50 group-hover/item:bg-purple-500/20 rounded-lg flex items-center justify-center transition-colors duration-200">
+                        <div className="w-8 h-8 bg-gray-100 group-hover/item:bg-purple-100 rounded-lg flex items-center justify-center transition-colors duration-200">
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
                             fill="none"
@@ -351,13 +351,13 @@ const HomePage = () => {
                         </div>
                       </button>
 
-                      <div className="border-t border-gray-700/50 my-2"></div>
+                      <div className="border-t border-gray-200 my-2"></div>
 
                       <button
                         onClick={handleLogout}
-                        className="w-full text-left px-4 py-3 text-red-400 hover:bg-red-500/10 hover:text-red-300 rounded-xl transition-all duration-200 flex items-center space-x-3 group/item"
+                        className="w-full text-left px-4 py-3 text-red-600 hover:bg-red-50 hover:text-red-700 rounded-xl transition-all duration-200 flex items-center space-x-3 group/item"
                       >
-                        <div className="w-8 h-8 bg-gray-700/50 group-hover/item:bg-red-500/20 rounded-lg flex items-center justify-center transition-colors duration-200">
+                        <div className="w-8 h-8 bg-gray-100 group-hover/item:bg-red-100 rounded-lg flex items-center justify-center transition-colors duration-200">
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
                             fill="none"
@@ -389,46 +389,46 @@ const HomePage = () => {
         </div>
       </nav>
 
-      <div className="max-w-7xl mx-auto px-6 py-8">
-        {/* Hero Section */}
-        <div className="text-center mb-12">
-          <h1 className="text-6xl font-bold bg-gradient-to-r from-white via-gray-100 to-gray-300 bg-clip-text text-transparent mb-4">
+      <div className="max-w-7xl mx-auto px-6 py-12">
+        {/* Hero Section - Improved alignment */}
+        <div className="text-center mb-16">
+          <h1 className="text-7xl font-bold bg-gradient-to-r from-gray-900 via-purple-600 to-blue-600 bg-clip-text text-transparent mb-6 leading-tight">
             Code Your Way Forward
           </h1>
-          <p className="text-xl text-gray-400 max-w-3xl mx-auto mb-8">
+          <p className="text-2xl text-gray-600 max-w-4xl mx-auto mb-12 leading-relaxed">
             Master algorithms and data structures with our curated collection of
             coding challenges
           </p>
 
           {/* Enhanced Progress Dashboard */}
           {user && (
-            <div className="max-w-6xl mx-auto mb-8">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="max-w-7xl mx-auto mb-12">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                 {/* Overall Progress Card */}
-                <div className="lg:col-span-2 bg-gray-800/40 backdrop-blur-sm rounded-2xl p-6 border border-gray-700/50 hover:border-gray-600/50 transition-all duration-300">
-                  <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-lg font-semibold text-white">
+                <div className="lg:col-span-2 bg-white/90 backdrop-blur-sm rounded-3xl p-8 border border-gray-200 hover:border-purple-300 transition-all duration-300 shadow-lg hover:shadow-xl">
+                  <div className="flex items-center justify-between mb-6">
+                    <h3 className="text-2xl font-bold text-gray-900">
                       Overall Progress
                     </h3>
                     <div
-                      className={`px-3 py-1 rounded-full text-sm font-bold bg-gradient-to-r ${
+                      className={`px-4 py-2 rounded-full text-sm font-bold bg-gradient-to-r ${
                         getRankInfo().color
-                      } text-white shadow-lg`}
+                      } text-white shadow-md`}
                     >
                       {getRankInfo().icon} {getRankInfo().rank}
                     </div>
                   </div>
-                  <div className="flex items-center justify-between mb-3">
-                    <span className="text-gray-300 font-medium">
+                  <div className="flex items-center justify-between mb-4">
+                    <span className="text-gray-700 font-semibold text-lg">
                       Problems Solved
                     </span>
-                    <span className="text-2xl font-bold text-white">
+                    <span className="text-3xl font-bold text-gray-900">
                       {solvedCount}/{totalCount}
                     </span>
                   </div>
-                  <div className="w-full bg-gray-700/50 rounded-full h-4 mb-4 overflow-hidden relative">
+                  <div className="w-full bg-gray-200 rounded-full h-5 mb-5 overflow-hidden relative shadow-inner">
                     <div
-                      className={`h-full bg-gradient-to-r from-green-500 to-emerald-600 rounded-full transition-all duration-2000 shadow-lg shadow-green-500/30 relative overflow-hidden ${
+                      className={`h-full bg-gradient-to-r from-green-500 to-emerald-600 rounded-full transition-all duration-2000 shadow-md shadow-green-500/30 relative overflow-hidden ${
                         animateProgress ? "animate-pulse" : ""
                       }`}
                       style={{
@@ -438,40 +438,42 @@ const HomePage = () => {
                       <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent animate-shimmer"></div>
                     </div>
                   </div>
-                  <div className="flex justify-between text-sm">
-                    <span className="text-gray-400">
+                  <div className="flex justify-between text-base">
+                    <span className="text-gray-600 font-medium">
                       {Math.round(solvedPercentage)}% complete
                     </span>
-                    <span className="text-green-400 font-medium">
+                    <span className="text-green-700 font-bold">
                       +{getStreakInfo()} day streak 🔥
                     </span>
                   </div>
                 </div>
 
                 {/* Streak Card */}
-                <div className="bg-gray-800/40 backdrop-blur-sm rounded-2xl p-6 border border-gray-700/50 hover:border-orange-500/30 group transition-all duration-300">
+                <div className="bg-gradient-to-br from-orange-50 to-red-50 backdrop-blur-sm rounded-3xl p-8 border border-orange-200 hover:border-orange-300 group transition-all duration-300 shadow-lg hover:shadow-xl">
                   <div className="text-center">
-                    <div className="w-12 h-12 bg-gradient-to-r from-orange-500 to-red-500 rounded-xl flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform duration-300 shadow-lg shadow-orange-500/30">
-                      <span className="text-2xl">🔥</span>
+                    <div className="w-16 h-16 bg-gradient-to-r from-orange-500 to-red-500 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300 shadow-lg shadow-orange-500/30">
+                      <span className="text-3xl">🔥</span>
                     </div>
-                    <div className="text-3xl font-bold text-white mb-1">
+                    <div className="text-4xl font-bold text-gray-900 mb-2">
                       {getStreakInfo()}
                     </div>
-                    <div className="text-sm text-gray-400">Day Streak</div>
+                    <div className="text-base text-gray-600 font-medium">
+                      Day Streak
+                    </div>
                   </div>
                 </div>
 
                 {/* Achievement Card */}
-                <div className="bg-gray-800/40 backdrop-blur-sm rounded-2xl p-6 border border-gray-700/50 hover:border-purple-500/30 group transition-all duration-300">
+                <div className="bg-gradient-to-br from-purple-50 to-pink-50 backdrop-blur-sm rounded-3xl p-8 border border-purple-200 hover:border-purple-300 group transition-all duration-300 shadow-lg hover:shadow-xl">
                   <div className="text-center">
-                    <div className="w-12 h-12 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform duration-300 shadow-lg shadow-purple-500/30">
+                    <div className="w-16 h-16 bg-gradient-to-r from-purple-500 to-pink-500 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300 shadow-lg shadow-purple-500/30">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"
                         viewBox="0 0 24 24"
                         strokeWidth={2}
                         stroke="currentColor"
-                        className="w-6 h-6 text-white"
+                        className="w-8 h-8 text-white"
                       >
                         <path
                           strokeLinecap="round"
@@ -480,25 +482,27 @@ const HomePage = () => {
                         />
                       </svg>
                     </div>
-                    <div className="text-3xl font-bold text-white mb-1">
+                    <div className="text-4xl font-bold text-gray-900 mb-2">
                       {Math.floor(solvedPercentage / 10)}
                     </div>
-                    <div className="text-sm text-gray-400">Achievements</div>
+                    <div className="text-base text-gray-600 font-medium">
+                      Achievements
+                    </div>
                   </div>
                 </div>
               </div>
 
               {/* Detailed Stats Panel (Toggleable) */}
               {showStats && user && (
-                <div className="mt-6 bg-gray-800/30 backdrop-blur-sm rounded-2xl p-6 border border-gray-700/30 animate-fadeIn">
-                  <h3 className="text-xl font-bold text-white mb-6 flex items-center">
+                <div className="mt-8 bg-white/90 backdrop-blur-sm rounded-3xl p-8 border border-gray-200 animate-fadeIn shadow-lg">
+                  <h3 className="text-2xl font-bold text-gray-900 mb-8 flex items-center">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"
                       viewBox="0 0 24 24"
                       strokeWidth={2}
                       stroke="currentColor"
-                      className="w-6 h-6 mr-2 text-purple-400"
+                      className="w-7 h-7 mr-3 text-purple-600"
                     >
                       <path
                         strokeLinecap="round"
@@ -509,19 +513,21 @@ const HomePage = () => {
                     Detailed Statistics
                   </h3>
 
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                     {/* Easy Problems */}
-                    <div className="bg-gray-900/50 rounded-xl p-4 border border-gray-700/30">
-                      <div className="flex items-center justify-between mb-3">
-                        <span className="text-green-400 font-medium">Easy</span>
-                        <span className="text-white font-bold">
+                    <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl p-6 border border-green-200 shadow-md">
+                      <div className="flex items-center justify-between mb-4">
+                        <span className="text-green-700 font-bold text-lg">
+                          Easy
+                        </span>
+                        <span className="text-gray-900 font-bold text-xl">
                           {difficultyStats.easy.solved}/
                           {difficultyStats.easy.total}
                         </span>
                       </div>
-                      <div className="w-full bg-gray-700/50 rounded-full h-2">
+                      <div className="w-full bg-gray-200 rounded-full h-3 shadow-inner">
                         <div
-                          className="h-full bg-gradient-to-r from-green-500 to-emerald-600 rounded-full transition-all duration-1000"
+                          className="h-full bg-gradient-to-r from-green-500 to-emerald-600 rounded-full transition-all duration-1000 shadow-sm"
                           style={{
                             width: `${
                               difficultyStats.easy.total > 0
@@ -536,17 +542,17 @@ const HomePage = () => {
                     </div>
 
                     {/* Medium Problems */}
-                    <div className="bg-gray-900/50 rounded-xl p-4 border border-gray-700/30">
-                      <div className="flex items-center justify-between mb-3">
-                        <span className="text-amber-400 font-medium">
+                    <div className="bg-gradient-to-br from-amber-50 to-orange-50 rounded-2xl p-6 border border-amber-200 shadow-md">
+                      <div className="flex items-center justify-between mb-4">
+                        <span className="text-amber-700 font-bold text-lg">
                           Medium
                         </span>
-                        <span className="text-white font-bold">
+                        <span className="text-gray-900 font-bold text-xl">
                           {difficultyStats.medium.solved}/
                           {difficultyStats.medium.total}
                         </span>
                       </div>
-                      <div className="w-full bg-gray-700/50 rounded-full h-2">
+                      <div className="w-full bg-gray-200 rounded-full h-3 shadow-inner">
                         <div
                           className="h-full bg-gradient-to-r from-amber-500 to-orange-600 rounded-full transition-all duration-1000"
                           style={{
@@ -563,15 +569,15 @@ const HomePage = () => {
                     </div>
 
                     {/* Hard Problems */}
-                    <div className="bg-gray-900/50 rounded-xl p-4 border border-gray-700/30">
+                    <div className="bg-gray-50 rounded-xl p-4 border border-gray-200">
                       <div className="flex items-center justify-between mb-3">
-                        <span className="text-red-400 font-medium">Hard</span>
-                        <span className="text-white font-bold">
+                        <span className="text-red-700 font-medium">Hard</span>
+                        <span className="text-gray-900 font-bold">
                           {difficultyStats.hard.solved}/
                           {difficultyStats.hard.total}
                         </span>
                       </div>
-                      <div className="w-full bg-gray-700/50 rounded-full h-2">
+                      <div className="w-full bg-gray-200 rounded-full h-2">
                         <div
                           className="h-full bg-gradient-to-r from-red-500 to-rose-600 rounded-full transition-all duration-1000"
                           style={{
@@ -594,16 +600,16 @@ const HomePage = () => {
         </div>
 
         {/* Enhanced Filters */}
-        <div className="bg-gray-800/30 backdrop-blur-sm rounded-2xl p-6 mb-8 border border-gray-700/30">
+        <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 mb-8 border border-gray-200 shadow-sm">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold text-white flex items-center">
+            <h3 className="text-lg font-semibold text-gray-900 flex items-center">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
                 strokeWidth={2}
                 stroke="currentColor"
-                className="w-5 h-5 mr-2 text-purple-400"
+                className="w-5 h-5 mr-2 text-purple-600"
               >
                 <path
                   strokeLinecap="round"
@@ -614,7 +620,7 @@ const HomePage = () => {
               Filter Problems
             </h3>
 
-            <div className="text-sm text-gray-400">
+            <div className="text-sm text-gray-600">
               Showing {filteredProblems.length} of {totalCount} problems
             </div>
           </div>
@@ -641,7 +647,7 @@ const HomePage = () => {
                 <input
                   type="text"
                   placeholder="Search problems by title, tags, or keywords..."
-                  className="w-full mt-4 bg-gray-800/80 border border-gray-600/50 rounded-xl pl-12 pr-8 py-4 text-white placeholder-gray-400 focus:border-purple-500/50 focus:ring-2 focus:ring-purple-500/20 transition-all duration-300 text-lg"
+                  className="w-full mt-4 bg-white border border-gray-300 rounded-xl pl-12 pr-8 py-4 text-gray-900 placeholder-gray-500 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 transition-all duration-300 text-lg shadow-sm"
                   value={filters.search}
                   onChange={(e) =>
                     setFilters({ ...filters, search: e.target.value })
@@ -650,7 +656,7 @@ const HomePage = () => {
                 {filters.search && (
                   <button
                     onClick={() => setFilters({ ...filters, search: "" })}
-                    className="absolute inset-y-0 right-0 pr-4 flex items-center text-gray-400 hover:text-white transition-colors duration-300"
+                    className="absolute inset-y-0 right-0 pr-4 flex items-center text-gray-600 hover:text-gray-900 transition-colors duration-300"
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -671,11 +677,11 @@ const HomePage = () => {
               </div>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
                 Status
               </label>
               <select
-                className="w-full bg-gray-800/80 border border-gray-600/50 rounded-xl px-4 py-3 text-white focus:border-purple-500/50 focus:ring-2 focus:ring-purple-500/20 transition-all duration-300"
+                className="w-full bg-white border border-gray-300 rounded-xl px-4 py-3 text-gray-900 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 transition-all duration-300 shadow-sm"
                 value={filters.status}
                 onChange={(e) => {
                   setFilters({ ...filters, status: e.target.value });
@@ -688,11 +694,11 @@ const HomePage = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
                 Difficulty
               </label>
               <select
-                className="w-full bg-gray-800/80 border border-gray-600/50 rounded-xl px-4 py-3 text-white focus:border-purple-500/50 focus:ring-2 focus:ring-purple-500/20 transition-all duration-300"
+                className="w-full bg-white border border-gray-300 rounded-xl px-4 py-3 text-gray-900 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 transition-all duration-300 shadow-sm"
                 value={filters.difficulty}
                 onChange={(e) => {
                   setFilters({ ...filters, difficulty: e.target.value });
@@ -706,11 +712,11 @@ const HomePage = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
                 Tags
               </label>
               <select
-                className="w-full bg-gray-800/80 border border-gray-600/50 rounded-xl px-4 py-3 text-white focus:border-purple-500/50 focus:ring-2 focus:ring-purple-500/20 transition-all duration-300"
+                className="w-full bg-white border border-gray-300 rounded-xl px-4 py-3 text-gray-900 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 transition-all duration-300 shadow-sm"
                 value={filters.tags}
                 onChange={(e) => {
                   setFilters({ ...filters, tags: e.target.value });
@@ -739,18 +745,18 @@ const HomePage = () => {
             return (
               <div
                 key={problem._id}
-                className={`group relative bg-gray-800/40 backdrop-blur-sm border border-gray-700/50 rounded-2xl p-6 transition-all duration-500 hover:scale-[1.01] hover:bg-gray-800/60 ${
+                className={`group relative bg-white/80 backdrop-blur-sm border border-gray-200 rounded-2xl p-6 transition-all duration-500 hover:scale-[1.01] hover:bg-white ${
                   hoveredCard === problem._id
-                    ? "shadow-2xl shadow-purple-500/20"
-                    : "hover:shadow-xl hover:shadow-gray-900/50"
-                } ${isSolved ? "bg-green-900/10 border-green-700/30" : ""}`}
+                    ? "shadow-xl shadow-purple-500/20"
+                    : "hover:shadow-lg hover:shadow-gray-200"
+                } ${isSolved ? "bg-green-50 border-green-300" : ""}`}
                 onMouseEnter={() => setHoveredCard(problem._id)}
                 onMouseLeave={() => setHoveredCard(null)}
               >
                 {/* Background Effects */}
-                <div className="absolute inset-0 bg-gradient-to-r from-purple-600/5 to-blue-600/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl"></div>
+                <div className="absolute inset-0 bg-gradient-to-r from-purple-100/30 to-blue-100/30 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl"></div>
                 {isSolved && (
-                  <div className="absolute inset-0 bg-gradient-to-r from-green-600/5 to-emerald-600/5 rounded-2xl"></div>
+                  <div className="absolute inset-0 bg-gradient-to-r from-green-100/30 to-emerald-100/30 rounded-2xl"></div>
                 )}
 
                 <div className="relative z-10">
@@ -759,7 +765,7 @@ const HomePage = () => {
                       {/* Enhanced Status Indicator */}
                       {isSolved ? (
                         <div className="relative">
-                          <div className="w-7 h-7 rounded-full bg-gradient-to-r from-green-500 to-emerald-600 flex items-center justify-center shadow-lg shadow-green-500/40 group-hover:scale-110 transition-transform duration-300">
+                          <div className="w-7 h-7 rounded-full bg-gradient-to-r from-green-500 to-emerald-600 flex items-center justify-center shadow-md shadow-green-500/40 group-hover:scale-110 transition-transform duration-300">
                             <svg
                               className="w-4 h-4 text-white"
                               fill="currentColor"
@@ -775,14 +781,14 @@ const HomePage = () => {
                           <div className="absolute inset-0 bg-green-500 rounded-full animate-ping opacity-20"></div>
                         </div>
                       ) : (
-                        <div className="w-7 h-7 rounded-full border-2 border-gray-500/60 group-hover:border-gray-400 transition-all duration-300 relative flex items-center justify-center">
-                          <div className="w-3 h-3 rounded-full bg-gray-600/30 group-hover:bg-gray-500/50 transition-colors duration-300"></div>
+                        <div className="w-7 h-7 rounded-full border-2 border-gray-400 group-hover:border-gray-600 transition-all duration-300 relative flex items-center justify-center">
+                          <div className="w-3 h-3 rounded-full bg-gray-300 group-hover:bg-gray-400 transition-colors duration-300"></div>
                         </div>
                       )}
 
                       {/* Enhanced Problem Number */}
-                      <div className="flex items-center justify-center w-12 h-12 bg-gray-700/50 rounded-xl border border-gray-600/30 group-hover:bg-gray-700/80 group-hover:border-gray-500/50 transition-all duration-300 group-hover:shadow-lg">
-                        <span className="text-gray-300 text-lg font-bold group-hover:text-white transition-colors duration-300">
+                      <div className="flex items-center justify-center w-12 h-12 bg-gray-100 rounded-xl border border-gray-200 group-hover:bg-gray-200 group-hover:border-gray-300 transition-all duration-300 group-hover:shadow-sm">
+                        <span className="text-gray-700 text-lg font-bold group-hover:text-gray-900 transition-colors duration-300">
                           {index + 1}
                         </span>
                       </div>
@@ -790,18 +796,18 @@ const HomePage = () => {
                       {/* Enhanced Problem Title */}
                       <div className="flex flex-col">
                         <h2
-                          className="text-xl font-semibold text-white hover:text-transparent hover:bg-gradient-to-r hover:from-purple-400 hover:to-blue-400 hover:bg-clip-text cursor-pointer transition-all duration-300 group-hover:scale-105 transform-gpu flex items-center"
+                          className="text-xl font-semibold text-gray-900 hover:text-transparent hover:bg-gradient-to-r hover:from-purple-600 hover:to-blue-600 hover:bg-clip-text cursor-pointer transition-all duration-300 group-hover:scale-105 transform-gpu flex items-center"
                           onClick={() => navigate(`/problem/${problem._id}`)}
                         >
                           {problem.title}
                           {isSolved && (
-                            <span className="ml-2 text-green-400 text-sm">
+                            <span className="ml-2 text-green-700 text-sm">
                               ✓ Solved
                             </span>
                           )}
                         </h2>
                         <div className="flex items-center mt-1 space-x-2">
-                          <div className="flex items-center space-x-1 text-xs text-gray-500">
+                          <div className="flex items-center space-x-1 text-xs text-gray-600">
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
                               fill="none"
@@ -819,8 +825,8 @@ const HomePage = () => {
                             <span>Problem #{index + 1}</span>
                           </div>
                           {isSolved && (
-                            <div className="flex items-center space-x-1 text-xs text-green-400">
-                              <div className="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse"></div>
+                            <div className="flex items-center space-x-1 text-xs text-green-700">
+                              <div className="w-1.5 h-1.5 bg-green-600 rounded-full animate-pulse"></div>
                               <span>Completed</span>
                             </div>
                           )}
@@ -876,13 +882,13 @@ const HomePage = () => {
                       problem.tags.map((tag, idx) => (
                         <div
                           key={idx}
-                          className="px-3 py-2 bg-gray-700/50 border border-gray-600/50 rounded-lg text-gray-300 text-sm font-medium hover:bg-purple-600/20 hover:border-purple-500/50 hover:text-purple-300 transition-all duration-300 cursor-default hover:scale-105 hover:shadow-lg"
+                          className="px-3 py-2 bg-gray-100 border border-gray-200 rounded-lg text-gray-700 text-sm font-medium hover:bg-purple-100 hover:border-purple-300 hover:text-purple-700 transition-all duration-300 cursor-default hover:scale-105 hover:shadow-sm"
                         >
                           #{tag}
                         </div>
                       ))
                     ) : (
-                      <div className="px-3 py-2 bg-gray-700/50 border border-gray-600/50 rounded-lg text-gray-300 text-sm font-medium hover:bg-purple-600/20 hover:border-purple-500/50 hover:text-purple-300 transition-all duration-300 cursor-default hover:scale-105 hover:shadow-lg">
+                      <div className="px-3 py-2 bg-gray-100 border border-gray-200 rounded-lg text-gray-700 text-sm font-medium hover:bg-purple-100 hover:border-purple-300 hover:text-purple-700 transition-all duration-300 cursor-default hover:scale-105 hover:shadow-sm">
                         #{problem.tags}
                       </div>
                     )}
@@ -890,9 +896,9 @@ const HomePage = () => {
                 </div>
 
                 {/* Decorative Elements */}
-                <div className="absolute top-4 right-4 w-2 h-2 bg-purple-500/30 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500 animate-pulse"></div>
+                <div className="absolute top-4 right-4 w-2 h-2 bg-purple-400/30 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500 animate-pulse"></div>
                 <div
-                  className="absolute top-6 right-6 w-1 h-1 bg-blue-500/30 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-700 animate-pulse"
+                  className="absolute top-6 right-6 w-1 h-1 bg-blue-400/30 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-700 animate-pulse"
                   style={{ animationDelay: "0.5s" }}
                 ></div>
               </div>
@@ -903,7 +909,7 @@ const HomePage = () => {
         {/* Enhanced Empty State */}
         {filteredProblems.length === 0 && (
           <div className="text-center py-20">
-            <div className="w-32 h-32 bg-gradient-to-r from-gray-700/50 to-gray-600/50 rounded-full flex items-center justify-center mx-auto mb-8 animate-pulse">
+            <div className="w-32 h-32 bg-gradient-to-r from-gray-200 to-gray-300 rounded-full flex items-center justify-center mx-auto mb-8 animate-pulse shadow-sm">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -919,10 +925,10 @@ const HomePage = () => {
                 />
               </svg>
             </div>
-            <h3 className="text-3xl font-bold text-gray-300 mb-4">
+            <h3 className="text-3xl font-bold text-gray-900 mb-4">
               No problems found
             </h3>
-            <p className="text-gray-500 text-lg mb-6">
+            <p className="text-gray-600 text-lg mb-6">
               Try adjusting your filters to see more results
             </p>
             <button
@@ -970,13 +976,13 @@ const HomePage = () => {
 const getDifficultyStyle = (difficulty) => {
   switch (difficulty.toLowerCase()) {
     case "easy":
-      return "bg-green-500/10 border-green-500/30 text-green-400 hover:bg-green-500/20 hover:border-green-500/50 shadow-lg shadow-green-500/10";
+      return "bg-green-100 border-green-300 text-green-700 hover:bg-green-200 hover:border-green-400 shadow-sm";
     case "medium":
-      return "bg-amber-500/10 border-amber-500/30 text-amber-400 hover:bg-amber-500/20 hover:border-amber-500/50 shadow-lg shadow-amber-500/10";
+      return "bg-amber-100 border-amber-300 text-amber-700 hover:bg-amber-200 hover:border-amber-400 shadow-sm";
     case "hard":
-      return "bg-red-500/10 border-red-500/30 text-red-400 hover:bg-red-500/20 hover:border-red-500/50 shadow-lg shadow-red-500/10";
+      return "bg-red-100 border-red-300 text-red-700 hover:bg-red-200 hover:border-red-400 shadow-sm";
     default:
-      return "bg-gray-600/10 border-gray-600/30 text-gray-400 hover:bg-gray-600/20 hover:border-gray-600/50";
+      return "bg-gray-100 border-gray-300 text-gray-700 hover:bg-gray-200 hover:border-gray-400";
   }
 };
 
