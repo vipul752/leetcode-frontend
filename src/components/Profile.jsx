@@ -306,28 +306,28 @@ function Profile() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-white via-gray-50 to-blue-50 py-8 px-4 relative overflow-hidden">
-      {/* Animated Background Elements */}
+    <div className="min-h-screen bg-gradient-to-br from-white via-gray-50 to-blue-50 py-6 sm:py-8 px-3 sm:px-4 relative overflow-hidden">
+      {/* Animated Background Elements - Responsive */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-purple-200/30 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute top-0 left-1/4 w-64 h-64 sm:w-96 sm:h-96 bg-purple-200/30 rounded-full blur-3xl animate-pulse"></div>
         <div
-          className="absolute bottom-0 right-1/4 w-96 h-96 bg-pink-200/30 rounded-full blur-3xl animate-pulse"
+          className="absolute bottom-0 right-1/4 w-64 h-64 sm:w-96 sm:h-96 bg-pink-200/30 rounded-full blur-3xl animate-pulse"
           style={{ animationDelay: "1s" }}
         ></div>
         <div
-          className="absolute top-1/2 left-1/2 w-96 h-96 bg-blue-200/20 rounded-full blur-3xl animate-pulse"
+          className="absolute top-1/2 left-1/2 w-64 h-64 sm:w-96 sm:h-96 bg-blue-200/20 rounded-full blur-3xl animate-pulse"
           style={{ animationDelay: "2s" }}
         ></div>
       </div>
 
       <div className="max-w-6xl mx-auto relative z-10">
-        {/* Profile Header */}
+        {/* Profile Header - Responsive */}
         <div
-          className={`bg-white/90 backdrop-blur-xl rounded-3xl shadow-lg p-8 border border-gray-200 mb-8 transform transition-all duration-1000 ${
+          className={`bg-white/90 backdrop-blur-xl rounded-2xl sm:rounded-3xl shadow-lg p-5 sm:p-8 border border-gray-200 mb-6 sm:mb-8 transform transition-all duration-1000 ${
             isLoaded ? "translate-y-0 opacity-100" : "-translate-y-8 opacity-0"
           }`}
         >
-          <div className="flex flex-col lg:flex-row items-center lg:items-start gap-8">
+          <div className="flex flex-col lg:flex-row items-center lg:items-start gap-6 sm:gap-8">
             {/* Avatar Section */}
             <div className="flex-shrink-0">
               <div className="relative group">

@@ -138,20 +138,23 @@ const HomePage = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-white via-gray-50 to-blue-50">
-      {/* Enhanced Navigation */}
+      {/* Enhanced Navigation - Responsive */}
       <nav className="bg-white/80 backdrop-blur-md border-b border-gray-200 shadow-sm sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-6 py-4">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 sm:py-4">
           <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
-              <NavLink to="/" className="flex items-center space-x-3 group">
-                <div className="w-10 h-10 bg-gradient-to-r from-purple-600 to-blue-600 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-lg shadow-purple-500/25">
+            <div className="flex items-center space-x-2 sm:space-x-4">
+              <NavLink
+                to="/"
+                className="flex items-center space-x-2 sm:space-x-3 group"
+              >
+                <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-r from-purple-600 to-blue-600 rounded-lg sm:rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-lg shadow-purple-500/25">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
                     viewBox="0 0 24 24"
                     strokeWidth={2}
                     stroke="currentColor"
-                    className="w-6 h-6 text-white"
+                    className="w-4 h-4 sm:w-6 sm:h-6 text-white"
                   >
                     <path
                       strokeLinecap="round"
@@ -160,16 +163,16 @@ const HomePage = () => {
                     />
                   </svg>
                 </div>
-                <span className="text-3xl mr-4  font-bold bg-gradient-to-r from-gray-900 via-purple-600 to-blue-600 bg-clip-text text-transparent group-hover:from-purple-600 group-hover:to-blue-600 transition-all duration-300">
+                <span className="text-xl sm:text-2xl lg:text-3xl font-bold bg-gradient-to-r from-gray-900 via-purple-600 to-blue-600 bg-clip-text text-transparent group-hover:from-purple-600 group-hover:to-blue-600 transition-all duration-300">
                   CodeArena
                 </span>
               </NavLink>
             </div>
 
-            <div className="flex items-center space-x-6">
+            <div className="flex items-center space-x-2 sm:space-x-3 lg:space-x-6">
               <button
                 onClick={() => navigate("/contest")}
-                className="relative px-6 py-3 bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white rounded-xl font-semibold transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-indigo-500/40 flex items-center space-x-2 group overflow-hidden"
+                className="hidden sm:flex relative px-3 py-2 sm:px-4 sm:py-2.5 lg:px-6 lg:py-3 bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white rounded-lg sm:rounded-xl text-xs sm:text-sm font-semibold transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-indigo-500/40 items-center space-x-1 sm:space-x-2 group overflow-hidden"
               >
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-1000"></div>
                 <svg
@@ -178,7 +181,7 @@ const HomePage = () => {
                   viewBox="0 0 24 24"
                   strokeWidth={2}
                   stroke="currentColor"
-                  className="w-5 h-5 group-hover:rotate-12 transition-transform duration-300"
+                  className="w-4 h-4 sm:w-5 sm:h-5 group-hover:rotate-12 transition-transform duration-300"
                 >
                   <path
                     strokeLinecap="round"
@@ -186,13 +189,13 @@ const HomePage = () => {
                     d="M16.5 18.75h-9m9 0a3 3 0 0 1 3 3h-15a3 3 0 0 1 3-3m9 0v-3.375c0-.621-.503-1.125-1.125-1.125h-.871M7.5 18.75v-3.375c0-.621.504-1.125 1.125-1.125h.872m5.007 0H9.497m5.007 0a7.454 7.454 0 0 1-.982-3.172M9.497 14.25a7.454 7.454 0 0 0 .981-3.172M15.75 4.5V2.25a1.5 1.5 0 0 0-1.5-1.5h-6a1.5 1.5 0 0 0-1.5 1.5V4.5m11.25 0a2.25 2.25 0 0 1 2.25 2.25v10.125a2.25 2.25 0 0 1-2.25 2.25H6.75a2.25 2.25 0 0 1-2.25-2.25V6.75a2.25 2.25 0 0 1 2.25-2.25H15.75Z"
                   />
                 </svg>
-                <span className="relative z-10">Contest</span>
+                <span className="relative z-10 hidden sm:inline">Contest</span>
                 <div className="absolute top-0 right-0 w-2 h-2 bg-yellow-400 rounded-full animate-ping"></div>
               </button>
 
               <button
                 onClick={() => navigate("/challenge")}
-                className="relative px-6 py-3 bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white rounded-xl font-semibold transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-indigo-500/40 flex items-center space-x-2 group overflow-hidden"
+                className="hidden md:flex relative px-3 py-2 sm:px-4 sm:py-2.5 lg:px-6 lg:py-3 bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white rounded-lg sm:rounded-xl text-xs sm:text-sm font-semibold transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-indigo-500/40 items-center space-x-1 sm:space-x-2 group overflow-hidden"
               >
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-1000"></div>
                 <svg
@@ -201,7 +204,7 @@ const HomePage = () => {
                   viewBox="0 0 24 24"
                   strokeWidth={2}
                   stroke="currentColor"
-                  className="w-5 h-5 group-hover:rotate-12 transition-transform duration-300"
+                  className="w-4 h-4 sm:w-5 sm:h-5 group-hover:rotate-12 transition-transform duration-300"
                 >
                   <path
                     strokeLinecap="round"
@@ -209,13 +212,15 @@ const HomePage = () => {
                     d="M16.5 18.75h-9m9 0a3 3 0 0 1 3 3h-15a3 3 0 0 1 3-3m9 0v-3.375c0-.621-.503-1.125-1.125-1.125h-.871M7.5 18.75v-3.375c0-.621.504-1.125 1.125-1.125h.872m5.007 0H9.497m5.007 0a7.454 7.454 0 0 1-.982-3.172M9.497 14.25a7.454 7.454 0 0 0 .981-3.172M15.75 4.5V2.25a1.5 1.5 0 0 0-1.5-1.5h-6a1.5 1.5 0 0 0-1.5 1.5V4.5m11.25 0a2.25 2.25 0 0 1 2.25 2.25v10.125a2.25 2.25 0 0 1-2.25 2.25H6.75a2.25 2.25 0 0 1-2.25-2.25V6.75a2.25 2.25 0 0 1 2.25-2.25H15.75Z"
                   />
                 </svg>
-                <span className="relative z-10">Challenge</span>
+                <span className="relative z-10 hidden sm:inline">
+                  Challenge
+                </span>
                 <div className="absolute top-0 right-0 w-2 h-2 bg-yellow-400 rounded-full animate-ping"></div>
               </button>
 
               <button
                 onClick={() => navigate("/ai-interview")}
-                className="relative px-6 py-1 bg-gradient-to-r from-purple-600 via-pink-600 to-cyan-600 hover:from-purple-500 hover:via-pink-500 hover:to-cyan-500 text-white rounded-xl font-semibold transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-purple-500/50 flex items-center space-x-2 group overflow-hidden"
+                className="hidden lg:flex relative px-3 py-1.5 sm:px-4 sm:py-2 lg:px-6 lg:py-1 bg-gradient-to-r from-purple-600 via-pink-600 to-cyan-600 hover:from-purple-500 hover:via-pink-500 hover:to-cyan-500 text-white rounded-lg sm:rounded-xl text-xs sm:text-sm font-semibold transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-purple-500/50 items-center space-x-1 sm:space-x-2 group overflow-hidden"
               >
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-1000"></div>
                 <svg
@@ -224,7 +229,7 @@ const HomePage = () => {
                   viewBox="0 0 24 24"
                   strokeWidth={2}
                   stroke="currentColor"
-                  className="w-5 h-5 group-hover:scale-110 transition-transform duration-300"
+                  className="w-4 h-4 sm:w-5 sm:h-5 group-hover:scale-110 transition-transform duration-300"
                 >
                   <path
                     strokeLinecap="round"
@@ -232,15 +237,17 @@ const HomePage = () => {
                     d="m15.75 10.5 4.72-4.72a.75.75 0 0 1 1.28.53v11.38a.75.75 0 0 1-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25h-9A2.25 2.25 0 0 0 2.25 7.5v9a2.25 2.25 0 0 0 2.25 2.25Z"
                   />
                 </svg>
-                <span className="relative z-10">AI Interview</span>
+                <span className="relative z-10 hidden sm:inline">
+                  AI Interview
+                </span>
                 <div className="absolute top-0 right-0 w-2 h-2 bg-cyan-400 rounded-full animate-ping"></div>
                 <div className="absolute -top-1 -right-1 bg-gradient-to-r from-yellow-400 to-orange-400 text-[10px] font-black px-1.5 py-0.5 rounded-full animate-pulse">
                   NEW
                 </div>
               </button>
-              {/* Enhanced Quick Stats */}
+              {/* Enhanced Quick Stats - Responsive */}
               {user && (
-                <div className="hidden lg:flex items-center space-x-4 bg-white/80 rounded-xl px-6 py-3 border border-gray-200 shadow-sm">
+                <div className="hidden xl:flex items-center space-x-4 bg-white/80 rounded-xl px-4 lg:px-6 py-2 lg:py-3 border border-gray-200 shadow-sm">
                   <div className="flex items-center space-x-2">
                     <div className="w-3 h-3 bg-green-600 rounded-full animate-pulse"></div>
                     <span className="text-sm font-medium text-green-700">
@@ -262,11 +269,11 @@ const HomePage = () => {
                 </div>
               )}
 
-              {/* Stats Toggle Button */}
+              {/* Stats Toggle Button - Responsive */}
               {user && (
                 <button
                   onClick={() => setShowStats(!showStats)}
-                  className="p-3 bg-white/80 hover:bg-white rounded-xl border border-gray-200 hover:border-purple-300 transition-all duration-300 group shadow-sm"
+                  className="p-2 sm:p-3 bg-white/80 hover:bg-white rounded-lg sm:rounded-xl border border-gray-200 hover:border-purple-300 transition-all duration-300 group shadow-sm"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -274,7 +281,7 @@ const HomePage = () => {
                     viewBox="0 0 24 24"
                     strokeWidth={2}
                     stroke="currentColor"
-                    className="w-5 h-5 text-gray-600 group-hover:text-purple-600 transition-colors duration-300"
+                    className="w-4 h-4 sm:w-5 sm:h-5 text-gray-600 group-hover:text-purple-600 transition-colors duration-300"
                   >
                     <path
                       strokeLinecap="round"
@@ -288,16 +295,16 @@ const HomePage = () => {
               {user && user.role === "admin" && (
                 <button
                   onClick={() => navigate("/admin")}
-                  className="px-4 py-2 bg-gray-900 text-white rounded-xl font-medium transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-red-500/30 flex items-center space-x-2"
+                  className="hidden sm:flex px-3 py-1.5 sm:px-4 sm:py-2 bg-gray-900 text-white rounded-lg sm:rounded-xl text-xs sm:text-sm font-medium transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-red-500/30 items-center space-x-2"
                 >
                   <span>Admin</span>
                 </button>
               )}
 
-              {/* User Dropdown */}
+              {/* User Dropdown - Responsive */}
               <div className="relative group">
-                <button className="flex items-center space-x-3 bg-white/80 hover:bg-white rounded-xl px-4 py-2 border border-gray-200 hover:border-purple-300 transition-all duration-300 shadow-sm">
-                  <div className="w-8 h-8 bg-gradient-to-r from-purple-500 to-blue-500 rounded-lg flex items-center justify-center">
+                <button className="flex items-center space-x-2 sm:space-x-3 bg-white/80 hover:bg-white rounded-lg sm:rounded-xl px-2 sm:px-4 py-1.5 sm:py-2 border border-gray-200 hover:border-purple-300 transition-all duration-300 shadow-sm">
+                  <div className="w-6 h-6 sm:w-8 sm:h-8 bg-gradient-to-r from-purple-500 to-blue-500 rounded-md sm:rounded-lg flex items-center justify-center">
                     <span className="text-white font-semibold text-sm">
                       {user?.firstName?.charAt(0) || "G"}
                     </span>
@@ -389,44 +396,47 @@ const HomePage = () => {
         </div>
       </nav>
 
-      <div className="max-w-7xl mx-auto px-6 py-12">
-        {/* Hero Section - Improved alignment */}
-        <div className="text-center mb-16">
-          <h1 className="text-7xl font-bold bg-gradient-to-r from-gray-900 via-purple-600 to-blue-600 bg-clip-text text-transparent mb-6 leading-tight">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
+        {/* Hero Section - Responsive */}
+        <div className="text-center mb-12 sm:mb-16">
+          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold bg-gradient-to-r from-gray-900 via-purple-600 to-blue-600 bg-clip-text text-transparent mb-4 sm:mb-6 leading-tight px-4">
             Code Your Way Forward
           </h1>
-          <p className="text-2xl text-gray-600 max-w-4xl mx-auto mb-12 leading-relaxed">
+          <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-gray-600 max-w-4xl mx-auto mb-8 sm:mb-12 leading-relaxed px-4">
             Master algorithms and data structures with our curated collection of
             coding challenges
           </p>
 
-          {/* Enhanced Progress Dashboard */}
+          {/* Enhanced Progress Dashboard - Responsive */}
           {user && (
-            <div className="max-w-7xl mx-auto mb-12">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                {/* Overall Progress Card */}
-                <div className="lg:col-span-2 bg-white/90 backdrop-blur-sm rounded-3xl p-8 border border-gray-200 hover:border-purple-300 transition-all duration-300 shadow-lg hover:shadow-xl">
-                  <div className="flex items-center justify-between mb-6">
-                    <h3 className="text-2xl font-bold text-gray-900">
+            <div className="max-w-7xl mx-auto mb-8 sm:mb-12">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
+                {/* Overall Progress Card - Responsive */}
+                <div className="sm:col-span-2 bg-white/90 backdrop-blur-sm rounded-2xl sm:rounded-3xl p-6 sm:p-8 border border-gray-200 hover:border-purple-300 transition-all duration-300 shadow-lg hover:shadow-xl">
+                  <div className="flex items-center justify-between mb-4 sm:mb-6">
+                    <h3 className="text-xl sm:text-2xl font-bold text-gray-900">
                       Overall Progress
                     </h3>
                     <div
-                      className={`px-4 py-2 rounded-full text-sm font-bold bg-gradient-to-r ${
+                      className={`px-3 py-1.5 sm:px-4 sm:py-2 rounded-full text-xs sm:text-sm font-bold bg-gradient-to-r ${
                         getRankInfo().color
                       } text-white shadow-md`}
                     >
-                      {getRankInfo().icon} {getRankInfo().rank}
+                      {getRankInfo().icon}{" "}
+                      <span className="hidden sm:inline">
+                        {getRankInfo().rank}
+                      </span>
                     </div>
                   </div>
-                  <div className="flex items-center justify-between mb-4">
-                    <span className="text-gray-700 font-semibold text-lg">
+                  <div className="flex items-center justify-between mb-3 sm:mb-4">
+                    <span className="text-base sm:text-lg text-gray-700 font-semibold">
                       Problems Solved
                     </span>
-                    <span className="text-3xl font-bold text-gray-900">
+                    <span className="text-2xl sm:text-3xl font-bold text-gray-900">
                       {solvedCount}/{totalCount}
                     </span>
                   </div>
-                  <div className="w-full bg-gray-200 rounded-full h-5 mb-5 overflow-hidden relative shadow-inner">
+                  <div className="w-full bg-gray-200 rounded-full h-4 sm:h-5 mb-4 sm:mb-5 overflow-hidden relative shadow-inner">
                     <div
                       className={`h-full bg-gradient-to-r from-green-500 to-emerald-600 rounded-full transition-all duration-2000 shadow-md shadow-green-500/30 relative overflow-hidden ${
                         animateProgress ? "animate-pulse" : ""
@@ -438,7 +448,7 @@ const HomePage = () => {
                       <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent animate-shimmer"></div>
                     </div>
                   </div>
-                  <div className="flex justify-between text-base">
+                  <div className="flex justify-between text-sm sm:text-base">
                     <span className="text-gray-600 font-medium">
                       {Math.round(solvedPercentage)}% complete
                     </span>
@@ -448,32 +458,32 @@ const HomePage = () => {
                   </div>
                 </div>
 
-                {/* Streak Card */}
-                <div className="bg-gradient-to-br from-orange-50 to-red-50 backdrop-blur-sm rounded-3xl p-8 border border-orange-200 hover:border-orange-300 group transition-all duration-300 shadow-lg hover:shadow-xl">
+                {/* Streak Card - Responsive */}
+                <div className="bg-gradient-to-br from-orange-50 to-red-50 backdrop-blur-sm rounded-2xl sm:rounded-3xl p-6 sm:p-8 border border-orange-200 hover:border-orange-300 group transition-all duration-300 shadow-lg hover:shadow-xl">
                   <div className="text-center">
-                    <div className="w-16 h-16 bg-gradient-to-r from-orange-500 to-red-500 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300 shadow-lg shadow-orange-500/30">
-                      <span className="text-3xl">🔥</span>
+                    <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-r from-orange-500 to-red-500 rounded-xl sm:rounded-2xl flex items-center justify-center mx-auto mb-3 sm:mb-4 group-hover:scale-110 transition-transform duration-300 shadow-lg shadow-orange-500/30">
+                      <span className="text-2xl sm:text-3xl">🔥</span>
                     </div>
-                    <div className="text-4xl font-bold text-gray-900 mb-2">
+                    <div className="text-3xl sm:text-4xl font-bold text-gray-900 mb-2">
                       {getStreakInfo()}
                     </div>
-                    <div className="text-base text-gray-600 font-medium">
+                    <div className="text-sm sm:text-base text-gray-600 font-medium">
                       Day Streak
                     </div>
                   </div>
                 </div>
 
-                {/* Achievement Card */}
-                <div className="bg-gradient-to-br from-purple-50 to-pink-50 backdrop-blur-sm rounded-3xl p-8 border border-purple-200 hover:border-purple-300 group transition-all duration-300 shadow-lg hover:shadow-xl">
+                {/* Achievement Card - Responsive */}
+                <div className="bg-gradient-to-br from-purple-50 to-pink-50 backdrop-blur-sm rounded-2xl sm:rounded-3xl p-6 sm:p-8 border border-purple-200 hover:border-purple-300 group transition-all duration-300 shadow-lg hover:shadow-xl">
                   <div className="text-center">
-                    <div className="w-16 h-16 bg-gradient-to-r from-purple-500 to-pink-500 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300 shadow-lg shadow-purple-500/30">
+                    <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl sm:rounded-2xl flex items-center justify-center mx-auto mb-3 sm:mb-4 group-hover:scale-110 transition-transform duration-300 shadow-lg shadow-purple-500/30">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"
                         viewBox="0 0 24 24"
                         strokeWidth={2}
                         stroke="currentColor"
-                        className="w-8 h-8 text-white"
+                        className="w-6 h-6 sm:w-8 sm:h-8 text-white"
                       >
                         <path
                           strokeLinecap="round"
@@ -482,19 +492,19 @@ const HomePage = () => {
                         />
                       </svg>
                     </div>
-                    <div className="text-4xl font-bold text-gray-900 mb-2">
+                    <div className="text-3xl sm:text-4xl font-bold text-gray-900 mb-2">
                       {Math.floor(solvedPercentage / 10)}
                     </div>
-                    <div className="text-base text-gray-600 font-medium">
+                    <div className="text-sm sm:text-base text-gray-600 font-medium">
                       Achievements
                     </div>
                   </div>
                 </div>
               </div>
 
-              {/* Detailed Stats Panel (Toggleable) */}
+              {/* Detailed Stats Panel (Toggleable) - Responsive */}
               {showStats && user && (
-                <div className="mt-8 bg-white/90 backdrop-blur-sm rounded-3xl p-8 border border-gray-200 animate-fadeIn shadow-lg">
+                <div className="mt-6 sm:mt-8 bg-white/90 backdrop-blur-sm rounded-2xl sm:rounded-3xl p-6 sm:p-8 border border-gray-200 animate-fadeIn shadow-lg">
                   <h3 className="text-2xl font-bold text-gray-900 mb-8 flex items-center">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -599,17 +609,17 @@ const HomePage = () => {
           )}
         </div>
 
-        {/* Enhanced Filters */}
-        <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 mb-8 border border-gray-200 shadow-sm">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold text-gray-900 flex items-center">
+        {/* Enhanced Filters - Responsive */}
+        <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-4 sm:p-6 mb-6 sm:mb-8 border border-gray-200 shadow-sm">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-4 gap-3">
+            <h3 className="text-base sm:text-lg font-semibold text-gray-900 flex items-center">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
                 strokeWidth={2}
                 stroke="currentColor"
-                className="w-5 h-5 mr-2 text-purple-600"
+                className="w-4 h-4 sm:w-5 sm:h-5 mr-2 text-purple-600"
               >
                 <path
                   strokeLinecap="round"
@@ -620,22 +630,22 @@ const HomePage = () => {
               Filter Problems
             </h3>
 
-            <div className="text-sm text-gray-600">
+            <div className="text-xs sm:text-sm text-gray-600">
               Showing {filteredProblems.length} of {totalCount} problems
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <div className="mb-6">
-              <div className="relative ">
-                <div className="absolute inset-y-0 left-0 mt-4 pl-4  flex items-center pointer-events-none">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="sm:col-span-2 lg:col-span-1">
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 sm:pl-4 flex items-center pointer-events-none">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
                     viewBox="0 0 24 24"
                     strokeWidth={2}
                     stroke="currentColor"
-                    className="w-5 h-5 text-gray-400"
+                    className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400"
                   >
                     <path
                       strokeLinecap="round"
@@ -646,8 +656,8 @@ const HomePage = () => {
                 </div>
                 <input
                   type="text"
-                  placeholder="Search problems by title, tags, or keywords..."
-                  className="w-full mt-4 bg-white border border-gray-300 rounded-xl pl-12 pr-8 py-4 text-gray-900 placeholder-gray-500 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 transition-all duration-300 text-lg shadow-sm"
+                  placeholder="Search problems..."
+                  className="w-full bg-white border border-gray-300 rounded-xl pl-10 sm:pl-12 pr-10 py-2.5 sm:py-3 text-sm sm:text-base text-gray-900 placeholder-gray-500 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 transition-all duration-300 shadow-sm"
                   value={filters.search}
                   onChange={(e) =>
                     setFilters({ ...filters, search: e.target.value })
@@ -656,7 +666,7 @@ const HomePage = () => {
                 {filters.search && (
                   <button
                     onClick={() => setFilters({ ...filters, search: "" })}
-                    className="absolute inset-y-0 right-0 pr-4 flex items-center text-gray-600 hover:text-gray-900 transition-colors duration-300"
+                    className="absolute inset-y-0 right-0 pr-3 sm:pr-4 flex items-center text-gray-600 hover:text-gray-900 transition-colors duration-300"
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -664,7 +674,7 @@ const HomePage = () => {
                       viewBox="0 0 24 24"
                       strokeWidth={2}
                       stroke="currentColor"
-                      className="w-5 h-5"
+                      className="w-4 h-4 sm:w-5 sm:h-5"
                     >
                       <path
                         strokeLinecap="round"
@@ -677,11 +687,11 @@ const HomePage = () => {
               </div>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1.5 sm:mb-2">
                 Status
               </label>
               <select
-                className="w-full bg-white border border-gray-300 rounded-xl px-4 py-3 text-gray-900 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 transition-all duration-300 shadow-sm"
+                className="w-full bg-white border border-gray-300 rounded-xl px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base text-gray-900 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 transition-all duration-300 shadow-sm"
                 value={filters.status}
                 onChange={(e) => {
                   setFilters({ ...filters, status: e.target.value });
@@ -694,11 +704,11 @@ const HomePage = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1.5 sm:mb-2">
                 Difficulty
               </label>
               <select
-                className="w-full bg-white border border-gray-300 rounded-xl px-4 py-3 text-gray-900 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 transition-all duration-300 shadow-sm"
+                className="w-full bg-white border border-gray-300 rounded-xl px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base text-gray-900 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 transition-all duration-300 shadow-sm"
                 value={filters.difficulty}
                 onChange={(e) => {
                   setFilters({ ...filters, difficulty: e.target.value });
@@ -712,11 +722,11 @@ const HomePage = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1.5 sm:mb-2">
                 Tags
               </label>
               <select
-                className="w-full bg-white border border-gray-300 rounded-xl px-4 py-3 text-gray-900 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 transition-all duration-300 shadow-sm"
+                className="w-full bg-white border border-gray-300 rounded-xl px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base text-gray-900 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 transition-all duration-300 shadow-sm"
                 value={filters.tags}
                 onChange={(e) => {
                   setFilters({ ...filters, tags: e.target.value });
@@ -736,8 +746,8 @@ const HomePage = () => {
           </div>
         </div>
 
-        {/* Enhanced Problems List */}
-        <div className="space-y-4">
+        {/* Enhanced Problems List - Responsive */}
+        <div className="space-y-3 sm:space-y-4">
           {filteredProblems.map((problem, index) => {
             const isSolved = solvedProblems.some(
               (sp) => sp._id === problem._id
@@ -745,7 +755,7 @@ const HomePage = () => {
             return (
               <div
                 key={problem._id}
-                className={`group relative bg-white/80 backdrop-blur-sm border border-gray-200 rounded-2xl p-6 transition-all duration-500 hover:scale-[1.01] hover:bg-white ${
+                className={`group relative bg-white/80 backdrop-blur-sm border border-gray-200 rounded-xl sm:rounded-2xl p-4 sm:p-6 transition-all duration-500 hover:scale-[1.01] hover:bg-white ${
                   hoveredCard === problem._id
                     ? "shadow-xl shadow-purple-500/20"
                     : "hover:shadow-lg hover:shadow-gray-200"
@@ -754,20 +764,20 @@ const HomePage = () => {
                 onMouseLeave={() => setHoveredCard(null)}
               >
                 {/* Background Effects */}
-                <div className="absolute inset-0 bg-gradient-to-r from-purple-100/30 to-blue-100/30 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl"></div>
+                <div className="absolute inset-0 bg-gradient-to-r from-purple-100/30 to-blue-100/30 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-xl sm:rounded-2xl"></div>
                 {isSolved && (
-                  <div className="absolute inset-0 bg-gradient-to-r from-green-100/30 to-emerald-100/30 rounded-2xl"></div>
+                  <div className="absolute inset-0 bg-gradient-to-r from-green-100/30 to-emerald-100/30 rounded-xl sm:rounded-2xl"></div>
                 )}
 
                 <div className="relative z-10">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-4">
-                      {/* Enhanced Status Indicator */}
+                  <div className="flex items-start sm:items-center justify-between gap-3">
+                    <div className="flex items-start sm:items-center gap-2 sm:gap-4 flex-1 min-w-0">
+                      {/* Enhanced Status Indicator - Responsive */}
                       {isSolved ? (
-                        <div className="relative">
-                          <div className="w-7 h-7 rounded-full bg-gradient-to-r from-green-500 to-emerald-600 flex items-center justify-center shadow-md shadow-green-500/40 group-hover:scale-110 transition-transform duration-300">
+                        <div className="relative flex-shrink-0">
+                          <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-gradient-to-r from-green-500 to-emerald-600 flex items-center justify-center shadow-md shadow-green-500/40 group-hover:scale-110 transition-transform duration-300">
                             <svg
-                              className="w-4 h-4 text-white"
+                              className="w-3 h-3 sm:w-4 sm:h-4 text-white"
                               fill="currentColor"
                               viewBox="0 0 20 20"
                             >
@@ -781,33 +791,36 @@ const HomePage = () => {
                           <div className="absolute inset-0 bg-green-500 rounded-full animate-ping opacity-20"></div>
                         </div>
                       ) : (
-                        <div className="w-7 h-7 rounded-full border-2 border-gray-400 group-hover:border-gray-600 transition-all duration-300 relative flex items-center justify-center">
-                          <div className="w-3 h-3 rounded-full bg-gray-300 group-hover:bg-gray-400 transition-colors duration-300"></div>
+                        <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-full border-2 border-gray-400 group-hover:border-gray-600 transition-all duration-300 relative flex items-center justify-center flex-shrink-0">
+                          <div className="w-2 h-2 sm:w-3 sm:h-3 rounded-full bg-gray-300 group-hover:bg-gray-400 transition-colors duration-300"></div>
                         </div>
                       )}
 
-                      {/* Enhanced Problem Number */}
-                      <div className="flex items-center justify-center w-12 h-12 bg-gray-100 rounded-xl border border-gray-200 group-hover:bg-gray-200 group-hover:border-gray-300 transition-all duration-300 group-hover:shadow-sm">
-                        <span className="text-gray-700 text-lg font-bold group-hover:text-gray-900 transition-colors duration-300">
+                      {/* Enhanced Problem Number - Responsive */}
+                      <div className="hidden sm:flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 bg-gray-100 rounded-lg sm:rounded-xl border border-gray-200 group-hover:bg-gray-200 group-hover:border-gray-300 transition-all duration-300 group-hover:shadow-sm flex-shrink-0">
+                        <span className="text-gray-700 text-base sm:text-lg font-bold group-hover:text-gray-900 transition-colors duration-300">
                           {index + 1}
                         </span>
                       </div>
 
-                      {/* Enhanced Problem Title */}
-                      <div className="flex flex-col">
+                      {/* Enhanced Problem Title - Responsive */}
+                      <div className="flex flex-col flex-1 min-w-0">
                         <h2
-                          className="text-xl font-semibold text-gray-900 hover:text-transparent hover:bg-gradient-to-r hover:from-purple-600 hover:to-blue-600 hover:bg-clip-text cursor-pointer transition-all duration-300 group-hover:scale-105 transform-gpu flex items-center"
+                          className="text-base sm:text-lg lg:text-xl font-semibold text-gray-900 hover:text-transparent hover:bg-gradient-to-r hover:from-purple-600 hover:to-blue-600 hover:bg-clip-text cursor-pointer transition-all duration-300 group-hover:scale-105 transform-gpu flex items-center truncate"
                           onClick={() => navigate(`/problem/${problem._id}`)}
                         >
-                          {problem.title}
+                          <span className="sm:hidden text-gray-600 mr-2 flex-shrink-0">
+                            #{index + 1}
+                          </span>
+                          <span className="truncate">{problem.title}</span>
                           {isSolved && (
-                            <span className="ml-2 text-green-700 text-sm">
-                              ✓ Solved
+                            <span className="ml-2 text-green-700 text-xs sm:text-sm flex-shrink-0">
+                              ✓ <span className="hidden sm:inline">Solved</span>
                             </span>
                           )}
                         </h2>
-                        <div className="flex items-center mt-1 space-x-2">
-                          <div className="flex items-center space-x-1 text-xs text-gray-600">
+                        <div className="flex items-center mt-1 space-x-2 text-xs text-gray-600">
+                          <div className="hidden sm:flex items-center space-x-1">
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
                               fill="none"
@@ -825,7 +838,7 @@ const HomePage = () => {
                             <span>Problem #{index + 1}</span>
                           </div>
                           {isSolved && (
-                            <div className="flex items-center space-x-1 text-xs text-green-700">
+                            <div className="flex items-center space-x-1 text-green-700">
                               <div className="w-1.5 h-1.5 bg-green-600 rounded-full animate-pulse"></div>
                               <span>Completed</span>
                             </div>
@@ -834,11 +847,11 @@ const HomePage = () => {
                       </div>
                     </div>
 
-                    {/* Enhanced Action Button */}
-                    <div className="opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-x-4 group-hover:translate-x-0">
+                    {/* Enhanced Action Button - Responsive */}
+                    <div className="sm:opacity-0 sm:group-hover:opacity-100 transition-all duration-300 sm:transform sm:translate-x-4 sm:group-hover:translate-x-0 flex-shrink-0">
                       <button
                         onClick={() => navigate(`/problem/${problem._id}`)}
-                        className="flex items-center space-x-2 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white px-6 py-3 rounded-xl font-medium transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-purple-500/30"
+                        className="flex items-center space-x-1 sm:space-x-2 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white px-3 py-2 sm:px-6 sm:py-3 rounded-lg sm:rounded-xl text-xs sm:text-sm font-medium transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-purple-500/30"
                       >
                         <span>{isSolved ? "Review" : "Solve"}</span>
                         <svg
@@ -847,7 +860,7 @@ const HomePage = () => {
                           viewBox="0 0 24 24"
                           strokeWidth={2}
                           stroke="currentColor"
-                          className="w-4 h-4"
+                          className="w-3 h-3 sm:w-4 sm:h-4"
                         >
                           <path
                             strokeLinecap="round"
@@ -859,17 +872,17 @@ const HomePage = () => {
                     </div>
                   </div>
 
-                  {/* Enhanced Tags and Difficulty */}
-                  <div className="flex flex-wrap items-center gap-3 mt-6">
-                    {/* Enhanced Difficulty Badge */}
+                  {/* Enhanced Tags and Difficulty - Responsive */}
+                  <div className="flex flex-wrap items-center gap-2 sm:gap-3 mt-4 sm:mt-6">
+                    {/* Enhanced Difficulty Badge - Responsive */}
                     <div
-                      className={`px-4 py-2 rounded-xl font-bold text-sm border transition-all duration-300 ${getDifficultyStyle(
+                      className={`px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg sm:rounded-xl font-bold text-xs sm:text-sm border transition-all duration-300 ${getDifficultyStyle(
                         problem.difficulty
                       )}`}
                     >
-                      <div className="flex items-center space-x-2">
+                      <div className="flex items-center space-x-1.5 sm:space-x-2">
                         <div
-                          className={`w-2 h-2 rounded-full ${getDifficultyDot(
+                          className={`w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full ${getDifficultyDot(
                             problem.difficulty
                           )}`}
                         ></div>
@@ -877,19 +890,24 @@ const HomePage = () => {
                       </div>
                     </div>
 
-                    {/* Enhanced Tags */}
+                    {/* Enhanced Tags - Responsive */}
                     {Array.isArray(problem.tags) ? (
-                      problem.tags.map((tag, idx) => (
+                      problem.tags.slice(0, 3).map((tag, idx) => (
                         <div
                           key={idx}
-                          className="px-3 py-2 bg-gray-100 border border-gray-200 rounded-lg text-gray-700 text-sm font-medium hover:bg-purple-100 hover:border-purple-300 hover:text-purple-700 transition-all duration-300 cursor-default hover:scale-105 hover:shadow-sm"
+                          className="px-2 py-1 sm:px-3 sm:py-2 bg-gray-100 border border-gray-200 rounded-md sm:rounded-lg text-gray-700 text-xs sm:text-sm font-medium hover:bg-purple-100 hover:border-purple-300 hover:text-purple-700 transition-all duration-300 cursor-default hover:scale-105 hover:shadow-sm"
                         >
                           #{tag}
                         </div>
                       ))
                     ) : (
-                      <div className="px-3 py-2 bg-gray-100 border border-gray-200 rounded-lg text-gray-700 text-sm font-medium hover:bg-purple-100 hover:border-purple-300 hover:text-purple-700 transition-all duration-300 cursor-default hover:scale-105 hover:shadow-sm">
+                      <div className="px-2 py-1 sm:px-3 sm:py-2 bg-gray-100 border border-gray-200 rounded-md sm:rounded-lg text-gray-700 text-xs sm:text-sm font-medium hover:bg-purple-100 hover:border-purple-300 hover:text-purple-700 transition-all duration-300 cursor-default hover:scale-105 hover:shadow-sm">
                         #{problem.tags}
+                      </div>
+                    )}
+                    {Array.isArray(problem.tags) && problem.tags.length > 3 && (
+                      <div className="px-2 py-1 sm:px-3 sm:py-2 bg-gray-100 border border-gray-200 rounded-md sm:rounded-lg text-gray-600 text-xs sm:text-sm font-medium">
+                        +{problem.tags.length - 3} more
                       </div>
                     )}
                   </div>
@@ -997,31 +1015,6 @@ const getDifficultyDot = (difficulty) => {
     default:
       return "bg-gray-500";
   }
-};
-
-const getRankInfo = () => {
-  const solvedCount = 0; // This will be calculated based on actual data
-  const totalCount = 100; // This will be calculated based on actual data
-  const solvedPercentage =
-    totalCount > 0 ? (solvedCount / totalCount) * 100 : 0;
-
-  if (solvedPercentage >= 80)
-    return { rank: "Expert", color: "from-purple-500 to-pink-500", icon: "👑" };
-  if (solvedPercentage >= 60)
-    return { rank: "Advanced", color: "from-blue-500 to-cyan-500", icon: "🚀" };
-  if (solvedPercentage >= 40)
-    return {
-      rank: "Intermediate",
-      color: "from-green-500 to-emerald-500",
-      icon: "⭐",
-    };
-  if (solvedPercentage >= 20)
-    return {
-      rank: "Beginner",
-      color: "from-yellow-500 to-orange-500",
-      icon: "🌟",
-    };
-  return { rank: "Newbie", color: "from-gray-500 to-gray-600", icon: "🔥" };
 };
 
 export default HomePage;
