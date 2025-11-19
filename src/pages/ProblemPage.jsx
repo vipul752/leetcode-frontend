@@ -180,7 +180,7 @@ const ProblemPage = () => {
     try {
       const response = await axiosClient.post(`/submission/run/${problemId}`, {
         code: code,
-        language: selectedLanguage,
+        language: languageMap[selectedLanguage] || selectedLanguage,
       });
       setRunResult(response.data);
       setActiveRightTab("testcase");
@@ -206,7 +206,7 @@ const ProblemPage = () => {
         `/submission/submit/${problemId}`,
         {
           code: code,
-          language: selectedLanguage,
+          language: languageMap[selectedLanguage] || selectedLanguage,
         }
       );
       setSubmitResult(response.data);

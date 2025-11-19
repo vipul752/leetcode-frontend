@@ -140,22 +140,23 @@ const HomePage = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-white via-gray-50 to-blue-50">
       {/* Enhanced Navigation - Responsive */}
-      <nav className="bg-white/80 backdrop-blur-md border-b border-gray-200 shadow-sm sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 sm:py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-2 sm:space-x-4">
+      <nav className="bg-white/85 backdrop-blur-xl border-b border-gray-200/70 shadow-sm sticky top-0 z-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2.5 sm:py-3">
+          <div className="flex items-center justify-between gap-2 sm:gap-4 w-full">
+            {/* Logo */}
+            <div className="flex items-center gap-1.5 sm:gap-2.5 flex-shrink-0">
               <NavLink
                 to="/"
-                className="flex items-center space-x-2 sm:space-x-3 group"
+                className="flex items-center gap-1.5 sm:gap-2 group flex-shrink-0"
               >
-                <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-r from-purple-600 to-blue-600 rounded-lg sm:rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-lg shadow-purple-500/25">
+                <div className="w-9 h-9 sm:w-10 sm:h-10 bg-gradient-to-br from-purple-600 to-blue-600 rounded-lg sm:rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-lg shadow-purple-500/25 flex-shrink-0">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
                     viewBox="0 0 24 24"
                     strokeWidth={2}
                     stroke="currentColor"
-                    className="w-4 h-4 sm:w-6 sm:h-6 text-white"
+                    className="w-4.5 h-4.5 sm:w-5.5 sm:h-5.5 text-white"
                   >
                     <path
                       strokeLinecap="round"
@@ -164,45 +165,17 @@ const HomePage = () => {
                     />
                   </svg>
                 </div>
-                <span className="text-xl sm:text-2xl lg:text-3xl font-bold bg-gradient-to-r from-gray-900 via-purple-600 to-blue-600 bg-clip-text text-transparent group-hover:from-purple-600 group-hover:to-blue-600 transition-all duration-300">
+                <span className="text-lg sm:text-xl lg:text-2xl font-black bg-gradient-to-r from-gray-900 via-purple-600 to-blue-600 bg-clip-text text-transparent group-hover:from-purple-600 group-hover:to-blue-600 transition-all duration-300">
                   CodeArena
                 </span>
               </NavLink>
             </div>
 
-            <div className="flex items-center space-x-2 sm:space-x-3 lg:space-x-6">
-              {/* Mobile Menu Button */}
-              <button
-                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="sm:hidden p-2 bg-white/80 hover:bg-white rounded-lg border border-gray-200 hover:border-purple-300 transition-all duration-300 shadow-sm"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={2}
-                  stroke="currentColor"
-                  className="w-5 h-5 text-gray-600"
-                >
-                  {mobileMenuOpen ? (
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M6 18L18 6M6 6l12 12"
-                    />
-                  ) : (
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
-                    />
-                  )}
-                </svg>
-              </button>
-
+            {/* Desktop Navigation - Hidden on mobile */}
+            <div className="hidden md:flex items-center gap-1.5 lg:gap-2 flex-1 justify-center">
               <button
                 onClick={() => navigate("/contest")}
-                className="flex relative px-3 py-2 sm:px-4 sm:py-2.5 lg:px-6 lg:py-3 bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white rounded-lg sm:rounded-xl text-xs sm:text-sm font-semibold transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-indigo-500/40 items-center space-x-1 sm:space-x-2 group overflow-hidden"
+                className="flex relative px-2.5 py-2 lg:px-4 lg:py-2.5 bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white rounded-lg lg:rounded-xl text-xs lg:text-sm font-semibold transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-indigo-500/30 items-center gap-1.5 group overflow-hidden"
               >
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-1000"></div>
                 <svg
@@ -211,7 +184,7 @@ const HomePage = () => {
                   viewBox="0 0 24 24"
                   strokeWidth={2}
                   stroke="currentColor"
-                  className="w-4 h-4 sm:w-5 sm:h-5 group-hover:rotate-12 transition-transform duration-300"
+                  className="w-4 h-4 lg:w-5 lg:h-5 group-hover:rotate-12 transition-transform duration-300 flex-shrink-0"
                 >
                   <path
                     strokeLinecap="round"
@@ -219,13 +192,13 @@ const HomePage = () => {
                     d="M16.5 18.75h-9m9 0a3 3 0 0 1 3 3h-15a3 3 0 0 1 3-3m9 0v-3.375c0-.621-.503-1.125-1.125-1.125h-.871M7.5 18.75v-3.375c0-.621.504-1.125 1.125-1.125h.872m5.007 0H9.497m5.007 0a7.454 7.454 0 0 1-.982-3.172M9.497 14.25a7.454 7.454 0 0 0 .981-3.172M15.75 4.5V2.25a1.5 1.5 0 0 0-1.5-1.5h-6a1.5 1.5 0 0 0-1.5 1.5V4.5m11.25 0a2.25 2.25 0 0 1 2.25 2.25v10.125a2.25 2.25 0 0 1-2.25 2.25H6.75a2.25 2.25 0 0 1-2.25-2.25V6.75a2.25 2.25 0 0 1 2.25-2.25H15.75Z"
                   />
                 </svg>
-                <span className="relative z-10 hidden sm:inline">Contest</span>
-                <div className="absolute top-0 right-0 w-2 h-2 bg-yellow-400 rounded-full animate-ping"></div>
+                <span className="relative z-10 hidden lg:inline">Contest</span>
+                <div className="absolute top-1 right-1 w-1.5 h-1.5 bg-yellow-400 rounded-full animate-pulse"></div>
               </button>
 
               <button
                 onClick={() => navigate("/challenge")}
-                className="hidden md:flex relative px-3 py-2 sm:px-4 sm:py-2.5 lg:px-6 lg:py-3 bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white rounded-lg sm:rounded-xl text-xs sm:text-sm font-semibold transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-indigo-500/40 items-center space-x-1 sm:space-x-2 group overflow-hidden"
+                className="hidden lg:flex relative px-2.5 py-2 lg:px-4 lg:py-2.5 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white rounded-lg lg:rounded-xl text-xs lg:text-sm font-semibold transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-cyan-500/30 items-center gap-1.5 group overflow-hidden"
               >
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-1000"></div>
                 <svg
@@ -234,23 +207,21 @@ const HomePage = () => {
                   viewBox="0 0 24 24"
                   strokeWidth={2}
                   stroke="currentColor"
-                  className="w-4 h-4 sm:w-5 sm:h-5 group-hover:rotate-12 transition-transform duration-300"
+                  className="w-4 h-4 lg:w-5 lg:h-5 group-hover:rotate-12 transition-transform duration-300 flex-shrink-0"
                 >
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                    d="M16.5 18.75h-9m9 0a3 3 0 0 1 3 3h-15a3 3 0 0 1 3-3m9 0v-3.375c0-.621-.503-1.125-1.125-1.125h-.871M7.5 18.75v-3.375c0-.621.504-1.125 1.125-1.125h.872m5.007 0H9.497m5.007 0a7.454 7.454 0 0 1-.982-3.172M9.497 14.25a7.454 7.454 0 0 0 .981-3.172M15.75 4.5V2.25a1.5 1.5 0 0 0-1.5-1.5h-6a1.5 1.5 0 0 0-1.5 1.5V4.5m11.25 0a2.25 2.25 0 0 1 2.25 2.25v10.125a2.25 2.25 0 0 1-2.25 2.25H6.75a2.25 2.25 0 0 1-2.25-2.25V6.75a2.25 2.25 0 0 1 2.25-2.25H15.75Z"
+                    d="M13.5 21v-7.5a.75.75 0 0 1 .75-.75h3a.75.75 0 0 1 .75.75V21m-4.5 0H2.36m11.14 0H18a2.25 2.25 0 0 0 2.25-2.25V5.25A2.25 2.25 0 0 0 20.25 3H4.125A2.25 2.25 0 0 0 1.875 5.25v13.5A2.25 2.25 0 0 0 4.125 21"
                   />
                 </svg>
-                <span className="relative z-10 hidden sm:inline">
-                  Challenge
-                </span>
-                <div className="absolute top-0 right-0 w-2 h-2 bg-yellow-400 rounded-full animate-ping"></div>
+                <span className="relative z-10">Challenge</span>
+                <div className="absolute top-1 right-1 w-1.5 h-1.5 bg-cyan-400 rounded-full animate-pulse"></div>
               </button>
 
               <button
                 onClick={() => navigate("/ai-interview")}
-                className="hidden lg:flex relative px-3 py-1.5 sm:px-4 sm:py-2 lg:px-6 lg:py-1 bg-gradient-to-r from-purple-600 via-pink-600 to-cyan-600 hover:from-purple-500 hover:via-pink-500 hover:to-cyan-500 text-white rounded-lg sm:rounded-xl text-xs sm:text-sm font-semibold transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-purple-500/50 items-center space-x-1 sm:space-x-2 group overflow-hidden"
+                className="hidden xl:flex relative px-2.5 py-2 lg:px-4 lg:py-2.5 bg-gradient-to-r from-purple-600 via-pink-600 to-cyan-600 hover:from-purple-500 hover:via-pink-500 hover:to-cyan-500 text-white rounded-lg lg:rounded-xl text-xs lg:text-sm font-semibold transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-purple-500/30 items-center gap-1.5 group overflow-hidden"
               >
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-1000"></div>
                 <svg
@@ -259,7 +230,7 @@ const HomePage = () => {
                   viewBox="0 0 24 24"
                   strokeWidth={2}
                   stroke="currentColor"
-                  className="w-4 h-4 sm:w-5 sm:h-5 group-hover:scale-110 transition-transform duration-300"
+                  className="w-4 h-4 lg:w-5 lg:h-5 group-hover:scale-110 transition-transform duration-300 flex-shrink-0"
                 >
                   <path
                     strokeLinecap="round"
@@ -267,15 +238,13 @@ const HomePage = () => {
                     d="m15.75 10.5 4.72-4.72a.75.75 0 0 1 1.28.53v11.38a.75.75 0 0 1-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25h-9A2.25 2.25 0 0 0 2.25 7.5v9a2.25 2.25 0 0 0 2.25 2.25Z"
                   />
                 </svg>
-                <span className="relative z-10 hidden sm:inline">
-                  AI Interview
-                </span>
-                <div className="absolute top-0 right-0 w-2 h-2 bg-cyan-400 rounded-full animate-ping"></div>
-                <div className="absolute -top-1 -right-1 bg-gradient-to-r from-yellow-400 to-orange-400 text-[10px] font-black px-1.5 py-0.5 rounded-full animate-pulse">
+                <span className="relative z-10">AI Interview</span>
+                <div className="absolute -top-0.5 -right-0.5 bg-gradient-to-r from-yellow-400 to-orange-400 text-[9px] font-black px-1 py-0 rounded-full animate-pulse">
                   NEW
                 </div>
               </button>
-              {/* Enhanced Quick Stats - Responsive */}
+
+              {/* Enhanced Quick Stats - Desktop only */}
               {user && (
                 <div className="hidden xl:flex items-center space-x-4 bg-white/80 rounded-xl px-4 lg:px-6 py-2 lg:py-3 border border-gray-200 shadow-sm">
                   <div className="flex items-center space-x-2">
@@ -299,11 +268,11 @@ const HomePage = () => {
                 </div>
               )}
 
-              {/* Stats Toggle Button - Responsive */}
+              {/* Stats Toggle Button - Desktop only */}
               {user && (
                 <button
                   onClick={() => setShowStats(!showStats)}
-                  className="p-2 sm:p-3 bg-white/80 hover:bg-white rounded-lg sm:rounded-xl border border-gray-200 hover:border-purple-300 transition-all duration-300 group shadow-sm"
+                  className="hidden md:flex p-2 sm:p-3 bg-white/80 hover:bg-white rounded-lg sm:rounded-xl border border-gray-200 hover:border-purple-300 transition-all duration-300 group shadow-sm"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -325,14 +294,14 @@ const HomePage = () => {
               {user && user.role === "admin" && (
                 <button
                   onClick={() => navigate("/admin")}
-                  className="hidden sm:flex px-3 py-1.5 sm:px-4 sm:py-2 bg-gray-900 text-white rounded-lg sm:rounded-xl text-xs sm:text-sm font-medium transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-red-500/30 items-center space-x-2"
+                  className="hidden md:flex px-3 py-1.5 sm:px-4 sm:py-2 bg-gray-900 text-white rounded-lg sm:rounded-xl text-xs sm:text-sm font-medium transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-red-500/30 items-center space-x-2"
                 >
                   <span>Admin</span>
                 </button>
               )}
 
               {/* User Dropdown - Responsive */}
-              <div className="relative group">
+              <div className="relative group hidden md:block">
                 <button className="flex items-center space-x-2 sm:space-x-3 bg-white/80 hover:bg-white rounded-lg sm:rounded-xl px-2 sm:px-4 py-1.5 sm:py-2 border border-gray-200 hover:border-purple-300 transition-all duration-300 shadow-sm">
                   <div className="w-6 h-6 sm:w-8 sm:h-8 bg-gradient-to-r from-purple-500 to-blue-500 rounded-md sm:rounded-lg flex items-center justify-center">
                     <span className="text-white font-semibold text-sm">
@@ -422,6 +391,125 @@ const HomePage = () => {
                 </div>
               </div>
             </div>
+
+            {/* Mobile Menu Button */}
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="md:hidden p-2 bg-white/80 hover:bg-white rounded-lg border border-gray-200 hover:border-purple-300 transition-all duration-300 shadow-sm flex-shrink-0"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={2}
+                stroke="currentColor"
+                className="w-5 h-5 text-gray-600"
+              >
+                {mobileMenuOpen ? (
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                ) : (
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
+                  />
+                )}
+              </svg>
+            </button>
+
+            {/* Mobile User Dropdown */}
+            {user && (
+              <div className="relative group md:hidden">
+                <button className="flex items-center gap-1.5 bg-white/80 hover:bg-white rounded-lg px-2 py-2 border border-gray-200 hover:border-purple-300 transition-all duration-300 shadow-sm flex-shrink-0">
+                  <div className="w-6 h-6 bg-gradient-to-r from-purple-500 to-blue-500 rounded-md flex items-center justify-center">
+                    <span className="text-white font-semibold text-xs">
+                      {user?.firstName?.charAt(0) || "G"}
+                    </span>
+                  </div>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={2}
+                    stroke="currentColor"
+                    className="w-3 h-3 text-gray-600 group-hover:text-gray-900 transition-colors duration-300"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="m19.5 8.25-7.5 7.5-7.5-7.5"
+                    />
+                  </svg>
+                </button>
+                <div className="absolute right-0 mt-2 w-48 bg-white/95 backdrop-blur-md border border-gray-200 rounded-xl shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
+                  <div className="p-2">
+                    <div className="space-y-1">
+                      <button
+                        onClick={() => navigate("/profile")}
+                        className="w-full text-left px-4 py-3 text-gray-700 hover:bg-purple-50 hover:text-purple-700 rounded-xl transition-all duration-200 flex items-center space-x-3 group/item"
+                      >
+                        <div className="w-8 h-8 bg-gray-100 group-hover/item:bg-purple-100 rounded-lg flex items-center justify-center transition-colors duration-200">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            strokeWidth={2}
+                            stroke="currentColor"
+                            className="w-4 h-4"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"
+                            />
+                          </svg>
+                        </div>
+                        <div className="flex flex-col">
+                          <span className="font-medium">Profile</span>
+                          <span className="text-xs text-gray-500">
+                            View and edit profile
+                          </span>
+                        </div>
+                      </button>
+
+                      <div className="border-t border-gray-200 my-2"></div>
+
+                      <button
+                        onClick={handleLogout}
+                        className="w-full text-left px-4 py-3 text-red-600 hover:bg-red-50 hover:text-red-700 rounded-xl transition-all duration-200 flex items-center space-x-3 group/item"
+                      >
+                        <div className="w-8 h-8 bg-gray-100 group-hover/item:bg-red-100 rounded-lg flex items-center justify-center transition-colors duration-200">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            strokeWidth={2}
+                            stroke="currentColor"
+                            className="w-4 h-4"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9"
+                            />
+                          </svg>
+                        </div>
+                        <div className="flex flex-col">
+                          <span className="font-medium">Logout</span>
+                          <span className="text-xs text-gray-500">
+                            Sign out of your account
+                          </span>
+                        </div>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         </div>
 
