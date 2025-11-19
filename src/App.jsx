@@ -19,6 +19,8 @@ import MyContest from "./pages/MyContest";
 import ChallengePage from "./pages/Challenge";
 import AiInterviewVideo from "./pages/AiInterview";
 import Landing from "./pages/Landing";
+import ResumeUpload from "./pages/ResumeUpload";
+import ResumeResult from "./pages/ResumeResult";
 
 function App() {
   const { isAuthenticated, loading } = useSelector((state) => state.auth);
@@ -85,6 +87,18 @@ function App() {
           element={user?._id && <ChallengePage userId={user._id} />}
         />
         <Route path="/ai-interview" element={<AiInterviewVideo />} />
+        <Route
+          path="/resume"
+          element={
+            isAuthenticated ? <ResumeUpload /> : <Navigate to="/login" />
+          }
+        />
+        <Route
+          path="/resume-result"
+          element={
+            isAuthenticated ? <ResumeResult /> : <Navigate to="/login" />
+          }
+        />
       </Routes>
     </div>
   );

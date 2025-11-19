@@ -14,6 +14,7 @@ const HomePage = () => {
   const [showStats, setShowStats] = useState(false);
   const [animateProgress, setAnimateProgress] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [featuresDropdownOpen, setFeaturesDropdownOpen] = useState(false);
   const [filters, setFilters] = useState({
     difficulty: "all",
     status: "all",
@@ -173,76 +174,185 @@ const HomePage = () => {
 
             {/* Desktop Navigation - Hidden on mobile */}
             <div className="hidden md:flex items-center gap-1.5 lg:gap-2 flex-1 justify-center">
-              <button
-                onClick={() => navigate("/contest")}
-                className="flex relative px-2.5 py-2 lg:px-4 lg:py-2.5 bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white rounded-lg lg:rounded-xl text-xs lg:text-sm font-semibold transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-indigo-500/30 items-center gap-1.5 group overflow-hidden"
-              >
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-1000"></div>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={2}
-                  stroke="currentColor"
-                  className="w-4 h-4 lg:w-5 lg:h-5 group-hover:rotate-12 transition-transform duration-300 flex-shrink-0"
+              {/* Features Dropdown */}
+              <div className="relative group">
+                <button
+                  onClick={() => setFeaturesDropdownOpen(!featuresDropdownOpen)}
+                  className="flex items-center gap-2 px-4 py-2 lg:px-6 lg:py-2.5 bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white rounded-lg lg:rounded-xl text-sm font-semibold transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-indigo-500/30"
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M16.5 18.75h-9m9 0a3 3 0 0 1 3 3h-15a3 3 0 0 1 3-3m9 0v-3.375c0-.621-.503-1.125-1.125-1.125h-.871M7.5 18.75v-3.375c0-.621.504-1.125 1.125-1.125h.872m5.007 0H9.497m5.007 0a7.454 7.454 0 0 1-.982-3.172M9.497 14.25a7.454 7.454 0 0 0 .981-3.172M15.75 4.5V2.25a1.5 1.5 0 0 0-1.5-1.5h-6a1.5 1.5 0 0 0-1.5 1.5V4.5m11.25 0a2.25 2.25 0 0 1 2.25 2.25v10.125a2.25 2.25 0 0 1-2.25 2.25H6.75a2.25 2.25 0 0 1-2.25-2.25V6.75a2.25 2.25 0 0 1 2.25-2.25H15.75Z"
-                  />
-                </svg>
-                <span className="relative z-10 hidden lg:inline">Contest</span>
-                <div className="absolute top-1 right-1 w-1.5 h-1.5 bg-yellow-400 rounded-full animate-pulse"></div>
-              </button>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={2}
+                    stroke="currentColor"
+                    className="w-5 h-5"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M4 6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6Z"
+                    />
+                  </svg>
+                  <span>Features</span>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={2}
+                    stroke="currentColor"
+                    className={`w-4 h-4 transition-transform duration-300 ${
+                      featuresDropdownOpen ? "rotate-180" : ""
+                    }`}
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="m19.5 8.25-7.5 7.5-7.5-7.5"
+                    />
+                  </svg>
+                </button>
 
-              <button
-                onClick={() => navigate("/challenge")}
-                className="hidden lg:flex relative px-2.5 py-2 lg:px-4 lg:py-2.5 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white rounded-lg lg:rounded-xl text-xs lg:text-sm font-semibold transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-cyan-500/30 items-center gap-1.5 group overflow-hidden"
-              >
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-1000"></div>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={2}
-                  stroke="currentColor"
-                  className="w-4 h-4 lg:w-5 lg:h-5 group-hover:rotate-12 transition-transform duration-300 flex-shrink-0"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M13.5 21v-7.5a.75.75 0 0 1 .75-.75h3a.75.75 0 0 1 .75.75V21m-4.5 0H2.36m11.14 0H18a2.25 2.25 0 0 0 2.25-2.25V5.25A2.25 2.25 0 0 0 20.25 3H4.125A2.25 2.25 0 0 0 1.875 5.25v13.5A2.25 2.25 0 0 0 4.125 21"
-                  />
-                </svg>
-                <span className="relative z-10">Challenge</span>
-                <div className="absolute top-1 right-1 w-1.5 h-1.5 bg-cyan-400 rounded-full animate-pulse"></div>
-              </button>
+                {/* Dropdown Menu */}
+                {featuresDropdownOpen && (
+                  <div className="absolute top-full left-0 mt-2 w-64 bg-white rounded-xl shadow-2xl border border-gray-200 overflow-hidden z-50 group-hover:block animate-fadeIn">
+                    {/* Contest */}
+                    <button
+                      onClick={() => {
+                        navigate("/contest");
+                        setFeaturesDropdownOpen(false);
+                      }}
+                      className="w-full flex items-center gap-3 px-4 py-3 hover:bg-gradient-to-r hover:from-indigo-50 hover:to-violet-50 transition-all duration-200 border-b border-gray-100"
+                    >
+                      <div className="p-2 bg-gradient-to-br from-indigo-600 to-violet-600 rounded-lg">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          strokeWidth={2}
+                          stroke="currentColor"
+                          className="w-4 h-4 text-white"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M16.5 18.75h-9m9 0a3 3 0 0 1 3 3h-15a3 3 0 0 1 3-3m9 0v-3.375c0-.621-.503-1.125-1.125-1.125h-.871M7.5 18.75v-3.375c0-.621.504-1.125 1.125-1.125h.872m5.007 0H9.497m5.007 0a7.454 7.454 0 0 1-.982-3.172M9.497 14.25a7.454 7.454 0 0 0 .981-3.172M15.75 4.5V2.25a1.5 1.5 0 0 0-1.5-1.5h-6a1.5 1.5 0 0 0-1.5 1.5V4.5m11.25 0a2.25 2.25 0 0 1 2.25 2.25v10.125a2.25 2.25 0 0 1-2.25 2.25H6.75a2.25 2.25 0 0 1-2.25-2.25V6.75a2.25 2.25 0 0 1 2.25-2.25H15.75Z"
+                          />
+                        </svg>
+                      </div>
+                      <div className="text-left">
+                        <p className="font-semibold text-gray-900">Contest</p>
+                        <p className="text-xs text-gray-600">
+                          Compete with others
+                        </p>
+                      </div>
+                    </button>
 
-              <button
-                onClick={() => navigate("/ai-interview")}
-                className="hidden xl:flex relative px-2.5 py-2 lg:px-4 lg:py-2.5 bg-gradient-to-r from-purple-600 via-pink-600 to-cyan-600 hover:from-purple-500 hover:via-pink-500 hover:to-cyan-500 text-white rounded-lg lg:rounded-xl text-xs lg:text-sm font-semibold transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-purple-500/30 items-center gap-1.5 group overflow-hidden"
-              >
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-1000"></div>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={2}
-                  stroke="currentColor"
-                  className="w-4 h-4 lg:w-5 lg:h-5 group-hover:scale-110 transition-transform duration-300 flex-shrink-0"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="m15.75 10.5 4.72-4.72a.75.75 0 0 1 1.28.53v11.38a.75.75 0 0 1-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25h-9A2.25 2.25 0 0 0 2.25 7.5v9a2.25 2.25 0 0 0 2.25 2.25Z"
-                  />
-                </svg>
-                <span className="relative z-10">AI Interview</span>
-                <div className="absolute -top-0.5 -right-0.5 bg-gradient-to-r from-yellow-400 to-orange-400 text-[9px] font-black px-1 py-0 rounded-full animate-pulse">
-                  NEW
-                </div>
-              </button>
+                    {/* Challenge */}
+                    <button
+                      onClick={() => {
+                        navigate("/challenge");
+                        setFeaturesDropdownOpen(false);
+                      }}
+                      className="w-full flex items-center gap-3 px-4 py-3 hover:bg-gradient-to-r hover:from-cyan-50 hover:to-blue-50 transition-all duration-200 border-b border-gray-100"
+                    >
+                      <div className="p-2 bg-gradient-to-br from-cyan-600 to-blue-600 rounded-lg">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          strokeWidth={2}
+                          stroke="currentColor"
+                          className="w-4 h-4 text-white"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M13.5 21v-7.5a.75.75 0 0 1 .75-.75h3a.75.75 0 0 1 .75.75V21m-4.5 0H2.36m11.14 0H18a2.25 2.25 0 0 0 2.25-2.25V5.25A2.25 2.25 0 0 0 20.25 3H4.125A2.25 2.25 0 0 0 1.875 5.25v13.5A2.25 2.25 0 0 0 4.125 21"
+                          />
+                        </svg>
+                      </div>
+                      <div className="text-left">
+                        <p className="font-semibold text-gray-900">Challenge</p>
+                        <p className="text-xs text-gray-600">
+                          Practice problems
+                        </p>
+                      </div>
+                    </button>
+
+                    {/* AI Interview */}
+                    <button
+                      onClick={() => {
+                        navigate("/ai-interview");
+                        setFeaturesDropdownOpen(false);
+                      }}
+                      className="w-full flex items-center gap-3 px-4 py-3 hover:bg-gradient-to-r hover:from-purple-50 hover:to-pink-50 transition-all duration-200 border-b border-gray-100"
+                    >
+                      <div className="p-2 bg-gradient-to-br from-purple-600 via-pink-600 to-cyan-600 rounded-lg">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          strokeWidth={2}
+                          stroke="currentColor"
+                          className="w-4 h-4 text-white"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="m15.75 10.5 4.72-4.72a.75.75 0 0 1 1.28.53v11.38a.75.75 0 0 1-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25h-9A2.25 2.25 0 0 0 2.25 7.5v9a2.25 2.25 0 0 0 2.25 2.25Z"
+                          />
+                        </svg>
+                      </div>
+                      <div className="text-left">
+                        <p className="font-semibold text-gray-900">
+                          AI Interview
+                        </p>
+                        <div className="flex items-center gap-1 mt-0.5">
+                          <span className="text-xs text-gray-600">
+                            Mock interviews
+                          </span>
+                          <span className="bg-gradient-to-r from-yellow-400 to-orange-400 text-white text-[9px] font-black px-1.5 py-0 rounded-full">
+                            NEW
+                          </span>
+                        </div>
+                      </div>
+                    </button>
+
+                    {/* Resume */}
+                    <button
+                      onClick={() => {
+                        navigate("/resume");
+                        setFeaturesDropdownOpen(false);
+                      }}
+                      className="w-full flex items-center gap-3 px-4 py-3 hover:bg-gradient-to-r hover:from-amber-50 hover:to-orange-50 transition-all duration-200"
+                    >
+                      <div className="p-2 bg-gradient-to-br from-amber-600 to-orange-600 rounded-lg">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          strokeWidth={2}
+                          stroke="currentColor"
+                          className="w-4 h-4 text-white"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 18 4.5h-2.25A2.25 2.25 0 0 0 13.5 6.75v11.25A2.25 2.25 0 0 0 15.75 20.25z"
+                          />
+                        </svg>
+                      </div>
+                      <div className="text-left">
+                        <p className="font-semibold text-gray-900">Resume</p>
+                        <p className="text-xs text-gray-600">
+                          Analyze your resume
+                        </p>
+                      </div>
+                    </button>
+                  </div>
+                )}
+              </div>
 
               {/* Enhanced Quick Stats - Desktop only */}
               {user && (
@@ -623,6 +733,46 @@ const HomePage = () => {
                   <span className="ml-1 bg-gradient-to-r from-yellow-400 to-orange-400 text-white text-[9px] font-black px-1.5 py-0.5 rounded-full">
                     NEW
                   </span>
+                </span>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={2}
+                  stroke="currentColor"
+                  className="w-4 h-4"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="m8.25 4.5 7.5 7.5-7.5 7.5"
+                  />
+                </svg>
+              </button>
+
+              <button
+                onClick={() => {
+                  navigate("/resume");
+                  setMobileMenuOpen(false);
+                }}
+                className="w-full flex items-center justify-between px-4 py-3 bg-gradient-to-r from-amber-50 to-orange-50 hover:from-amber-100 hover:to-orange-100 text-amber-700 rounded-xl font-medium transition-all duration-300"
+              >
+                <span className="flex items-center gap-2">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={2}
+                    stroke="currentColor"
+                    className="w-5 h-5"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 18 4.5h-2.25A2.25 2.25 0 0 0 13.5 6.75v11.25A2.25 2.25 0 0 0 15.75 20.25z"
+                    />
+                  </svg>
+                  Resume
                 </span>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
