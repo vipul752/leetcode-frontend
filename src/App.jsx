@@ -85,10 +85,19 @@ function App() {
         <Route
           path="/challenge"
           element={
-            isAuthenticated ? user?._id && <ChallengePage userId={user._id} /> : <Navigate to="/login" />
+            isAuthenticated ? (
+              user?._id && <ChallengePage userId={user._id} />
+            ) : (
+              <Navigate to="/login" />
+            )
           }
         />
-        <Route path="/ai-interview" element={<AiInterviewVideo />} />
+        <Route
+          path="/ai-interview"
+          element={
+            isAuthenticated ? <AiInterviewVideo /> : <Navigate to="/login" />
+          }
+        />
         <Route
           path="/resume"
           element={
