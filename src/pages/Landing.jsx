@@ -2,19 +2,17 @@ import { useNavigate } from "react-router";
 import {
   Code2,
   Trophy,
-  Users,
   Zap,
   Brain,
-  Video,
-  Sparkles,
-  ChevronRight,
   CheckCircle,
-  Cpu,
+  ChevronDown,
+  GraduationCap,
+  Briefcase,
   Target,
-  Award,
-  TrendingUp,
-  Swords,
-  Bot,
+  Flame,
+  ArrowRight,
+  Star,
+  Quote,
 } from "lucide-react";
 import axiosClient from "../utils/axiosClient";
 import { useState, useEffect } from "react";
@@ -24,6 +22,7 @@ const Landing = () => {
 
   const [numberOfUsers, setNumberOfUsers] = useState(0);
   const [numberOfContests, setNumberOfContests] = useState(0);
+  const [visibleSections, setVisibleSections] = useState({});
 
   useEffect(() => {
     const handleNoOfUser = async () => {
@@ -46,286 +45,466 @@ const Landing = () => {
 
     handleNoOfUser();
     handleNoOfContest();
+
+    // Intersection Observer for scroll animations
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setVisibleSections((prev) => ({
+              ...prev,
+              [entry.target.id]: true,
+            }));
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    document.querySelectorAll("[data-aos]").forEach((el) => {
+      observer.observe(el);
+    });
+
+    return () => observer.disconnect();
   }, []);
 
+  const getAOSClass = (id) => {
+    return visibleSections[id]
+      ? "opacity-100 translate-y-0"
+      : "opacity-0 translate-y-4";
+  };
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-gray-900 to-black text-white overflow-hidden relative">
-      {/* Enhanced Animated Background Effects */}
-      <div className="fixed inset-0 pointer-events-none overflow-hidden">
-        {/* Main gradient orbs - enhanced with more vibrant colors */}
-        <div className="absolute top-0 -left-4 w-96 h-96 bg-gradient-to-br from-purple-500/10 to-blue-500/5 rounded-full blur-[120px] animate-pulse"></div>
+    <div className="min-h-screen bg-black text-white overflow-hidden relative">
+      {/* Animated background gradient blobs */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute -top-40 -right-40 w-80 h-80 bg-blue-500/10 rounded-full blur-[120px] animate-pulse"></div>
         <div
-          className="absolute bottom-0 right-0 w-96 h-96 bg-gradient-to-tl from-cyan-500/10 to-green-500/5 rounded-full blur-[120px] animate-pulse"
+          className="absolute -bottom-40 -left-40 w-80 h-80 bg-purple-500/10 rounded-full blur-[120px] animate-pulse"
           style={{ animationDelay: "1s" }}
-        ></div>
-        <div
-          className="absolute top-1/2 left-1/2 w-96 h-96 bg-gradient-to-br from-pink-500/10 to-purple-500/5 rounded-full blur-[120px] animate-pulse"
-          style={{ animationDelay: "0.5s" }}
-        ></div>
-
-        {/* Additional floating orbs with gradients */}
-        <div
-          className="absolute top-1/4 right-1/4 w-64 h-64 bg-gradient-to-br from-blue-500/8 to-cyan-500/3 rounded-full blur-[100px] animate-pulse"
-          style={{ animationDelay: "1.5s" }}
-        ></div>
-        <div
-          className="absolute bottom-1/4 left-1/4 w-72 h-72 bg-gradient-to-tr from-purple-500/8 to-pink-500/3 rounded-full blur-[100px] animate-pulse"
-          style={{ animationDelay: "2s" }}
-        ></div>
-
-        {/* Animated grid pattern */}
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:50px_50px] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_50%,black,transparent)]"></div>
-
-        {/* Floating particles with gradients */}
-        <div className="absolute top-20 left-10 w-2 h-2 bg-gradient-to-r from-blue-400 to-cyan-400 rounded-full animate-ping opacity-50"></div>
-        <div
-          className="absolute top-40 right-20 w-2 h-2 bg-gradient-to-r from-purple-400 to-pink-400 rounded-full animate-ping opacity-50"
-          style={{ animationDelay: "0.5s" }}
-        ></div>
-        <div
-          className="absolute bottom-32 left-1/3 w-2 h-2 bg-gradient-to-r from-green-400 to-cyan-400 rounded-full animate-ping opacity-50"
-          style={{ animationDelay: "1s" }}
-        ></div>
-        <div
-          className="absolute top-60 right-1/3 w-2 h-2 bg-gradient-to-r from-pink-400 to-purple-400 rounded-full animate-ping opacity-50"
-          style={{ animationDelay: "1.5s" }}
         ></div>
       </div>
 
-      {/* Enhanced Header/Navigation */}
-      <header className="relative z-20 px-6 py-6 max-w-7xl mx-auto">
-        <nav className="flex items-center justify-between backdrop-blur-md bg-gradient-to-r from-white/10 via-purple-500/5 to-blue-500/10 border border-white/20 shadow-lg shadow-purple-500/10 rounded-2xl px-6 py-3 hover:from-white/20 hover:via-purple-500/10 hover:to-blue-500/20 transition-all duration-300">
-          <div className="flex items-center gap-3">
-            <div className="relative group">
-              <div className="absolute inset-0 bg-gradient-to-r from-purple-500/30 to-blue-500/30 rounded-xl blur-lg opacity-50 group-hover:opacity-100 animate-pulse transition-opacity duration-300"></div>
-            </div>
-            <div>
-              <h1 className="text-2xl font-black bg-gradient-to-r from-white via-purple-200 to-blue-200 bg-clip-text text-transparent">
-                CodeArena
-              </h1>
-              <p className="text-[10px] text-purple-300 font-bold tracking-widest">
-                MASTER THE CODE
-              </p>
-            </div>
-          </div>
+      {/* Minimal Navbar */}
+      <header className="relative z-20 border-b border-white/5 bg-black/40 backdrop-blur-md">
+        <div className="px-6 py-4 max-w-7xl mx-auto">
+          <nav className="flex items-center justify-between">
+            {/* Left: Logo + Navigation Links */}
+            <div className="flex items-center gap-8">
+              {/* Logo */}
+              <div className="flex items-center gap-2 group cursor-pointer hover:scale-105 transition-transform">
+                <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-500 rounded-lg flex items-center justify-center shadow-lg">
+                  <Code2 className="w-5 h-5 text-white" />
+                </div>
+                <span className="text-lg font-bold text-white">CodeArena</span>
+              </div>
 
-          <div className="flex items-center gap-4">
-            <button
-              onClick={() => navigate("/login")}
-              className="relative group px-6 py-2.5 bg-gradient-to-r from-white/10 to-purple-500/10 hover:from-white/20 hover:to-purple-500/20 border border-white/20 hover:border-white/40 text-white rounded-xl font-semibold transition-all duration-300 hover:scale-105 shadow-sm hover:shadow-purple-500/20"
-            >
-              <span className="relative z-10">Login</span>
-              <div className="absolute inset-0 bg-gradient-to-r from-white/5 to-purple-500/5 group-hover:from-white/15 group-hover:to-purple-500/15 rounded-xl transition-all duration-300"></div>
-            </button>
-            <button
-              onClick={() => navigate("/signup")}
-              className="relative group overflow-hidden px-6 py-2.5 bg-gradient-to-r from-cyan-500 via-blue-500 to-purple-500 hover:from-cyan-400 hover:via-blue-400 hover:to-purple-400 text-black rounded-xl font-semibold transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-2xl hover:shadow-purple-500/40"
-            >
-              <span className="relative z-10 flex items-center gap-2">
+              {/* Navigation Links */}
+              <div className="hidden md:flex items-center gap-8">
+                <button
+                  onClick={() => navigate("/challenge")}
+                  className="text-gray-300 hover:text-white transition-colors text-sm font-medium relative group"
+                >
+                  Problems
+                  <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-400 group-hover:w-full transition-all duration-300"></span>
+                </button>
+                <button
+                  onClick={() => navigate("/contest")}
+                  className="text-gray-300 hover:text-white transition-colors text-sm font-medium relative group"
+                >
+                  Contests
+                  <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-400 group-hover:w-full transition-all duration-300"></span>
+                </button>
+                {/* Features Dropdown */}
+                <div className="relative group">
+                  <button className="text-gray-300 hover:text-white transition-colors text-sm font-medium flex items-center gap-1 relative">
+                    Features
+                    <ChevronDown className="w-4 h-4 group-hover:rotate-180 transition-transform duration-300" />
+                    <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-400 group-hover:w-full transition-all duration-300"></span>
+                  </button>
+                  <div className="absolute left-0 mt-2 w-48 bg-slate-900/80 backdrop-blur-md border border-white/10 rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 shadow-xl">
+                    <button
+                      onClick={() => navigate("/challenge")}
+                      className="w-full text-left px-4 py-3 text-gray-300 hover:text-white hover:bg-white/5 text-sm transition-colors"
+                    >
+                      Challenge
+                    </button>
+                    <button
+                      onClick={() => navigate("/ai-interview")}
+                      className="w-full text-left px-4 py-3 text-gray-300 hover:text-white hover:bg-white/5 text-sm transition-colors"
+                    >
+                      AI Interview
+                    </button>
+                    <button
+                      onClick={() => navigate("/resume")}
+                      className="w-full text-left px-4 py-3 text-gray-300 hover:text-white hover:bg-white/5 text-sm transition-colors rounded-b-lg"
+                    >
+                      Resume Analyzer
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Right: Auth Buttons */}
+            <div className="flex items-center gap-3">
+              <button
+                onClick={() => navigate("/login")}
+                className="px-5 py-2 text-gray-300 hover:text-white text-sm font-medium hover:scale-105 transition-all duration-300"
+              >
+                Login
+              </button>
+              <button
+                onClick={() => navigate("/signup")}
+                className="px-5 py-2 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-lg text-sm font-medium transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 transform"
+              >
                 Sign Up
-                <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
-              </span>
-              <div className="absolute inset-0 bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-700"></div>
-            </button>
-          </div>
-        </nav>
+              </button>
+            </div>
+          </nav>
+        </div>
       </header>
 
-      {/* Enhanced Hero Section */}
-      <section className="relative z-10 px-6 pt-20 pb-32 max-w-7xl mx-auto">
-        <div className="text-center mb-16">
-          {/* Floating badge with enhanced animation */}
-          <div className="inline-flex items-center gap-2 bg-white/5 border border-white/20 rounded-full px-6 py-2 mb-8 backdrop-blur-sm hover:border-white/40 hover:bg-white/10 shadow-sm transition-all duration-300 hover:scale-105 group cursor-default">
-            <Sparkles className="w-4 h-4 text-gray-300 animate-pulse group-hover:rotate-12 transition-transform duration-300" />
-            <span className="text-sm font-semibold text-gray-300">
-              Level Up Your Coding Skills
-            </span>
-            <Sparkles className="w-4 h-4 text-gray-400 animate-pulse group-hover:-rotate-12 transition-transform duration-300" />
-          </div>
+      {/* Hero Section */}
+      <section className="relative z-10 px-6 py-24 max-w-7xl mx-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          {/* Left: Content */}
+          <div
+            id="hero-content"
+            data-aos="fade-up"
+            className={`transform transition-all duration-700 ${getAOSClass(
+              "hero-content"
+            )}`}
+          >
+            <div className="space-y-6">
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-md w-fit hover:bg-white/10 transition-colors">
+                <span className="text-xs font-semibold text-blue-400">
+                  ✨ NEW
+                </span>
+                <span className="text-xs text-gray-300">
+                  AI-Powered Interview Prep
+                </span>
+              </div>
 
-          {/* Enhanced hero title */}
-          <h2 className="text-6xl md:text-7xl lg:text-8xl font-black mb-6 leading-tight">
-            <span className="inline-block bg-gradient-to-r from-cyan-300 via-blue-300 to-purple-300 bg-clip-text text-transparent drop-shadow-lg hover:scale-105 transition-transform duration-300">
-              Master Coding
-            </span>
-            <br />
-            <span
-              className="inline-block bg-gradient-to-r from-purple-400 via-pink-300 to-red-300 bg-clip-text text-transparent drop-shadow-lg hover:scale-105 transition-transform duration-300"
-              style={{ animationDelay: "0.5s" }}
-            >
-              Through Practice
-            </span>
-          </h2>
+              <h1 className="text-6xl md:text-7xl font-black bg-gradient-to-r from-white via-blue-200 to-purple-200 bg-clip-text text-transparent leading-tight">
+                Practice. Compete. Get Hired.
+              </h1>
 
-          <p className="text-xl md:text-2xl bg-gradient-to-r from-gray-300 via-blue-200 to-purple-200 bg-clip-text text-transparent mb-12 max-w-3xl mx-auto leading-relaxed hover:text-gray-300 transition-colors duration-300">
-            Solve challenging problems, compete in contests, battle friends in
-            real-time challenges, and ace AI-powered video interviews
-          </p>
+              <p className="text-xl text-gray-400 leading-relaxed max-w-md">
+                Master coding with 1000+ problems, compete globally, and ace
+                interviews with AI assistance.
+              </p>
 
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
-            <button
-              onClick={() => navigate("/signup")}
-              className="group relative overflow-hidden px-10 py-5 bg-gradient-to-r from-cyan-500 via-blue-500 to-purple-500 hover:from-cyan-400 hover:via-blue-400 hover:to-purple-400 text-black rounded-2xl font-bold text-lg transition-all duration-300 hover:scale-110 shadow-xl hover:shadow-2xl hover:shadow-purple-500/50 flex items-center gap-3 "
-            >
-              <span className="relative z-10 flex items-center gap-3">
-                Get Started Free
-                <ChevronRight className="w-6 h-6 group-hover:translate-x-2 transition-transform duration-300" />
-              </span>
-              <div className="absolute inset-0 bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
-            </button>
+              {/* CTA Buttons */}
+              <div className="flex flex-col sm:flex-row gap-4 pt-4">
+                <button
+                  onClick={() => navigate("/signup")}
+                  className="group px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-xl font-semibold transition-all duration-300 shadow-xl hover:shadow-2xl hover:scale-105 transform flex items-center gap-2"
+                >
+                  Start Free Now
+                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                </button>
+                <button
+                  onClick={() => navigate("/challenge")}
+                  className="px-8 py-4 bg-white/5 hover:bg-white/10 border border-white/20 hover:border-white/40 text-white rounded-xl font-semibold transition-all duration-300 backdrop-blur-md hover:scale-105 transform"
+                >
+                  Explore Problems
+                </button>
+              </div>
 
-            <button
-              onClick={() => navigate("/login")}
-              className="group relative px-10 py-5 bg-gradient-to-r from-white/10 to-purple-500/10 hover:from-white/20 hover:to-purple-500/20 border-2 border-purple-400/50 hover:border-purple-300 text-white rounded-2xl font-bold text-lg transition-all duration-300 hover:scale-105 shadow-md hover:shadow-lg hover:shadow-purple-500/20 overflow-hidden"
-            >
-              <span className="relative z-10">Sign In</span>
-              <div className="absolute inset-0 bg-gradient-to-r from-white/5 via-purple-500/5 to-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-            </button>
-          </div>
-        </div>
-
-        {/* Enhanced Feature Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-20">
-          {/* Feature 1 */}
-          <div className="group relative hover:-translate-y-2 transition-all duration-500">
-            <div className="absolute -inset-0.5 bg-gradient-to-r from-white/20 to-gray-400/20 rounded-2xl blur opacity-10 group-hover:opacity-30 transition duration-500 animate-pulse"></div>
-            <div className="relative bg-white/5 backdrop-blur-xl border border-white/10 group-hover:border-white/30 shadow-lg group-hover:shadow-xl rounded-2xl p-6 h-full overflow-hidden">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full blur-2xl group-hover:bg-white/10 transition-all duration-500"></div>
-              <div className="relative">
-                <div className="w-14 h-14 bg-gradient-to-br from-white/30 to-gray-400/30 rounded-xl flex items-center justify-center mb-4 shadow-md shadow-white/10 group-hover:scale-110 group-hover:rotate-6 transition-all duration-500">
-                  <Target className="w-7 h-7 text-white group-hover:scale-110 transition-transform duration-500" />
+              {/* Trust badges */}
+              <div className="flex items-center gap-4 pt-4">
+                <div className="flex -space-x-2">
+                  {[1, 2, 3, 4].map((i) => (
+                    <div
+                      key={i}
+                      className="w-8 h-8 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 border-2 border-black"
+                    ></div>
+                  ))}
                 </div>
-                <h3 className="text-xl font-bold text-white mb-2 group-hover:text-gray-200 transition-all duration-300">
-                  1000+ Problems
-                </h3>
-                <p className="text-gray-400 text-sm leading-relaxed group-hover:text-gray-300 transition-colors duration-300">
-                  Practice coding with curated problems from easy to hard
-                  difficulty
-                </p>
+                <span className="text-sm text-gray-400">
+                  Trusted by{" "}
+                  <span className="text-white font-semibold">
+                    {numberOfUsers.toLocaleString()}+ developers
+                  </span>
+                </span>
               </div>
             </div>
           </div>
 
-          {/* Feature 2 */}
+          {/* Right: 3D Laptop Illustration */}
           <div
-            className="group relative hover:-translate-y-2 transition-all duration-500"
-            style={{ animationDelay: "0.1s" }}
+            id="hero-visual"
+            data-aos="fade-up"
+            className={`hidden lg:flex items-center justify-center transform transition-all duration-700 ${getAOSClass(
+              "hero-visual"
+            )}`}
           >
-            <div className="absolute -inset-0.5 bg-gradient-to-r from-gray-400/20 to-white/20 rounded-2xl blur opacity-10 group-hover:opacity-30 transition duration-500 animate-pulse"></div>
-            <div className="relative bg-white/5 backdrop-blur-xl border border-white/10 group-hover:border-white/30 shadow-lg group-hover:shadow-xl rounded-2xl p-6 h-full overflow-hidden">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-gray-400/5 rounded-full blur-2xl group-hover:bg-gray-400/10 transition-all duration-500"></div>
-              <div className="relative">
-                <div className="w-14 h-14 bg-gradient-to-br from-gray-400/30 to-white/30 rounded-xl flex items-center justify-center mb-4 shadow-md shadow-white/10 group-hover:scale-110 group-hover:rotate-6 transition-all duration-500">
-                  <Trophy className="w-7 h-7 text-white group-hover:scale-110 transition-transform duration-500" />
+            <div className="relative w-full h-96">
+              {/* Laptop mockup with glassmorphism */}
+              <div className="absolute inset-0 flex items-center justify-center">
+                {/* Laptop screen - code editor mockup */}
+                <div
+                  className="w-80 h-56 bg-gradient-to-br from-slate-800 to-slate-900 border-8 border-slate-700 rounded-lg shadow-2xl overflow-hidden transform perspective hover:scale-105 transition-all duration-300"
+                  style={{
+                    boxShadow:
+                      "0 25px 50px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.1)",
+                    background:
+                      "linear-gradient(135deg, #1e293b 0%, #0f172a 100%)",
+                  }}
+                >
+                  {/* Screen content - code lines */}
+                  <div className="p-4 h-full flex flex-col justify-between font-mono text-xs">
+                    <div className="space-y-2">
+                      <div className="text-green-400">
+                        {"function"}{" "}
+                        <span className="text-blue-400">solve</span>()
+                        {"{"}
+                      </div>
+                      <div className="text-gray-400 ml-4">
+                        {"// Practice problems"}
+                      </div>
+                      <div className="text-orange-300 ml-4">
+                        {"return "}
+                        <span className="text-purple-400">success</span>
+                      </div>
+                      <div className="text-green-400">{"}"}</div>
+                    </div>
+                    {/* Active indicator */}
+                    <div className="flex items-center gap-2">
+                      <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                      <span className="text-gray-500 text-[10px]">
+                        Live Problem: DSA-001
+                      </span>
+                    </div>
+                  </div>
                 </div>
-                <h3 className="text-xl font-bold text-white mb-2 group-hover:text-gray-200 transition-all duration-300">
-                  Live Contests
-                </h3>
-                <p className="text-gray-400 text-sm leading-relaxed group-hover:text-gray-300 transition-colors duration-300">
-                  Compete with developers worldwide in timed coding competitions
-                </p>
-              </div>
-            </div>
-          </div>
 
-          {/* Feature 3 */}
-          <div
-            className="group relative hover:-translate-y-2 transition-all duration-500 perspective-1000"
-            style={{ animationDelay: "0.2s" }}
-          >
-            <div className="absolute -inset-0.5 bg-gradient-to-r from-white/20 to-gray-500/20 rounded-2xl blur opacity-20 group-hover:opacity-60 transition duration-500 animate-pulse"></div>
-            <div className="relative bg-white/5 backdrop-blur-xl border border-white/10 group-hover:border-white/30 rounded-2xl p-6 h-full overflow-hidden shadow-lg transform-gpu group-hover:scale-105 transition-all duration-500">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-white/3 rounded-full blur-2xl group-hover:bg-white/5 transition-all duration-500 group-hover:scale-150"></div>
-              <div className="relative transform-gpu group-hover:translate-z-10 transition-transform duration-500">
-                <div className="w-14 h-14 bg-gradient-to-br from-white/30 to-gray-500/30 rounded-xl flex items-center justify-center mb-4 shadow-lg group-hover:scale-110 group-hover:rotate-12 transition-all duration-500 transform-gpu">
-                  <Swords className="w-7 h-7 text-white group-hover:scale-110 group-hover:rotate-12 transition-all duration-500" />
+                {/* Floating cards around laptop */}
+                {/* Top left card */}
+                <div className="absolute -top-8 -left-12 w-28 h-24 bg-slate-800/80 backdrop-blur-md border border-white/10 rounded-lg p-3 shadow-lg hover:scale-110 transition-transform duration-300">
+                  <div className="text-green-400 text-xs font-bold mb-1">
+                    Accepted
+                  </div>
+                  <div className="text-white text-sm font-bold">847/1000</div>
+                  <div className="text-gray-500 text-xs mt-1">
+                    Problems Solved
+                  </div>
                 </div>
-                <h3 className="text-xl font-bold text-white mb-2 group-hover:text-gray-200 transition-all duration-300">
-                  1v1 Challenges
-                </h3>
-                <p className="text-gray-400 text-sm leading-relaxed group-hover:text-gray-300 transition-colors duration-300">
-                  Battle friends in real-time coding duels and prove your skills
-                </p>
-              </div>
-            </div>
-          </div>
 
-          {/* Feature 4 */}
-          <div
-            className="group relative hover:-translate-y-2 transition-all duration-500 perspective-1000"
-            style={{ animationDelay: "0.3s" }}
-          >
-            <div className="absolute -inset-0.5 bg-gradient-to-r from-gray-400/20 to-white/20 rounded-2xl blur opacity-20 group-hover:opacity-60 transition duration-500 animate-pulse"></div>
-            <div className="relative bg-white/5 backdrop-blur-xl border border-white/10 group-hover:border-white/30 rounded-2xl p-6 h-full overflow-hidden shadow-lg transform-gpu group-hover:scale-105 transition-all duration-500">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-gray-400/3 rounded-full blur-2xl group-hover:bg-gray-400/5 transition-all duration-500 group-hover:scale-150"></div>
-              <div className="relative transform-gpu group-hover:translate-z-10 transition-transform duration-500">
-                <div className="w-14 h-14 bg-gradient-to-br from-gray-400/30 to-white/30 rounded-xl flex items-center justify-center mb-4 shadow-lg group-hover:scale-110 group-hover:rotate-12 transition-all duration-500 transform-gpu">
-                  <Video className="w-7 h-7 text-white group-hover:scale-110 group-hover:-rotate-12 transition-all duration-500" />
+                {/* Bottom right card */}
+                <div className="absolute -bottom-8 -right-12 w-28 h-20 bg-slate-800/80 backdrop-blur-md border border-white/10 rounded-lg p-3 shadow-lg hover:scale-110 transition-transform duration-300">
+                  <div className="text-blue-400 text-xs font-bold mb-1">
+                    Streak
+                  </div>
+                  <div className="text-white text-sm font-bold">7 Days</div>
+                  <div className="text-gray-500 text-xs mt-1">
+                    Current Streak
+                  </div>
                 </div>
-                <h3 className="text-xl font-bold text-white mb-2 group-hover:text-gray-200 transition-all duration-300">
-                  AI Interviews
-                </h3>
-                <p className="text-gray-400 text-sm leading-relaxed group-hover:text-gray-300 transition-colors duration-300">
-                  Practice with AI-powered video interviews and get instant
-                  feedback
-                </p>
+
+                {/* Top right badge */}
+                <div className="absolute -top-4 -right-8 w-24 h-24 bg-gradient-to-br from-blue-500/20 to-purple-500/20 border border-blue-400/30 rounded-full flex items-center justify-center backdrop-blur hover:scale-110 transition-transform duration-300">
+                  <div className="text-center">
+                    <Trophy className="w-6 h-6 text-amber-400 mx-auto mb-1" />
+                    <div className="text-white text-xs font-bold">Expert</div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Enhanced Stats Section */}
+      {/* Feature Overview Bar */}
+      <section className="relative z-10 px-6 py-8 max-w-7xl mx-auto">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          {[
+            { label: "⚡ Fast", desc: "Instant feedback" },
+            { label: "🧠 AI-Powered", desc: "Smart learning" },
+            { label: "🏆 Contests", desc: "Global ranking" },
+            { label: "📝 Resume", desc: "ATS analyzer" },
+          ].map((item, i) => (
+            <div
+              key={i}
+              id={`feature-bar-${i}`}
+              data-aos="fade-up"
+              className={`transform transition-all duration-300 p-4 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 hover:border-blue-400/50 text-center ${getAOSClass(
+                `feature-bar-${i}`
+              )}`}
+            >
+              <div className="text-lg font-bold text-white">{item.label}</div>
+              <div className="text-xs text-gray-400">{item.desc}</div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Core Features Section */}
       <section className="relative z-10 px-6 py-20 max-w-7xl mx-auto">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+        <div
+          id="features-header"
+          data-aos="fade-up"
+          className={`transform transition-all duration-700 text-center mb-16 ${getAOSClass(
+            "features-header"
+          )}`}
+        >
+          <h2 className="text-4xl font-bold text-white mb-4">
+            Everything You Need to Succeed
+          </h2>
+          <p className="text-gray-400 max-w-2xl mx-auto">
+            Comprehensive tools designed for every stage of your coding journey
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {[
             {
-              icon: Users,
-              value: numberOfUsers,
-              label: "Active Users",
-              gradient: "from-white/30 to-gray-400/30",
-            },
-            {
+              id: "feature-1",
               icon: Code2,
-              value: "1K+",
-              label: "Solutions",
-              gradient: "from-gray-400/30 to-white/30",
+              title: "1000+ Problems",
+              desc: "Practice from easy to hard",
+              color: "from-blue-500/20 to-blue-500/5",
             },
             {
+              id: "feature-2",
               icon: Trophy,
-              value: numberOfContests,
-              label: "Contests",
-              gradient: "from-white/30 to-gray-400/30",
+              title: "Weekly Contests",
+              desc: "Compete with developers",
+              color: "from-amber-500/20 to-amber-500/5",
             },
             {
-              icon: Award,
-              value: "98%",
-              label: "Satisfaction",
-              gradient: "from-gray-400/30 to-white/30",
+              id: "feature-3",
+              icon: Zap,
+              title: "1v1 Challenges",
+              desc: "Real-time duels",
+              color: "from-purple-500/20 to-purple-500/5",
             },
-          ].map((stat, idx) => (
+            {
+              id: "feature-4",
+              icon: Brain,
+              title: "AI Interviews",
+              desc: "Practice with AI",
+              color: "from-green-500/20 to-green-500/5",
+            },
+          ].map((feature) => (
             <div
-              key={idx}
-              className="group relative hover:-translate-y-2 transition-all duration-500 perspective-1000"
+              key={feature.id}
+              id={feature.id}
+              data-aos="fade-up"
+              className={`transform transition-all duration-700 group bg-gradient-to-br ${
+                feature.color
+              } border border-white/10 rounded-xl p-6 hover:border-white/30 hover:shadow-xl transition-all duration-300 cursor-pointer hover:scale-105 ${getAOSClass(
+                feature.id
+              )}`}
             >
-              <div
-                className={`absolute -inset-0.5 bg-gradient-to-r ${stat.gradient} rounded-2xl blur opacity-20 group-hover:opacity-50 transition duration-500 animate-pulse`}
-              ></div>
-              <div className="relative bg-white/5 backdrop-blur-xl border border-white/10 group-hover:border-white/30 rounded-2xl p-6 text-center overflow-hidden shadow-lg transform-gpu group-hover:scale-105 transition-all duration-500">
-                <div className="absolute top-0 right-0 w-20 h-20 bg-white/3 rounded-full blur-xl group-hover:bg-white/5 transition-all duration-500 group-hover:scale-150"></div>
-                <stat.icon
-                  className={`relative w-12 h-12 mx-auto mb-3 text-white group-hover:scale-125 group-hover:rotate-12 transition-all duration-500 transform-gpu`}
-                  strokeWidth={2}
-                />
-                <div
-                  className={`text-5xl font-black text-white mb-1 group-hover:scale-110 transition-transform duration-300 transform-gpu`}
-                >
-                  {stat.value}
+              <div className="w-12 h-12 rounded-lg bg-white/10 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                <feature.icon className="w-6 h-6 text-white" />
+              </div>
+              <h3 className="text-lg font-semibold text-white mb-2">
+                {feature.title}
+              </h3>
+              <p className="text-gray-400 text-sm">{feature.desc}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Stats Section */}
+      <section className="relative z-10 px-6 py-20 max-w-7xl mx-auto">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+          {[
+            { value: numberOfUsers.toLocaleString(), label: "Active Users" },
+            { value: numberOfContests, label: "Contests" },
+            { value: "1000+", label: "Problems" },
+            { value: "4.9/5", label: "Rating" },
+          ].map((stat, i) => (
+            <div
+              key={i}
+              id={`stat-${i}`}
+              data-aos="fade-up"
+              className={`transform transition-all duration-300 text-center p-6 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 ${getAOSClass(
+                `stat-${i}`
+              )}`}
+            >
+              <div className="text-4xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+                {stat.value}
+              </div>
+              <div className="text-gray-400 text-sm mt-2">{stat.label}</div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Testimonials Section */}
+      <section className="relative z-10 px-6 py-20 max-w-7xl mx-auto">
+        <div
+          id="testimonials-header"
+          data-aos="fade-up"
+          className={`transform transition-all duration-700 text-center mb-16 ${getAOSClass(
+            "testimonials-header"
+          )}`}
+        >
+          <h2 className="text-4xl font-bold text-white mb-4">
+            Loved by Developers
+          </h2>
+          <p className="text-gray-400 max-w-2xl mx-auto">
+            Join thousands of developers who've transformed their coding skills
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {[
+            {
+              id: "testimonial-1",
+              text: "CodeArena helped me land my dream job at a top tech company. The problems are well-curated and the AI interviews are incredibly realistic.",
+              author: "Sarah Chen",
+              role: "Software Engineer at Google",
+              rating: 5,
+            },
+            {
+              id: "testimonial-2",
+              text: "The contest platform is amazing! I've improved my competitive programming skills significantly. The leaderboard keeps me motivated.",
+              author: "Raj Patel",
+              role: "Competitive Programmer",
+              rating: 5,
+            },
+            {
+              id: "testimonial-3",
+              text: "As a career switcher, this platform was exactly what I needed. The learning roadmap guided me perfectly from beginner to being job-ready.",
+              author: "Emily Rodriguez",
+              role: "Senior Developer at Microsoft",
+              rating: 5,
+            },
+          ].map((testimonial) => (
+            <div
+              key={testimonial.id}
+              id={testimonial.id}
+              data-aos="fade-up"
+              className={`transform transition-all duration-300 bg-white/5 border border-white/10 rounded-xl p-6 hover:border-blue-400/50 hover:bg-white/10 ${getAOSClass(
+                testimonial.id
+              )}`}
+            >
+              <Quote className="w-5 h-5 text-blue-400 mb-3 opacity-50" />
+              <p className="text-gray-300 mb-4 leading-relaxed">
+                {testimonial.text}
+              </p>
+              <div className="flex items-center justify-between">
+                <div>
+                  <div className="font-semibold text-white">
+                    {testimonial.author}
+                  </div>
+                  <div className="text-xs text-gray-400">
+                    {testimonial.role}
+                  </div>
                 </div>
-                <div className="text-gray-400 text-sm font-medium group-hover:text-gray-300 transition-colors duration-300">
-                  {stat.label}
+                <div className="flex gap-1">
+                  {[...Array(testimonial.rating)].map((_, i) => (
+                    <Star
+                      key={i}
+                      className="w-4 h-4 fill-amber-400 text-amber-400"
+                    />
+                  ))}
                 </div>
               </div>
             </div>
@@ -333,367 +512,273 @@ const Landing = () => {
         </div>
       </section>
 
-      {/* Features Detail Section */}
+      {/* Who is this for? Section */}
       <section className="relative z-10 px-6 py-20 max-w-7xl mx-auto">
-        <div className="text-center mb-16">
-          <h3 className="text-4xl md:text-5xl font-black text-white mb-4">
-            Everything You Need to Excel
-          </h3>
-          <p className="text-xl text-gray-400 max-w-2xl mx-auto">
-            Powerful features designed to accelerate your coding journey
+        <div
+          id="who-header"
+          data-aos="fade-up"
+          className={`transform transition-all duration-700 text-center mb-16 ${getAOSClass(
+            "who-header"
+          )}`}
+        >
+          <h2 className="text-4xl font-bold text-white mb-4">
+            Who is this for?
+          </h2>
+          <p className="text-gray-400 max-w-2xl mx-auto">
+            Whether you're just starting or already a pro, CodeArena has
+            something for everyone
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {/* Feature Detail 1 */}
-          <div className="group relative perspective-1000">
-            <div className="absolute -inset-1 bg-gradient-to-r from-white/20 to-gray-400/20 rounded-3xl blur opacity-20 group-hover:opacity-30 transition duration-500"></div>
-            <div className="relative bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-8 shadow-lg transform-gpu group-hover:scale-105 transition-all duration-500">
-              <div className="flex items-start gap-4 mb-4">
-                <div className="w-12 h-12 bg-gradient-to-br from-white/30 to-gray-400/30 rounded-xl flex items-center justify-center flex-shrink-0 shadow-lg transform-gpu group-hover:scale-110 group-hover:rotate-12 transition-all duration-500">
-                  <Brain className="w-6 h-6 text-white" />
-                </div>
-                <div>
-                  <h4 className="text-2xl font-bold text-white mb-2">
-                    Smart Learning Path
-                  </h4>
-                  <p className="text-gray-400 leading-relaxed">
-                    Our AI-powered system adapts to your skill level and creates
-                    personalized learning paths to help you improve faster
-                  </p>
-                </div>
-              </div>
-              <ul className="space-y-3 mt-6">
-                {[
-                  "Adaptive difficulty",
-                  "Progress tracking",
-                  "Skill analytics",
-                ].map((item, idx) => (
-                  <li
-                    key={idx}
-                    className="flex items-center gap-3 text-gray-300"
-                  >
-                    <CheckCircle className="w-5 h-5 text-green-400 flex-shrink-0" />
-                    <span>{item}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {[
+            {
+              id: "persona-1",
+              icon: GraduationCap,
+              title: "Students",
+              desc: "Preparing for placements and campus interviews",
+              color: "blue",
+            },
+            {
+              id: "persona-2",
+              icon: Briefcase,
+              title: "Professionals",
+              desc: "Improving DSA and staying competitive",
+              color: "amber",
+            },
+            {
+              id: "persona-3",
+              icon: Target,
+              title: "Job Seekers",
+              desc: "Mastering mock interviews and resume reviews",
+              color: "purple",
+            },
+            {
+              id: "persona-4",
+              icon: Flame,
+              title: "Competitive Coders",
+              desc: "Competing in contests and leaderboards",
+              color: "red",
+            },
+          ].map((persona) => {
+            const colorMap = {
+              blue: {
+                bg: "from-blue-500/20 to-blue-500/5",
+                border: "hover:border-blue-400/50",
+                text: "text-blue-400",
+              },
+              amber: {
+                bg: "from-amber-500/20 to-amber-500/5",
+                border: "hover:border-amber-400/50",
+                text: "text-amber-400",
+              },
+              purple: {
+                bg: "from-purple-500/20 to-purple-500/5",
+                border: "hover:border-purple-400/50",
+                text: "text-purple-400",
+              },
+              red: {
+                bg: "from-red-500/20 to-red-500/5",
+                border: "hover:border-red-400/50",
+                text: "text-red-400",
+              },
+            };
+            const colors = colorMap[persona.color];
 
-          {/* Feature Detail 2 */}
-          <div className="group relative perspective-1000">
-            <div className="absolute -inset-1 bg-gradient-to-r from-gray-400/20 to-white/20 rounded-3xl blur opacity-20 group-hover:opacity-30 transition duration-500"></div>
-            <div className="relative bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-8 shadow-lg transform-gpu group-hover:scale-105 transition-all duration-500">
-              <div className="flex items-start gap-4 mb-4">
-                <div className="w-12 h-12 bg-gradient-to-br from-gray-400/30 to-white/30 rounded-xl flex items-center justify-center flex-shrink-0 shadow-lg transform-gpu group-hover:scale-110 group-hover:-rotate-12 transition-all duration-500">
-                  <Cpu className="w-6 h-6 text-white" />
+            return (
+              <div
+                key={persona.id}
+                id={persona.id}
+                data-aos="fade-up"
+                className={`transform transition-all duration-700 group bg-gradient-to-br ${
+                  colors.bg
+                } border border-white/10 ${
+                  colors.border
+                } rounded-xl p-6 hover:bg-white/10 transition-all duration-300 cursor-pointer hover:scale-105 ${getAOSClass(
+                  persona.id
+                )}`}
+              >
+                <div
+                  className={`w-12 h-12 rounded-lg bg-white/10 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform ${colors.text}`}
+                >
+                  <persona.icon className="w-6 h-6" />
                 </div>
-                <div>
-                  <h4 className="text-2xl font-bold text-white mb-2">
-                    Real-time Code Execution
-                  </h4>
-                  <p className="text-gray-400 leading-relaxed">
-                    Write, test, and debug your code instantly with our powerful
-                    online IDE supporting multiple languages
-                  </p>
-                </div>
+                <h3 className="text-lg font-semibold text-white mb-2">
+                  {persona.title}
+                </h3>
+                <p className="text-gray-400 text-sm">{persona.desc}</p>
               </div>
-              <ul className="space-y-3 mt-6">
-                {[
-                  "Multiple languages",
-                  "Instant feedback",
-                  "Performance metrics",
-                ].map((item, idx) => (
-                  <li
-                    key={idx}
-                    className="flex items-center gap-3 text-gray-300"
-                  >
-                    <CheckCircle className="w-5 h-5 text-green-400 flex-shrink-0" />
-                    <span>{item}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
+            );
+          })}
+        </div>
+      </section>
 
-          {/* Feature Detail 3 */}
-          <div className="group relative perspective-1000">
-            <div className="absolute -inset-1 bg-gradient-to-r from-white/20 to-gray-500/20 rounded-3xl blur opacity-20 group-hover:opacity-30 transition duration-500"></div>
-            <div className="relative bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-8 shadow-lg transform-gpu group-hover:scale-105 transition-all duration-500">
-              <div className="flex items-start gap-4 mb-4">
-                <div className="w-12 h-12 bg-gradient-to-br from-white/30 to-gray-500/30 rounded-xl flex items-center justify-center flex-shrink-0 shadow-lg transform-gpu group-hover:scale-110 group-hover:rotate-12 transition-all duration-500">
-                  <Zap className="w-6 h-6 text-white" />
-                </div>
-                <div>
-                  <h4 className="text-2xl font-bold text-white mb-2">
-                    Live Competitions
-                  </h4>
-                  <p className="text-gray-400 leading-relaxed">
-                    Join weekly contests, climb the leaderboard, and compete
-                    with the best developers from around the world
-                  </p>
-                </div>
-              </div>
-              <ul className="space-y-3 mt-6">
-                {[
-                  "Weekly contests",
-                  "Global rankings",
-                  "Prizes & recognition",
-                ].map((item, idx) => (
-                  <li
-                    key={idx}
-                    className="flex items-center gap-3 text-gray-300"
-                  >
-                    <CheckCircle className="w-5 h-5 text-green-400 flex-shrink-0" />
-                    <span>{item}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
+      {/* Learning Roadmap Section */}
+      <section className="relative z-10 px-6 py-20 max-w-7xl mx-auto">
+        <div
+          id="roadmap-header"
+          data-aos="fade-up"
+          className={`transform transition-all duration-700 text-center mb-16 ${getAOSClass(
+            "roadmap-header"
+          )}`}
+        >
+          <h2 className="text-4xl font-bold text-white mb-4">
+            Your Learning Roadmap
+          </h2>
+          <p className="text-gray-400 max-w-2xl mx-auto">
+            Structured pathway from beginner to industry-ready professional
+          </p>
+        </div>
 
-          {/* Feature Detail 4 */}
-          <div className="group relative perspective-1000">
-            <div className="absolute -inset-1 bg-gradient-to-r from-gray-500/20 to-white/20 rounded-3xl blur opacity-20 group-hover:opacity-30 transition duration-500"></div>
-            <div className="relative bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-8 shadow-lg transform-gpu group-hover:scale-105 transition-all duration-500">
-              <div className="flex items-start gap-4 mb-4">
-                <div className="w-12 h-12 bg-gradient-to-br from-gray-500/30 to-white/30 rounded-xl flex items-center justify-center flex-shrink-0 shadow-lg transform-gpu group-hover:scale-110 group-hover:-rotate-12 transition-all duration-500">
-                  <Bot className="w-6 h-6 text-white" />
-                </div>
-                <div>
-                  <h4 className="text-2xl font-bold text-white mb-2">
-                    AI Interview Prep
-                  </h4>
-                  <p className="text-gray-400 leading-relaxed">
-                    Practice technical interviews with our AI interviewer in
-                    live video sessions with real-time feedback
-                  </p>
-                </div>
+        <div className="relative">
+          {/* Timeline line */}
+          <div className="hidden md:block absolute left-1/2 transform -translate-x-1/2 top-12 bottom-0 w-1 bg-gradient-to-b from-blue-500 via-purple-500 to-transparent"></div>
+
+          {/* Roadmap steps */}
+          <div className="space-y-8 md:space-y-12">
+            {[
+              {
+                step: "1",
+                title: "Beginner Fundamentals",
+                desc: "Start with basic DSA problems and concepts",
+              },
+              {
+                step: "2",
+                title: "Intermediate Level",
+                desc: "Solve advanced algorithms and data structures",
+              },
+              {
+                step: "3",
+                title: "Advanced Mastery",
+                desc: "Tackle competitive programming challenges",
+              },
+              {
+                step: "4",
+                title: "Interview Prep",
+                desc: "Practice mock interviews with AI",
+              },
+              {
+                step: "5",
+                title: "Resume Review",
+                desc: "Optimize your resume with ATS analysis",
+              },
+              {
+                step: "6",
+                title: "Job Ready",
+                desc: "Get matched with opportunities",
+              },
+            ].map((item, idx) => (
+              <div
+                key={idx}
+                id={`roadmap-${idx}`}
+                data-aos="fade-up"
+                className={`transform transition-all duration-700 md:flex items-center ${getAOSClass(
+                  `roadmap-${idx}`
+                )}`}
+              >
+                {idx % 2 === 0 ? (
+                  <>
+                    <div className="flex-1 md:text-right md:pr-12">
+                      <div className="bg-white/5 border border-white/10 rounded-lg p-6 hover:border-blue-400/50 hover:bg-white/10 transition-all duration-300">
+                        <h3 className="text-lg font-semibold text-white mb-2">
+                          {item.title}
+                        </h3>
+                        <p className="text-gray-400 text-sm">{item.desc}</p>
+                      </div>
+                    </div>
+                    <div className="hidden md:flex items-center justify-center w-12 h-12 rounded-full bg-blue-600 text-white font-bold relative z-10 mx-auto my-8 md:my-0 border-4 border-black">
+                      {item.step}
+                    </div>
+                    <div className="flex-1 md:pl-12"></div>
+                  </>
+                ) : (
+                  <>
+                    <div className="flex-1 md:pr-12"></div>
+                    <div className="hidden md:flex items-center justify-center w-12 h-12 rounded-full bg-purple-600 text-white font-bold relative z-10 mx-auto my-8 md:my-0 border-4 border-black">
+                      {item.step}
+                    </div>
+                    <div className="flex-1 md:pl-12 md:text-left">
+                      <div className="bg-white/5 border border-white/10 rounded-lg p-6 hover:border-purple-400/50 hover:bg-white/10 transition-all duration-300">
+                        <h3 className="text-lg font-semibold text-white mb-2">
+                          {item.title}
+                        </h3>
+                        <p className="text-gray-400 text-sm">{item.desc}</p>
+                      </div>
+                    </div>
+                  </>
+                )}
               </div>
-              <ul className="space-y-3 mt-6">
-                {[
-                  "Video interviews",
-                  "Speech recognition",
-                  "Instant feedback",
-                ].map((item, idx) => (
-                  <li
-                    key={idx}
-                    className="flex items-center gap-3 text-gray-300"
-                  >
-                    <CheckCircle className="w-5 h-5 text-green-400 flex-shrink-0" />
-                    <span>{item}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="relative z-10 px-6 py-20 max-w-5xl mx-auto">
-        <div className="group relative perspective-1000">
-          <div className="absolute -inset-1 bg-gradient-to-r from-white/20 via-gray-400/20 to-white/20 rounded-3xl blur opacity-30 group-hover:opacity-50 transition duration-500 animate-pulse"></div>
-          <div className="relative bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-12 text-center shadow-xl transform-gpu group-hover:scale-105 transition-all duration-500">
-            <div className="mb-6 transform-gpu group-hover:translate-z-20 transition-transform duration-500">
-              <TrendingUp
-                className="w-16 h-16 mx-auto text-white mb-4 transform-gpu group-hover:scale-110 group-hover:rotate-12 transition-all duration-500"
-                strokeWidth={2}
-              />
-              <h3 className="text-4xl md:text-5xl font-black text-white mb-4">
-                Ready to Level Up?
-              </h3>
-              <p className="text-xl text-gray-400 max-w-2xl mx-auto">
-                Join thousands of developers improving their skills every day.
-                Start your journey now!
-              </p>
-            </div>
-
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-8 transform-gpu transition-transform duration-500">
-              <button
-                onClick={() => navigate("/signup")}
-                className="group/cta relative overflow-hidden px-10 py-5 bg-gradient-to-r from-white to-gray-300 text-black rounded-2xl font-bold text-lg transition-all duration-300 hover:scale-110 hover:shadow-2xl hover:shadow-white/30 flex items-center gap-3 transform-gpu"
-              >
-                <span className="relative z-10">Start Free Today</span>
-                <ChevronRight className="w-6 h-6 group-hover/cta:translate-x-2 transition-transform duration-300" />
-                <div className="absolute inset-0 bg-gradient-to-r from-gray-200 to-white opacity-0 group-hover/cta:opacity-100 transition-opacity duration-300"></div>
-              </button>
-
-              <button
-                onClick={() => navigate("/login")}
-                className="px-10 py-5 bg-white/10 hover:bg-white/20 border-2 border-white/20 hover:border-white/40 text-white rounded-2xl font-bold text-lg transition-all duration-300 hover:scale-105 shadow-md hover:shadow-lg transform-gpu"
-              >
-                Sign In
-              </button>
-            </div>
+      {/* Final CTA Section */}
+      <section className="relative z-10 px-6 py-20 max-w-5xl mx-auto text-center">
+        <div
+          id="final-cta"
+          data-aos="fade-up"
+          className={`transform transition-all duration-700 ${getAOSClass(
+            "final-cta"
+          )}`}
+        >
+          <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
+            Ready to Level Up?
+          </h2>
+          <p className="text-xl text-gray-400 mb-8 max-w-2xl mx-auto">
+            Join thousands of developers who've transformed their coding skills
+            and landed their dream jobs.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <button
+              onClick={() => navigate("/signup")}
+              className="group px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-xl font-semibold transition-all duration-300 shadow-xl hover:shadow-2xl hover:scale-105 transform flex items-center gap-2 justify-center"
+            >
+              Start Your Journey
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            </button>
+            <button
+              onClick={() => navigate("/challenge")}
+              className="px-8 py-4 bg-white/5 hover:bg-white/10 border border-white/20 hover:border-white/40 text-white rounded-xl font-semibold transition-all duration-300 backdrop-blur-md hover:scale-105 transform"
+            >
+              Explore Problems
+            </button>
           </div>
         </div>
       </section>
 
       {/* Footer */}
       <footer className="relative z-10 px-6 py-12 max-w-7xl mx-auto border-t border-white/10 mt-20">
-        <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-gradient-to-br from-white/30 to-gray-400/30 rounded-lg flex items-center justify-center shadow-md">
+        <div className="flex flex-col md:flex-row items-center justify-between">
+          <div className="flex items-center gap-2 mb-4 md:mb-0">
+            <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-500 rounded-lg flex items-center justify-center">
               <Code2 className="w-5 h-5 text-white" />
             </div>
-            <div>
-              <div className="text-lg font-black text-white">CodeArena</div>
-              <div className="text-xs text-gray-400">Master The Code</div>
-            </div>
+            <span className="text-lg font-bold text-white">CodeArena</span>
           </div>
-
-          <div className="text-center text-gray-400 text-sm">
-            © 2025 CodeArena. All rights reserved.
-          </div>
-
-          <div className="flex items-center gap-4 text-gray-400 text-sm">
-            <a
-              href="#"
-              className="hover:text-white transition-colors duration-300"
+          <div className="flex items-center gap-8 text-sm text-gray-400">
+            <button
+              onClick={() => navigate("/challenge")}
+              className="hover:text-white transition-colors"
             >
-              Privacy
-            </a>
-            <span>•</span>
-            <a
-              href="#"
-              className="hover:text-white transition-colors duration-300"
+              Problems
+            </button>
+            <button
+              onClick={() => navigate("/contest")}
+              className="hover:text-white transition-colors"
             >
-              Terms
-            </a>
-            <span>•</span>
-            <a
-              href="#"
-              className="hover:text-white transition-colors duration-300"
+              Contests
+            </button>
+            <button
+              onClick={() => navigate("/ai-interview")}
+              className="hover:text-white transition-colors"
             >
-              Contact
-            </a>
+              AI Interview
+            </button>
+            <span>© 2025 CodeArena. All rights reserved.</span>
           </div>
         </div>
       </footer>
-
-      {/* Custom CSS for animations */}
-      <style jsx>{`
-        @keyframes gradient {
-          0% {
-            background-position: 0% 50%;
-          }
-          50% {
-            background-position: 100% 50%;
-          }
-          100% {
-            background-position: 0% 50%;
-          }
-        }
-
-        .animate-gradient {
-          animation: gradient 8s ease infinite;
-          background-size: 200% 200%;
-        }
-
-        @keyframes float {
-          0%,
-          100% {
-            transform: translateY(0px);
-          }
-          50% {
-            transform: translateY(-20px);
-          }
-        }
-
-        .animate-float {
-          animation: float 6s ease-in-out infinite;
-        }
-
-        @keyframes shimmer {
-          0% {
-            background-position: -1000px 0;
-          }
-          100% {
-            background-position: 1000px 0;
-          }
-        }
-
-        /* 3D Transform Styles */
-        .perspective-1000 {
-          perspective: 1000px;
-        }
-
-        .transform-gpu {
-          transform: translateZ(0);
-          will-change: transform;
-        }
-
-        .group:hover .transform-gpu {
-          transform: translateZ(20px);
-        }
-
-        /* 3D Rotation Effects */
-        @keyframes rotate3d {
-          0% {
-            transform: rotateY(0deg) rotateX(0deg);
-          }
-          50% {
-            transform: rotateY(5deg) rotateX(5deg);
-          }
-          100% {
-            transform: rotateY(0deg) rotateX(0deg);
-          }
-        }
-
-        .group:hover > div > div {
-          animation: rotate3d 0.6s ease-in-out;
-        }
-
-        /* Enhanced floating animation with 3D effect */
-        @keyframes float3d {
-          0%,
-          100% {
-            transform: translateY(0px) translateZ(0px) rotateX(0deg);
-          }
-          33% {
-            transform: translateY(-10px) translateZ(10px) rotateX(2deg);
-          }
-          66% {
-            transform: translateY(-20px) translateZ(20px) rotateX(-2deg);
-          }
-        }
-
-        .animate-float {
-          animation: float3d 6s ease-in-out infinite;
-        }
-
-        /* Parallax depth layers */
-        @keyframes parallax {
-          0% {
-            transform: translateY(0px) scale(1);
-          }
-          50% {
-            transform: translateY(-15px) scale(1.05);
-          }
-          100% {
-            transform: translateY(0px) scale(1);
-          }
-        }
-
-        /* Card tilt on hover */
-        .group:hover .relative {
-          transform: rotateY(var(--rotate-y, 0deg))
-            rotateX(var(--rotate-x, 0deg)) translateZ(30px);
-          transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1);
-        }
-
-        /* Smooth scroll */
-        html {
-          scroll-behavior: smooth;
-        }
-
-        /* Enable 3D space for children */
-        .group {
-          transform-style: preserve-3d;
-        }
-      `}</style>
     </div>
   );
 };

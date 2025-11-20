@@ -84,7 +84,9 @@ function App() {
         <Route path="my-contests" element={<MyContest />} />
         <Route
           path="/challenge"
-          element={user?._id && <ChallengePage userId={user._id} />}
+          element={
+            isAuthenticated ? user?._id && <ChallengePage userId={user._id} /> : <Navigate to="/login" />
+          }
         />
         <Route path="/ai-interview" element={<AiInterviewVideo />} />
         <Route

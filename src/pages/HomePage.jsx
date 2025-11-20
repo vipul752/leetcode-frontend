@@ -173,7 +173,7 @@ const HomePage = () => {
             </div>
 
             {/* Desktop Navigation - Hidden on mobile */}
-            <div className="hidden md:flex items-center gap-1.5 lg:gap-2 flex-1 justify-center">
+            <div className="hidden ml-72 md:flex items-center gap-1.5 lg:gap-2 flex-1 justify-center">
               {/* Features Dropdown */}
               <div className="relative group">
                 <button
@@ -355,56 +355,14 @@ const HomePage = () => {
               </div>
 
               {/* Enhanced Quick Stats - Desktop only */}
-              {user && (
-                <div className="hidden xl:flex items-center space-x-4 bg-white/80 rounded-xl px-4 lg:px-6 py-2 lg:py-3 border border-gray-200 shadow-sm">
-                  <div className="flex items-center space-x-2">
-                    <div className="w-3 h-3 bg-green-600 rounded-full animate-pulse"></div>
-                    <span className="text-sm font-medium text-green-700">
-                      {solvedCount}
-                    </span>
-                    <span className="text-sm text-gray-600">solved</span>
-                  </div>
-                  <div className="w-px h-5 bg-gray-300"></div>
-                  <div className="flex items-center space-x-2">
-                    <span className="text-sm font-medium text-purple-600">
-                      {getStreakInfo()}
-                    </span>
-                    <span className="text-sm text-gray-600">streak</span>
-                  </div>
-                  <div className="w-px h-5 bg-gray-300"></div>
-                  <div className="text-sm font-medium text-blue-600">
-                    {getRankInfo().icon} {getRankInfo().rank}
-                  </div>
-                </div>
-              )}
+             
 
-              {/* Stats Toggle Button - Desktop only */}
-              {user && (
-                <button
-                  onClick={() => setShowStats(!showStats)}
-                  className="hidden md:flex p-2 sm:p-3 bg-white/80 hover:bg-white rounded-lg sm:rounded-xl border border-gray-200 hover:border-purple-300 transition-all duration-300 group shadow-sm"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={2}
-                    stroke="currentColor"
-                    className="w-4 h-4 sm:w-5 sm:h-5 text-gray-600 group-hover:text-purple-600 transition-colors duration-300"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 0 1 3 19.875v-6.75ZM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V8.625ZM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V4.125Z"
-                    />
-                  </svg>
-                </button>
-              )}
+             
 
               {user && user.role === "admin" && (
                 <button
                   onClick={() => navigate("/admin")}
-                  className="hidden md:flex px-3 py-1.5 sm:px-4 sm:py-2 bg-gray-900 text-white rounded-lg sm:rounded-xl text-xs sm:text-sm font-medium transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-red-500/30 items-center space-x-2"
+                  className="hidden ml-72 md:flex px-3 py-1.5 sm:px-4 sm:py-2 bg-gray-900 text-white rounded-lg sm:rounded-xl text-xs sm:text-sm font-medium transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-red-500/30 items-center space-x-2"
                 >
                   <span>Admin</span>
                 </button>
@@ -857,94 +815,13 @@ const HomePage = () => {
             <div className="max-w-7xl mx-auto mb-8 sm:mb-12">
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
                 {/* Overall Progress Card - Responsive */}
-                <div className="sm:col-span-2 bg-white/90 backdrop-blur-sm rounded-2xl sm:rounded-3xl p-6 sm:p-8 border border-gray-200 hover:border-purple-300 transition-all duration-300 shadow-lg hover:shadow-xl">
-                  <div className="flex items-center justify-between mb-4 sm:mb-6">
-                    <h3 className="text-xl sm:text-2xl font-bold text-gray-900">
-                      Overall Progress
-                    </h3>
-                    <div
-                      className={`px-3 py-1.5 sm:px-4 sm:py-2 rounded-full text-xs sm:text-sm font-bold bg-gradient-to-r ${
-                        getRankInfo().color
-                      } text-white shadow-md`}
-                    >
-                      {getRankInfo().icon}{" "}
-                      <span className="hidden sm:inline">
-                        {getRankInfo().rank}
-                      </span>
-                    </div>
-                  </div>
-                  <div className="flex items-center justify-between mb-3 sm:mb-4">
-                    <span className="text-base sm:text-lg text-gray-700 font-semibold">
-                      Problems Solved
-                    </span>
-                    <span className="text-2xl sm:text-3xl font-bold text-gray-900">
-                      {solvedCount}/{totalCount}
-                    </span>
-                  </div>
-                  <div className="w-full bg-gray-200 rounded-full h-4 sm:h-5 mb-4 sm:mb-5 overflow-hidden relative shadow-inner">
-                    <div
-                      className={`h-full bg-gradient-to-r from-green-500 to-emerald-600 rounded-full transition-all duration-2000 shadow-md shadow-green-500/30 relative overflow-hidden ${
-                        animateProgress ? "animate-pulse" : ""
-                      }`}
-                      style={{
-                        width: animateProgress ? `${solvedPercentage}%` : "0%",
-                      }}
-                    >
-                      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent animate-shimmer"></div>
-                    </div>
-                  </div>
-                  <div className="flex justify-between text-sm sm:text-base">
-                    <span className="text-gray-600 font-medium">
-                      {Math.round(solvedPercentage)}% complete
-                    </span>
-                    <span className="text-green-700 font-bold">
-                      +{getStreakInfo()} day streak 🔥
-                    </span>
-                  </div>
-                </div>
+                
 
                 {/* Streak Card - Responsive */}
-                <div className="bg-gradient-to-br from-orange-50 to-red-50 backdrop-blur-sm rounded-2xl sm:rounded-3xl p-6 sm:p-8 border border-orange-200 hover:border-orange-300 group transition-all duration-300 shadow-lg hover:shadow-xl">
-                  <div className="text-center">
-                    <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-r from-orange-500 to-red-500 rounded-xl sm:rounded-2xl flex items-center justify-center mx-auto mb-3 sm:mb-4 group-hover:scale-110 transition-transform duration-300 shadow-lg shadow-orange-500/30">
-                      <span className="text-2xl sm:text-3xl">🔥</span>
-                    </div>
-                    <div className="text-3xl sm:text-4xl font-bold text-gray-900 mb-2">
-                      {getStreakInfo()}
-                    </div>
-                    <div className="text-sm sm:text-base text-gray-600 font-medium">
-                      Day Streak
-                    </div>
-                  </div>
-                </div>
+              
 
                 {/* Achievement Card - Responsive */}
-                <div className="bg-gradient-to-br from-purple-50 to-pink-50 backdrop-blur-sm rounded-2xl sm:rounded-3xl p-6 sm:p-8 border border-purple-200 hover:border-purple-300 group transition-all duration-300 shadow-lg hover:shadow-xl">
-                  <div className="text-center">
-                    <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl sm:rounded-2xl flex items-center justify-center mx-auto mb-3 sm:mb-4 group-hover:scale-110 transition-transform duration-300 shadow-lg shadow-purple-500/30">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth={2}
-                        stroke="currentColor"
-                        className="w-6 h-6 sm:w-8 sm:h-8 text-white"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M16.5 18.75h-9m9 0a3 3 0 0 1 3 3h-15a3 3 0 0 1 3-3m9 0v-3.375c0-.621-.503-1.125-1.125-1.125h-.871M7.5 18.75v-3.375c0-.621.504-1.125 1.125-1.125h.872m5.007 0H9.497m5.007 0a7.454 7.454 0 0 1-.982-3.172M9.497 14.25a7.454 7.454 0 0 0 .981-3.172M15.75 4.5V2.25a1.5 1.5 0 0 0-1.5-1.5h-6a1.5 1.5 0 0 0-1.5 1.5V4.5m11.25 0a2.25 2.25 0 0 1 2.25 2.25v10.125a2.25 2.25 0 0 1-2.25 2.25H6.75a2.25 2.25 0 0 1-2.25-2.25V6.75a2.25 2.25 0 0 1 2.25-2.25H15.75Z"
-                        />
-                      </svg>
-                    </div>
-                    <div className="text-3xl sm:text-4xl font-bold text-gray-900 mb-2">
-                      {Math.floor(solvedPercentage / 10)}
-                    </div>
-                    <div className="text-sm sm:text-base text-gray-600 font-medium">
-                      Achievements
-                    </div>
-                  </div>
-                </div>
+               
               </div>
 
               {/* Detailed Stats Panel (Toggleable) - Responsive */}
@@ -1081,7 +958,7 @@ const HomePage = () => {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div className="sm:col-span-2 lg:col-span-1">
+            <div className=" mt-7 sm:col-span-2 lg:col-span-1">
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 sm:pl-4 flex items-center pointer-events-none">
                   <svg

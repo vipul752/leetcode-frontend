@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef, useCallback } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { io } from "socket.io-client";
 import {
   Clock,
@@ -13,7 +14,6 @@ import {
   Shield,
   Zap,
   Trophy,
-  Star,
 } from "lucide-react";
 import axiosClient from "../utils/axiosClient";
 
@@ -31,8 +31,6 @@ const ChallengePage = ({ userId }) => {
   const [roomState, setRoomState] = useState("idle");
   const [opponent, setOpponent] = useState(null);
   const [copied, setCopied] = useState(false);
-  const [testResults, setTestResults] = useState(null);
-  const [submissionResult, setSubmissionResult] = useState(null);
   const [winner, setWinner] = useState(null);
   const messagesEndRef = useRef(null);
 
@@ -52,7 +50,7 @@ const ChallengePage = ({ userId }) => {
 
     const handleConnect = () => {
       console.log("✅ Socket connected:", socket.id);
-      addMessage("✅ Connected to challenge server", "system");
+      addMessage("✅ Connected to challenge server", "success");
     };
 
     const handleError = (error) => {
@@ -71,40 +69,21 @@ const ChallengePage = ({ userId }) => {
       message,
       durationSec,
     }) => {
-      console.log("🔔 Waiting event received:", {
-        problem: p,
-        roomId: id,
-        message,
-        durationSec,
-      });
       setProblem(p);
       setJoinedRoom(id);
       setRoomState("waiting");
       addMessage(message, "info");
-
-      // If durationSec is provided in waiting event, store it for later use
-      if (durationSec) {
-        setTimer(durationSec);
-      }
+      if (durationSec) setTimer(durationSec);
     };
 
     const handleChallengeStart = ({ durationSec, message }) => {
-      console.log("🚀 Challenge start event received:", {
-        durationSec,
-        message,
-      });
       setTimer(durationSec);
       setRoomState("running");
       addMessage(message, "success");
     };
 
     const handleOpponentJoined = ({ opponentId, durationSec }) => {
-      console.log("👥 Opponent joined event received:", {
-        opponentId,
-        durationSec,
-      });
       setOpponent(opponentId);
-      // Transition to running state when opponent joins
       if (durationSec) {
         setTimer(durationSec);
         setRoomState("running");
@@ -131,44 +110,25 @@ const ChallengePage = ({ userId }) => {
       setRoomState("finished");
     };
 
-    const handleRoomUpdate = (data) => {
-      console.log("🔄 Room update received:", data);
-      // Handle any room state updates
-      if (data.state === "running" && roomState === "waiting") {
-        setRoomState("running");
-        if (data.durationSec) setTimer(data.durationSec);
-        addMessage("⚡ Challenge started!", "success");
-      }
-    };
-
     socket.on("connect", handleConnect);
     socket.on("error", handleError);
     socket.on("disconnect", handleDisconnect);
     socket.on("waiting", handleWaiting);
     socket.on("challengeStart", handleChallengeStart);
-    socket.on("challengeStarted", handleChallengeStart); // Also listen for "challengeStarted"
+    socket.on("challengeStarted", handleChallengeStart);
     socket.on("opponentJoined", handleOpponentJoined);
     socket.on("winner", handleWinner);
     socket.on("userLeft", handleUserLeft);
-    socket.on("roomUpdate", handleRoomUpdate);
 
-    // Catch-all listener for debugging and auto-handling
     socket.onAny((eventName, ...args) => {
-      console.log(`🔔 Socket event received: ${eventName}`, args);
-
-      // Auto-handle state transitions for creator who might miss specific events
-      if (roomState === "waiting" && args[0]) {
-        const eventData = args[0];
-        // Check if event data indicates challenge has started (state is explicitly "running")
-        if (eventData.state === "running" && eventData.durationSec) {
-          console.log(
-            "⚡ Auto-detecting challenge start from event:",
-            eventName
-          );
-          setRoomState("running");
-          setTimer(eventData.durationSec);
-          addMessage("⚡ Challenge started!", "success");
-        }
+      if (
+        roomState === "waiting" &&
+        args[0]?.state === "running" &&
+        args[0]?.durationSec
+      ) {
+        setRoomState("running");
+        setTimer(args[0].durationSec);
+        addMessage("⚡ Challenge started!", "success");
       }
     });
 
@@ -182,7 +142,6 @@ const ChallengePage = ({ userId }) => {
       socket.off("opponentJoined", handleOpponentJoined);
       socket.off("winner", handleWinner);
       socket.off("userLeft", handleUserLeft);
-      socket.off("roomUpdate", handleRoomUpdate);
       socket.offAny();
     };
   }, [socket, userId, roomState]);
@@ -190,22 +149,19 @@ const ChallengePage = ({ userId }) => {
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
+
   const checkRoomStatus = useCallback(
     async (roomIdToCheck) => {
       try {
         const res = await axiosClient.get(
           `/challenge/room/status/${roomIdToCheck}`
         );
-        console.log("🔍 Room status check:", res.data);
-
         if (res.data.state === "running" && roomState === "waiting") {
-          console.log("⚡ Room is running! Updating state...");
           setRoomState("running");
           if (res.data.durationSec) setTimer(res.data.durationSec);
           addMessage("⚡ Challenge started!", "success");
         }
       } catch (error) {
-        // Silently fail - endpoint may not exist, socket events should handle state changes
         if (error.response?.status !== 404) {
           console.error("❌ Error checking room status:", error);
         }
@@ -222,44 +178,27 @@ const ChallengePage = ({ userId }) => {
     return () => clearInterval(interval);
   }, [timer, roomState]);
 
-  // Poll room status when waiting (backup mechanism if socket fails)
   useEffect(() => {
     if (roomState !== "waiting" || !joinedRoom) return;
-
-    console.log("🔄 Starting room status polling for:", joinedRoom);
-
-    // Only poll if the API endpoint exists, otherwise socket events should handle it
     const pollInterval = setInterval(() => {
       checkRoomStatus(joinedRoom);
-    }, 3000); // Check every 3 seconds (reduced frequency)
-
-    return () => {
-      console.log("🛑 Stopping room status polling");
-      clearInterval(pollInterval);
-    };
+    }, 3000);
+    return () => clearInterval(pollInterval);
   }, [roomState, joinedRoom, checkRoomStatus]);
 
   const addMessage = (text, type = "info") => {
-    setMessages((prev) => [...prev, { text, type }]);
+    setMessages((prev) => [...prev, { text, type, id: Date.now() }]);
   };
 
   const createRoom = async () => {
     try {
-      console.log("🎮 Creating room with socket ID:", socket.id);
       const res = await axiosClient.post("/challenge/create/room", {
         socketId: socket.id,
       });
-
-      console.log("✅ Room created:", res.data);
       setRoomId(res.data.roomId);
       setProblem(res.data.problem);
-      setJoinedRoom(res.data.roomId); // Set joinedRoom for creator
+      setJoinedRoom(res.data.roomId);
       addMessage("🎮 Room created! Share your room code.", "success");
-
-      console.log("📤 Emitting joinAsCreator:", {
-        roomId: res.data.roomId,
-        userId,
-      });
       socket.emit("joinAsCreator", { roomId: res.data.roomId, userId });
     } catch (error) {
       console.error("❌ Error creating room:", error);
@@ -270,62 +209,16 @@ const ChallengePage = ({ userId }) => {
   const joinRoom = async () => {
     if (!roomId.trim()) return addMessage("⚠️ Enter room ID", "warning");
     try {
-      console.log("🚪 Joining room:", roomId);
       const res = await axiosClient.post(`/challenge/join/room/${roomId}`);
-
-      console.log("✅ Room joined:", res.data);
       setJoinedRoom(roomId);
       setProblem(res.data.problem);
-
       setTimer(res.data.durationSec);
-      setRoomState("running"); // Set room state to running for opponent
-
-      console.log("📤 Emitting joinRoom:", { roomId, userId });
+      setRoomState("running");
       socket.emit("joinRoom", { roomId, userId });
       addMessage("✅ Joined challenge room!", "success");
     } catch (error) {
       console.error("❌ Error joining room:", error);
       addMessage("❌ Invalid room ID", "error");
-    }
-  };
-
-  const runCode = async () => {
-    if (!problem?._id) return addMessage("⚠️ Problem not loaded", "warning");
-    setIsRunning(true);
-    addMessage("🏃 Running code...", "info");
-    try {
-      const res = await axiosClient.post(`/submission/run/${problem._id}`, {
-        code,
-        language,
-      });
-      setTestResults(res.data);
-    } catch {
-      addMessage("❌ Error running code", "error");
-    } finally {
-      setIsRunning(false);
-    }
-  };
-
-  const submitCode = async () => {
-    if (!problem?._id) return addMessage("⚠️ Problem not loaded", "warning");
-    setIsSubmitting(true);
-    addMessage("🚀 Submitting solution...", "info");
-    try {
-      const res = await axiosClient.post(`/submission/submit/${problem._id}`, {
-        code,
-        language,
-      });
-      setSubmissionResult(res.data);
-      if (res.data.accepted)
-        socket.emit("submitCode", {
-          roomId: joinedRoom,
-          userId,
-          status: "accepted",
-        });
-    } catch {
-      addMessage("❌ Error submitting code", "error");
-    } finally {
-      setIsSubmitting(false);
     }
   };
 
@@ -340,646 +233,442 @@ const ChallengePage = ({ userId }) => {
     setTimeout(() => setCopied(false), 2000);
   };
 
+  const messageTypeStyles = {
+    error: "bg-red-500/10 border-red-400/30 text-red-200",
+    success: "bg-green-500/10 border-green-400/30 text-green-200",
+    warning: "bg-yellow-500/10 border-yellow-400/30 text-yellow-200",
+    info: "bg-blue-500/10 border-blue-400/30 text-blue-200",
+  };
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-white via-gray-50 to-blue-50 relative overflow-hidden">
-      {/* Winning Celebration Overlay */}
-      {roomState === "finished" && winner && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center pointer-events-auto">
-          {/* Dark backdrop */}
-          <div className="absolute inset-0 bg-black/40 backdrop-blur-sm animate-fadeIn"></div>
-
-          {/* Celebration content */}
-          <div className="relative z-10 flex items-center justify-center">
-            {winner === "user" ? (
-              // User Won
-              <div className="relative">
-                {/* Animated glow */}
-                <div className="absolute inset-0 bg-gradient-to-r from-yellow-400 via-yellow-300 to-orange-400 rounded-full blur-2xl opacity-75 animate-pulse scale-150"></div>
-
-                {/* Main card */}
-                <div className="relative bg-gradient-to-br from-white via-yellow-50 to-orange-50 border-2 border-yellow-300/60 rounded-3xl p-10 shadow-2xl hover:shadow-2xl transition-all duration-500 max-w-md">
-                  {/* Confetti effect - top left */}
-                  <div className="absolute -top-3 -left-3 text-4xl animate-bounce opacity-90">
-                    🎉
-                  </div>
-                  <div
-                    className="absolute -top-1 -right-5 text-3xl animate-bounce opacity-85"
-                    style={{ animationDelay: "0.2s" }}
-                  >
-                    ⭐
-                  </div>
-                  <div
-                    className="absolute -bottom-3 -left-5 text-3xl animate-bounce opacity-90"
-                    style={{ animationDelay: "0.4s" }}
-                  >
-                    🌟
-                  </div>
-                  <div
-                    className="absolute -bottom-1 -right-3 text-4xl animate-bounce opacity-85"
-                    style={{ animationDelay: "0.1s" }}
-                  >
-                    🎊
-                  </div>
-
-                  {/* Trophy icon */}
-                  <div className="flex justify-center mb-8">
-                    <div className="relative">
-                      <div className="absolute inset-0 bg-gradient-to-r from-yellow-400 to-orange-400 rounded-full blur-xl opacity-60 animate-pulse"></div>
-                      <div className="relative bg-gradient-to-br from-yellow-300 via-yellow-400 to-orange-500 rounded-full p-5 shadow-2xl hover:shadow-2xl transition-all duration-500">
-                        <Trophy
-                          className="w-12 h-12 text-white animate-spin"
-                          style={{ animationDuration: "4s" }}
-                        />
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Text */}
-                  <h2 className="text-center text-5xl font-black bg-gradient-to-r from-yellow-600 via-orange-600 to-red-600 bg-clip-text text-transparent mb-1">
-                    YOU WON!
-                  </h2>
-                  <p className="text-center text-gray-600 text-sm font-semibold mb-8 tracking-wide">
-                    Victory is yours!
-                  </p>
-
-                  {/* Victory message */}
-                  <div className="bg-gradient-to-r from-yellow-50/80 to-orange-50/80 border border-yellow-200 rounded-2xl p-5 mb-8 backdrop-blur-sm">
-                    <p className="text-center text-gray-700 font-medium text-sm leading-relaxed">
-                      Congratulations on your epic victory! You've proven your
-                      coding prowess in this 1v1 battle.
-                    </p>
-                  </div>
-
-                  {/* Button */}
-                  <button
-                    onClick={() => window.location.reload()}
-                    className="w-full bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-white font-bold py-3 px-6 rounded-2xl transition-all duration-300 hover:scale-105 hover:shadow-xl shadow-lg text-base tracking-wide"
-                  >
-                    Play Another Round
-                  </button>
-                </div>
-              </div>
-            ) : (
-              // Opponent Won
-              <div className="relative">
-                {/* Animated glow */}
-                <div className="absolute inset-0 bg-gradient-to-r from-red-400 via-pink-300 to-rose-400 rounded-full blur-2xl opacity-75 animate-pulse scale-150"></div>
-
-                {/* Main card */}
-                <div className="relative bg-gradient-to-br from-white via-red-50 to-pink-50 border-2 border-red-300/60 rounded-3xl p-10 shadow-2xl hover:shadow-2xl transition-all duration-500 max-w-md">
-                  {/* Sad decorations */}
-                  <div className="absolute -top-3 -left-3 text-4xl opacity-80">
-                    😅
-                  </div>
-                  <div className="absolute -top-1 -right-5 text-3xl opacity-75">
-                    💔
-                  </div>
-                  <div className="absolute -bottom-3 -left-5 text-3xl opacity-80">
-                    😢
-                  </div>
-                  <div className="absolute -bottom-1 -right-3 text-4xl opacity-75">
-                    ⚔️
-                  </div>
-
-                  {/* Opponent trophy icon */}
-                  <div className="flex justify-center mb-8">
-                    <div className="relative">
-                      <div className="absolute inset-0 bg-gradient-to-r from-red-400 to-pink-400 rounded-full blur-xl opacity-60 animate-pulse"></div>
-                      <div className="relative bg-gradient-to-br from-red-300 via-red-400 to-rose-500 rounded-full p-5 shadow-2xl opacity-80">
-                        <Trophy className="w-12 h-12 text-white/90" />
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Text */}
-                  <h2 className="text-center text-5xl font-black bg-gradient-to-r from-red-600 via-pink-600 to-rose-600 bg-clip-text text-transparent mb-1">
-                    OPPONENT WINS
-                  </h2>
-                  <p className="text-center text-gray-600 text-sm font-semibold mb-8 tracking-wide">
-                    Better luck next time!
-                  </p>
-
-                  {/* Loss message */}
-                  <div className="bg-gradient-to-r from-red-50/80 to-pink-50/80 border border-red-200 rounded-2xl p-5 mb-8 backdrop-blur-sm">
-                    <p className="text-center text-gray-700 font-medium text-sm leading-relaxed">
-                      Your opponent outmatched you in this battle. Keep coding
-                      and come back stronger!
-                    </p>
-                  </div>
-
-                  {/* Button */}
-                  <button
-                    onClick={() => window.location.reload()}
-                    className="w-full bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 text-white font-bold py-3 px-6 rounded-2xl transition-all duration-300 hover:scale-105 hover:shadow-xl shadow-lg text-base tracking-wide"
-                  >
-                    Try Again
-                  </button>
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
-      )}
-
-      {/* Animated background */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 -right-40 w-96 h-96 bg-purple-200/30 rounded-full blur-3xl animate-pulse"></div>
-        <div
-          className="absolute top-1/2 -left-40 w-96 h-96 bg-cyan-200/30 rounded-full blur-3xl animate-pulse"
-          style={{ animationDelay: "2s" }}
-        ></div>
-        <div
-          className="absolute -bottom-40 right-1/3 w-96 h-96 bg-blue-200/30 rounded-full blur-3xl animate-pulse"
-          style={{ animationDelay: "4s" }}
-        ></div>
+    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-white overflow-hidden">
+      {/* Clean background gradient */}
+      <div className="fixed inset-0 -z-10">
+        <div className="absolute top-0 right-0 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-0 left-0 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl"></div>
       </div>
 
-      {/* Header */}
-      <header className="sticky top-0 z-20 bg-white/80 backdrop-blur-xl border-b border-gray-200 shadow-sm">
-        <div className="max-w-7xl mx-auto px-8 py-6 flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <div className="relative">
-              <div className="absolute inset-0 bg-gradient-to-r from-cyan-500 to-purple-600 rounded-xl blur-md opacity-30"></div>
-              <div className="relative bg-gradient-to-br from-white to-gray-100 p-3 rounded-xl border border-purple-200 shadow-md">
-                <Target className="w-8 h-8 text-purple-600" />
+      {/* Winner Celebration Modal */}
+      <AnimatePresence>
+        {roomState === "finished" && winner && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm"
+          >
+            <motion.div
+              initial={{ scale: 0.8, y: 20 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.8, y: 20 }}
+              transition={{ type: "spring", damping: 20 }}
+              className={`relative max-w-md w-full mx-4 p-8 rounded-2xl backdrop-blur-xl border ${
+                winner === "user"
+                  ? "bg-green-500/10 border-green-400/30 shadow-lg shadow-green-500/20"
+                  : "bg-red-500/10 border-red-400/30 shadow-lg shadow-red-500/20"
+              }`}
+            >
+              <div className="text-center">
+                <motion.div
+                  animate={{ scale: [1, 1.1, 1] }}
+                  transition={{ duration: 2, repeat: Infinity }}
+                  className="w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center"
+                >
+                  <Trophy className="w-10 h-10 text-white" />
+                </motion.div>
+
+                <h2
+                  className={`text-4xl font-bold mb-2 ${
+                    winner === "user" ? "text-green-300" : "text-red-300"
+                  }`}
+                >
+                  {winner === "user" ? "YOU WON! 🎉" : "OPPONENT WINS 💔"}
+                </h2>
+
+                <p className="text-gray-300 mb-6">
+                  {winner === "user"
+                    ? "Congratulations! You've proven your coding skills!"
+                    : "Better luck next time. Keep coding and improve!"}
+                </p>
+
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => window.location.reload()}
+                  className={`w-full py-3 px-6 rounded-lg font-bold transition-all ${
+                    winner === "user"
+                      ? "bg-green-600 hover:bg-green-700"
+                      : "bg-red-600 hover:bg-red-700"
+                  }`}
+                >
+                  {winner === "user" ? "Play Again" : "Try Again"}
+                </motion.button>
               </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Header */}
+      <header className="sticky top-0 z-20 bg-white/5 backdrop-blur-xl border-b border-white/10">
+        <div className="max-w-7xl mx-auto px-6 py-6 flex items-center justify-between">
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            className="flex items-center gap-3"
+          >
+            <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center">
+              <Target className="w-6 h-6 text-white" />
             </div>
             <div>
-              <h1 className="text-4xl font-black bg-gradient-to-r from-cyan-600 via-blue-600 to-purple-600 bg-clip-text text-transparent">
-                CodeArena
-              </h1>
-              <p className="text-xs text-gray-600 font-medium tracking-wider">
-                1v1 CODING BATTLE
-              </p>
+              <h1 className="text-2xl font-bold text-white">CodeArena</h1>
+              <p className="text-xs text-gray-400">1v1 CODING BATTLE</p>
             </div>
-          </div>
+          </motion.div>
+
           {roomState === "running" && (
-            <div className="flex items-center gap-4">
-              <div className="relative group">
-                <div className="absolute -inset-1 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-2xl blur opacity-30 group-hover:opacity-50 transition duration-300 animate-pulse"></div>
-                <div className="relative flex items-center gap-3 bg-gradient-to-br from-white to-gray-50 border border-cyan-300 px-6 py-4 rounded-2xl shadow-md">
-                  <Clock className="w-6 h-6 text-cyan-600 animate-pulse" />
-                  <div className="flex flex-col">
-                    <span className="text-xs text-gray-600 font-medium">
-                      TIME LEFT
-                    </span>
-                    <span className="font-mono text-2xl font-black bg-gradient-to-r from-cyan-600 to-blue-600 bg-clip-text text-transparent tabular-nums">
-                      {formatTime(timer)}
-                    </span>
-                  </div>
-                </div>
-              </div>
-              <button
-                onClick={() => window.location.reload()}
-                className="relative group overflow-hidden bg-gradient-to-r from-red-600 to-rose-600 text-white px-6 py-4 rounded-2xl font-bold text-sm transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-red-500/30"
-              >
-                <span className="relative z-10 flex items-center gap-2">
-                  <Zap className="w-4 h-4" />
-                  Leave Arena
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="flex items-center gap-3"
+            >
+              <div className="flex items-center gap-2 bg-white/10 backdrop-blur border border-white/20 px-4 py-2 rounded-lg">
+                <Clock className="w-4 h-4 text-blue-400" />
+                <span className="font-mono text-lg font-bold text-white">
+                  {formatTime(timer)}
                 </span>
-                <div className="absolute inset-0 bg-gradient-to-r from-red-700 to-rose-700 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-              </button>
-            </div>
+              </div>
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => window.location.reload()}
+                className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-semibold transition-all"
+              >
+                Leave
+              </motion.button>
+            </motion.div>
           )}
         </div>
       </header>
 
-      {/* Main */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      {/* Main Content */}
+      <div className="max-w-7xl mx-auto px-4 py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Left: Problem + Editor */}
-          <div className="lg:col-span-2 space-y-8">
+          <div className="lg:col-span-2 space-y-6">
             {/* Problem */}
             {problem && (
-              <div className="group relative">
-                <div className="absolute -inset-1 bg-gradient-to-r from-cyan-500 via-blue-500 to-purple-600 rounded-3xl blur opacity-20 group-hover:opacity-30 transition duration-500"></div>
-                <div className="relative bg-white/90 backdrop-blur-xl border border-gray-200 rounded-3xl p-8 shadow-md">
-                  <div className="flex items-start gap-4 mb-6">
-                    <div className="flex-shrink-0">
-                      <div className="w-12 h-12 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-2xl flex items-center justify-center shadow-md">
-                        <Code className="w-6 h-6 text-white" />
-                      </div>
-                    </div>
-                    <div className="flex-1">
-                      <div className="flex items-center gap-3 mb-2">
-                        <h2 className="text-3xl font-black text-transparent bg-gradient-to-r from-cyan-600 via-blue-600 to-purple-600 bg-clip-text">
-                          {problem.title}
-                        </h2>
-                        <span className="px-3 py-1 text-xs font-bold bg-gradient-to-r from-orange-400/20 to-red-400/20 border border-orange-400/40 text-orange-600 rounded-full">
-                          {problem.difficulty || "MEDIUM"}
-                        </span>
-                      </div>
-                      <p className="text-gray-700 leading-relaxed text-lg">
-                        {problem.description}
-                      </p>
-                    </div>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-xl p-6 shadow-lg hover:border-white/20 transition-all"
+              >
+                <div className="flex items-start gap-4 mb-4">
+                  <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <Code className="w-5 h-5 text-white" />
                   </div>
-
-                  <div className="space-y-4 mt-6">
-                    <h3 className="text-sm font-bold text-cyan-600 uppercase tracking-wider flex items-center gap-2">
-                      <div className="w-6 h-0.5 bg-gradient-to-r from-cyan-500 to-transparent"></div>
-                      Test Cases
-                    </h3>
-                    {problem.visibleTestcase?.map((t, i) => (
-                      <div key={i} className="group/test relative">
-                        <div className="absolute -inset-0.5 bg-gradient-to-r from-green-400/20 to-blue-400/20 rounded-2xl blur opacity-0 group-hover/test:opacity-100 transition duration-300"></div>
-                        <div className="relative bg-gray-50/80 border border-gray-200 p-6 rounded-2xl hover:border-cyan-400/50 transition-all duration-300">
-                          <div className="flex items-center gap-2 mb-3">
-                            <div className="w-8 h-8 bg-gradient-to-br from-cyan-100 to-blue-100 border border-cyan-400/40 rounded-lg flex items-center justify-center">
-                              <span className="text-cyan-700 font-bold text-sm">
-                                #{i + 1}
-                              </span>
-                            </div>
-                            <span className="text-xs text-gray-600 font-semibold uppercase tracking-wider">
-                              Test Case
-                            </span>
-                          </div>
-                          <div className="space-y-4">
-                            <div>
-                              <div className="flex items-center gap-2 mb-2">
-                                <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                                <span className="text-xs font-bold text-green-700 uppercase tracking-wider">
-                                  Input
-                                </span>
-                              </div>
-                              <pre className="text-green-800 font-mono text-sm bg-green-50 p-4 rounded-xl border border-green-300/40 overflow-x-auto">
-                                {t.input}
-                              </pre>
-                            </div>
-                            <div>
-                              <div className="flex items-center gap-2 mb-2">
-                                <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
-                                <span className="text-xs font-bold text-blue-700 uppercase tracking-wider">
-                                  Expected Output
-                                </span>
-                              </div>
-                              <pre className="text-blue-800 font-mono text-sm bg-blue-50 p-4 rounded-xl border border-blue-300/40 overflow-x-auto">
-                                {t.output}
-                              </pre>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2 mb-2">
+                      <h2 className="text-2xl font-bold text-white">
+                        {problem.title}
+                      </h2>
+                      <span
+                        className={`px-3 py-1 text-xs font-bold rounded-full ${
+                          problem.difficulty === "Hard"
+                            ? "bg-red-500/20 text-red-300 border border-red-400/30"
+                            : problem.difficulty === "Medium"
+                            ? "bg-yellow-500/20 text-yellow-300 border border-yellow-400/30"
+                            : "bg-green-500/20 text-green-300 border border-green-400/30"
+                        }`}
+                      >
+                        {problem.difficulty || "MEDIUM"}
+                      </span>
+                    </div>
+                    <p className="text-gray-300 text-sm leading-relaxed">
+                      {problem.description}
+                    </p>
                   </div>
                 </div>
-              </div>
+
+                {/* Test Cases */}
+                <div className="space-y-3 mt-6">
+                  <h3 className="text-xs font-bold text-blue-400 uppercase tracking-wider">
+                    Test Cases
+                  </h3>
+                  {problem.visibleTestcase?.map((t, i) => (
+                    <motion.div
+                      key={i}
+                      initial={{ opacity: 0, x: -10 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: i * 0.1 }}
+                      className="bg-white/5 border border-white/10 rounded-lg p-4 hover:border-blue-400/30 transition-all"
+                    >
+                      <div className="flex items-center gap-2 mb-3 text-xs font-semibold text-gray-300">
+                        <span className="px-2 py-1 rounded bg-blue-500/20 text-blue-300">
+                          #{i + 1}
+                        </span>
+                        Test Case
+                      </div>
+                      <div className="space-y-2">
+                        <div>
+                          <p className="text-xs font-semibold text-green-300 mb-1">
+                            Input
+                          </p>
+                          <pre className="text-xs text-gray-300 bg-black/30 p-2 rounded overflow-x-auto">
+                            {t.input}
+                          </pre>
+                        </div>
+                        <div>
+                          <p className="text-xs font-semibold text-cyan-300 mb-1">
+                            Expected Output
+                          </p>
+                          <pre className="text-xs text-gray-300 bg-black/30 p-2 rounded overflow-x-auto">
+                            {t.output}
+                          </pre>
+                        </div>
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
+              </motion.div>
             )}
 
             {/* Editor */}
             {problem && (
-              <div className="group relative">
-                <div className="absolute -inset-1 bg-gradient-to-r from-purple-500 via-pink-500 to-cyan-500 rounded-3xl blur opacity-20 group-hover:opacity-30 transition duration-500"></div>
-                <div className="relative bg-white/90 backdrop-blur-xl border border-gray-200 rounded-3xl p-8 shadow-md">
-                  <div className="flex justify-between items-center mb-6">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-600 rounded-xl flex items-center justify-center shadow-md">
-                        <Code className="w-5 h-5 text-white" />
-                      </div>
-                      <div>
-                        <h3 className="text-xl font-black text-transparent bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text">
-                          Code Editor
-                        </h3>
-                        <p className="text-xs text-gray-600 font-medium">
-                          Write your solution
-                        </p>
-                      </div>
-                    </div>
-                    <div className="relative group/select">
-                      <div className="absolute -inset-0.5 bg-gradient-to-r from-cyan-500 to-purple-600 rounded-xl blur opacity-30 group-hover/select:opacity-50 transition duration-300"></div>
-                      <select
-                        value={language}
-                        onChange={(e) => setLanguage(e.target.value)}
-                        className="relative bg-white border border-gray-300 text-gray-900 rounded-xl px-5 py-3 text-sm font-bold focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 transition-all duration-300 cursor-pointer hover:border-cyan-500/50 appearance-none pr-10"
-                        style={{
-                          backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2306b6d4'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E")`,
-                          backgroundRepeat: "no-repeat",
-                          backgroundPosition: "right 0.75rem center",
-                          backgroundSize: "1.25rem",
-                        }}
-                      >
-                        <option value="cpp" className="bg-white">
-                          C++
-                        </option>
-                        <option value="java" className="bg-white">
-                          Java
-                        </option>
-                        <option value="python" className="bg-white">
-                          Python
-                        </option>
-                        <option value="javascript" className="bg-white">
-                          JavaScript
-                        </option>
-                      </select>
-                    </div>
-                  </div>
-
-                  <div className="relative group/editor">
-                    <div className="absolute -inset-0.5 bg-gradient-to-r from-cyan-500/20 to-purple-500/20 rounded-2xl blur opacity-0 group-focus-within/editor:opacity-100 transition duration-300"></div>
-                    <textarea
-                      value={code}
-                      onChange={(e) => setCode(e.target.value)}
-                      className="relative w-full h-96 bg-gray-50/80 border border-gray-300 rounded-2xl p-6 font-mono text-sm text-gray-900 focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 transition-all duration-300 placeholder-gray-500 resize-none leading-relaxed"
-                      placeholder="// Start coding your solution here..."
-                      spellCheck="false"
-                    ></textarea>
-                  </div>
-
-                  <div className="flex gap-5 mt-8">
-                    <button
-                      onClick={runCode}
-                      disabled={isRunning}
-                      className="group/run relative flex-1 overflow-hidden bg-gradient-to-r from-blue-600 to-cyan-600 text-white py-5 rounded-2xl font-bold text-base transition-all duration-300 hover:scale-[1.02] hover:shadow-lg hover:shadow-blue-500/30 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
-                    >
-                      <span className="relative z-10 flex items-center justify-center gap-3">
-                        {isRunning ? (
-                          <>
-                            <div className="w-5 h-5 border-3 border-white/30 border-t-white rounded-full animate-spin"></div>
-                            <span>Running...</span>
-                          </>
-                        ) : (
-                          <>
-                            <Play className="w-5 h-5" />
-                            <span>Run Code</span>
-                          </>
-                        )}
-                      </span>
-                      <div className="absolute inset-0 bg-gradient-to-r from-blue-700 to-cyan-700 opacity-0 group-hover/run:opacity-100 transition-opacity duration-300"></div>
-                    </button>
-                    <button
-                      onClick={submitCode}
-                      disabled={isSubmitting}
-                      className="group/submit relative flex-1 overflow-hidden bg-gradient-to-r from-green-600 to-emerald-600 text-white py-5 rounded-2xl font-bold text-base transition-all duration-300 hover:scale-[1.02] hover:shadow-lg hover:shadow-green-500/30 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
-                    >
-                      <span className="relative z-10 flex items-center justify-center gap-3">
-                        {isSubmitting ? (
-                          <>
-                            <div className="w-5 h-5 border-3 border-white/30 border-t-white rounded-full animate-spin"></div>
-                            <span>Submitting...</span>
-                          </>
-                        ) : (
-                          <>
-                            <Send className="w-5 h-5" />
-                            <span>Submit Solution</span>
-                          </>
-                        )}
-                      </span>
-                      <div className="absolute inset-0 bg-gradient-to-r from-green-700 to-emerald-700 opacity-0 group-hover/submit:opacity-100 transition-opacity duration-300"></div>
-                    </button>
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
-
-          {/* Right: Room + Messages */}
-          <div className="space-y-8">
-            {/* Room actions */}
-            {roomState === "idle" && (
-              <div className="group relative">
-                <div className="absolute -inset-1 bg-gradient-to-r from-cyan-500 to-purple-600 rounded-3xl blur opacity-30 group-hover:opacity-50 transition duration-500"></div>
-                <div className="relative bg-white/90 backdrop-blur-xl border border-gray-200 rounded-3xl p-8 shadow-md">
-                  <div className="flex items-center gap-3 mb-8">
-                    <div className="relative">
-                      <div className="absolute inset-0 bg-gradient-to-r from-cyan-500 to-purple-600 rounded-2xl blur-lg animate-pulse"></div>
-                      <div className="relative w-14 h-14 bg-gradient-to-br from-cyan-500 to-purple-600 rounded-2xl flex items-center justify-center shadow-md">
-                        <Shield className="w-7 h-7 text-white" />
-                      </div>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 }}
+                className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-xl p-6 shadow-lg"
+              >
+                <div className="flex justify-between items-center mb-4">
+                  <div className="flex items-center gap-2">
+                    <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg flex items-center justify-center">
+                      <Code className="w-5 h-5 text-white" />
                     </div>
                     <div>
-                      <h3 className="font-black text-2xl text-transparent bg-gradient-to-r from-cyan-600 to-purple-600 bg-clip-text">
-                        Battle Arena
-                      </h3>
-                      <p className="text-xs text-gray-600 font-medium">
-                        Choose your destiny
+                      <h3 className="font-bold text-white">Code Editor</h3>
+                      <p className="text-xs text-gray-400">
+                        Write your solution
                       </p>
                     </div>
                   </div>
-
-                  <button
-                    onClick={createRoom}
-                    className="group/create relative w-full overflow-hidden bg-gradient-to-r from-cyan-600 to-blue-600 text-white py-5 rounded-2xl hover:scale-[1.02] transition-all duration-300 shadow-md shadow-cyan-500/20 hover:shadow-cyan-500/40 mb-6"
+                  <select
+                    value={language}
+                    onChange={(e) => setLanguage(e.target.value)}
+                    className="bg-white/10 border border-white/20 text-white rounded-lg px-3 py-2 text-sm font-semibold focus:outline-none focus:border-blue-400 transition-all"
                   >
-                    <span className="relative z-10 flex items-center justify-center gap-3 font-bold text-base">
-                      <Zap className="w-5 h-5" />
-                      <span>Create Battle Room</span>
-                    </span>
-                    <div className="absolute inset-0 bg-gradient-to-r from-cyan-700 to-blue-700 opacity-0 group-hover/create:opacity-100 transition-opacity duration-300"></div>
-                  </button>
-
-                  <div className="relative">
-                    <div className="absolute -inset-2 bg-gradient-to-r from-purple-500/20 to-pink-500/20 rounded-2xl blur opacity-0 focus-within:opacity-100 transition duration-300"></div>
-                    <div className="relative space-y-4">
-                      <div className="flex items-center gap-3 mb-4">
-                        <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent"></div>
-                        <span className="text-xs text-gray-600 font-bold uppercase tracking-wider">
-                          Or Join
-                        </span>
-                        <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent"></div>
-                      </div>
-                      <input
-                        value={roomId}
-                        onChange={(e) => setRoomId(e.target.value)}
-                        placeholder="Enter Battle Code"
-                        className="w-full bg-gray-50/80 border border-gray-300 text-gray-900 rounded-2xl px-5 py-4 font-mono text-center text-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-300 placeholder-gray-500 tracking-widest uppercase"
-                      />
-                      <button
-                        onClick={joinRoom}
-                        className="group/join relative w-full overflow-hidden bg-gradient-to-r from-green-600 to-emerald-600 text-white py-5 rounded-2xl hover:scale-[1.02] transition-all duration-300 shadow-md shadow-green-500/20 hover:shadow-green-500/40"
-                      >
-                        <span className="relative z-10 flex items-center justify-center gap-3 font-bold text-base">
-                          <Users className="w-5 h-5" />
-                          <span>Join Battle</span>
-                        </span>
-                        <div className="absolute inset-0 bg-gradient-to-r from-green-700 to-emerald-700 opacity-0 group-hover/join:opacity-100 transition-opacity duration-300"></div>
-                      </button>
-                    </div>
-                  </div>
+                    <option value="cpp" className="bg-slate-900">
+                      C++
+                    </option>
+                    <option value="java" className="bg-slate-900">
+                      Java
+                    </option>
+                    <option value="python" className="bg-slate-900">
+                      Python
+                    </option>
+                    <option value="javascript" className="bg-slate-900">
+                      JavaScript
+                    </option>
+                  </select>
                 </div>
-              </div>
+
+                <textarea
+                  value={code}
+                  onChange={(e) => setCode(e.target.value)}
+                  className="w-full h-80 bg-black/30 border border-white/10 rounded-lg p-4 font-mono text-sm text-white placeholder-gray-500 focus:outline-none focus:border-blue-400 resize-none"
+                  placeholder="// Write your solution here..."
+                  spellCheck="false"
+                />
+
+                <div className="flex gap-3 mt-4">
+                  <motion.button
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    onClick={() => {}}
+                    disabled={isRunning}
+                    className="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-bold transition-all disabled:opacity-50 flex items-center justify-center gap-2"
+                  >
+                    <Play className="w-4 h-4" />
+                    Run Code
+                  </motion.button>
+                  <motion.button
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    onClick={() => {}}
+                    disabled={isSubmitting}
+                    className="flex-1 bg-green-600 hover:bg-green-700 text-white py-3 rounded-lg font-bold transition-all disabled:opacity-50 flex items-center justify-center gap-2"
+                  >
+                    <Send className="w-4 h-4" />
+                    Submit
+                  </motion.button>
+                </div>
+              </motion.div>
+            )}
+          </div>
+
+          {/* Right: Room + Activity */}
+          <div className="space-y-6">
+            {/* Room Actions */}
+            {roomState === "idle" && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-xl p-6 shadow-lg"
+              >
+                <div className="flex items-center gap-2 mb-6">
+                  <Shield className="w-5 h-5 text-blue-400" />
+                  <h3 className="font-bold text-white">Battle Arena</h3>
+                </div>
+
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={createRoom}
+                  className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white py-3 rounded-lg font-bold mb-4 transition-all flex items-center justify-center gap-2"
+                >
+                  <Zap className="w-4 h-4" />
+                  Create Battle
+                </motion.button>
+
+                <div className="relative py-4">
+                  <div className="absolute inset-x-0 top-1/2 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
+                  <p className="text-center text-xs text-gray-400 relative bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 inline-block w-full">
+                    Or join existing
+                  </p>
+                </div>
+
+                <input
+                  value={roomId}
+                  onChange={(e) => setRoomId(e.target.value)}
+                  placeholder="Enter Battle Code"
+                  className="w-full bg-white/10 border border-white/20 text-white rounded-lg px-3 py-2 text-center font-mono text-sm focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-400/30 placeholder-gray-500 mb-3"
+                />
+
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={joinRoom}
+                  className="w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-lg font-bold transition-all flex items-center justify-center gap-2"
+                >
+                  <Users className="w-4 h-4" />
+                  Join Battle
+                </motion.button>
+              </motion.div>
             )}
 
-            {/* Waiting */}
+            {/* Waiting for Opponent */}
             {roomState === "waiting" && (
-              <div className="group relative">
-                <div className="absolute -inset-1 bg-gradient-to-r from-cyan-500 via-purple-500 to-pink-500 rounded-3xl blur opacity-40 animate-pulse"></div>
-                <div className="relative bg-white/90 backdrop-blur-xl border border-gray-200 rounded-3xl p-10 text-center shadow-md">
-                  <div className="mb-8">
-                    <div className="relative w-24 h-24 mx-auto mb-6">
-                      <div
-                        className="absolute inset-0 bg-gradient-to-r from-cyan-500 via-purple-500 to-pink-500 rounded-full animate-spin"
-                        style={{ animationDuration: "3s" }}
-                      ></div>
-                      <div className="absolute inset-1 bg-white rounded-full"></div>
-                      <div className="absolute inset-0 flex items-center justify-center">
-                        <div className="w-20 h-20 bg-gradient-to-br from-cyan-500 to-purple-600 rounded-full flex items-center justify-center shadow-md animate-pulse">
-                          <Users className="w-10 h-10 text-white" />
-                        </div>
-                      </div>
-                    </div>
-                    <h3 className="text-2xl font-black text-transparent bg-gradient-to-r from-cyan-600 to-purple-600 bg-clip-text mb-3">
-                      Waiting for Opponent
-                    </h3>
-                    <p className="text-gray-600 text-sm font-medium">
-                      Share this code to start the epic battle
-                    </p>
-                  </div>
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-xl p-6 shadow-lg text-center"
+              >
+                <motion.div
+                  animate={{ scale: [1, 1.05, 1] }}
+                  transition={{ duration: 2, repeat: Infinity }}
+                  className="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center"
+                >
+                  <Users className="w-8 h-8 text-white" />
+                </motion.div>
 
-                  <div className="relative group/code">
-                    <div className="absolute -inset-1 bg-gradient-to-r from-cyan-500 to-purple-600 rounded-2xl blur opacity-50 group-hover/code:opacity-75 transition duration-300"></div>
-                    <div className="relative bg-gray-50/80 border border-cyan-400/40 rounded-2xl p-6">
-                      <div className="flex items-center justify-center gap-4">
-                        <code className="text-3xl font-mono font-black text-transparent bg-gradient-to-r from-cyan-600 via-blue-600 to-purple-600 bg-clip-text tracking-[0.5em] animate-pulse">
-                          {joinedRoom}
-                        </code>
-                        <button
-                          onClick={copyRoomId}
-                          className="group/copy p-4 bg-gradient-to-br from-white to-gray-100 border border-gray-200 rounded-xl hover:border-cyan-500/50 transition-all duration-300 hover:scale-110 shadow-sm"
-                          title={copied ? "Copied!" : "Copy code"}
-                        >
-                          {copied ? (
-                            <Check className="w-6 h-6 text-green-600" />
-                          ) : (
-                            <Copy className="w-6 h-6 text-cyan-600 group-hover/copy:text-cyan-500" />
-                          )}
-                        </button>
-                      </div>
-                    </div>
-                  </div>
+                <h3 className="text-xl font-bold text-white mb-2">
+                  Waiting for Opponent
+                </h3>
+                <p className="text-sm text-gray-400 mb-4">
+                  Share this code to start
+                </p>
 
-                  <div className="mt-6 flex items-center justify-center gap-2">
-                    <div
-                      className="w-2 h-2 bg-cyan-500 rounded-full animate-bounce"
-                      style={{ animationDelay: "0ms" }}
-                    ></div>
-                    <div
-                      className="w-2 h-2 bg-blue-500 rounded-full animate-bounce"
-                      style={{ animationDelay: "150ms" }}
-                    ></div>
-                    <div
-                      className="w-2 h-2 bg-purple-500 rounded-full animate-bounce"
-                      style={{ animationDelay: "300ms" }}
-                    ></div>
-                  </div>
+                <div className="flex items-center justify-center gap-2 bg-black/30 border border-white/20 rounded-lg p-3 mb-4">
+                  <code className="text-lg font-mono font-bold text-blue-300">
+                    {joinedRoom}
+                  </code>
+                  <motion.button
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.9 }}
+                    onClick={copyRoomId}
+                    className="p-2 hover:bg-white/10 rounded transition-all"
+                  >
+                    {copied ? (
+                      <Check className="w-5 h-5 text-green-400" />
+                    ) : (
+                      <Copy className="w-5 h-5 text-gray-400" />
+                    )}
+                  </motion.button>
                 </div>
-              </div>
+
+                <div className="flex items-center justify-center gap-1">
+                  {[0, 1, 2].map((i) => (
+                    <motion.div
+                      key={i}
+                      animate={{ scale: [1, 1.2, 1] }}
+                      transition={{ delay: i * 0.2, repeat: Infinity }}
+                      className="w-2 h-2 bg-blue-400 rounded-full"
+                    />
+                  ))}
+                </div>
+              </motion.div>
             )}
 
-            {/* Logs */}
-            <div className="group relative">
-              <div className="absolute -inset-1 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-3xl blur opacity-20 group-hover:opacity-30 transition duration-500"></div>
-              <div className="relative bg-white/90 backdrop-blur-xl border border-gray-200 rounded-3xl p-6 shadow-md flex flex-col h-[500px]">
-                <div className="flex items-center gap-3 mb-6 pb-4 border-b border-gray-200">
-                  <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-cyan-600 rounded-xl flex items-center justify-center shadow-md">
-                    <AlertCircle className="w-5 h-5 text-white" />
-                  </div>
-                  <div>
-                    <h3 className="font-black text-lg text-transparent bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text">
-                      Activity Feed
-                    </h3>
-                    <p className="text-xs text-gray-600 font-medium">
-                      Real-time updates
-                    </p>
-                  </div>
-                </div>
+            {/* Activity Feed */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+              className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-xl p-6 shadow-lg flex flex-col h-96"
+            >
+              <div className="flex items-center gap-2 mb-4 pb-4 border-b border-white/10">
+                <AlertCircle className="w-5 h-5 text-blue-400" />
+                <h3 className="font-bold text-white">Activity Feed</h3>
+              </div>
 
-                <div className="flex-1 overflow-y-auto space-y-3 pr-2 custom-scrollbar">
+              <div className="flex-1 overflow-y-auto space-y-2 pr-2 custom-scrollbar">
+                <AnimatePresence>
                   {messages.length === 0 ? (
-                    <div className="flex items-center justify-center h-full">
-                      <div className="text-center">
-                        <div className="w-16 h-16 mx-auto mb-4 bg-gray-100 rounded-full flex items-center justify-center">
-                          <AlertCircle className="w-8 h-8 text-gray-400" />
-                        </div>
-                        <p className="text-gray-500 text-sm font-medium">
-                          No activity yet
-                        </p>
-                      </div>
-                    </div>
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      className="flex items-center justify-center h-full"
+                    >
+                      <p className="text-sm text-gray-500">No activity yet</p>
+                    </motion.div>
                   ) : (
-                    messages.map((m, i) => (
-                      <div
-                        key={i}
-                        className={`group/msg relative p-4 rounded-xl backdrop-blur-sm transition-all duration-300 hover:scale-[1.02] ${
-                          m.type === "error"
-                            ? "bg-red-100/80 border border-red-300/50 hover:border-red-400/70"
-                            : m.type === "success"
-                            ? "bg-green-100/80 border border-green-300/50 hover:border-green-400/70"
-                            : m.type === "warning"
-                            ? "bg-yellow-100/80 border border-yellow-300/50 hover:border-yellow-400/70"
-                            : m.type === "system"
-                            ? "bg-purple-100/80 border border-purple-300/50 hover:border-purple-400/70"
-                            : "bg-blue-100/80 border border-blue-300/50 hover:border-blue-400/70"
+                    messages.map((msg, idx) => (
+                      <motion.div
+                        key={msg.id}
+                        initial={{ opacity: 0, x: -10 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: 10 }}
+                        className={`p-3 rounded-lg border text-sm ${
+                          messageTypeStyles[msg.type] || messageTypeStyles.info
                         }`}
                       >
-                        <div className="flex items-start gap-3">
-                          <div
-                            className={`flex-shrink-0 w-2 h-2 rounded-full mt-1.5 ${
-                              m.type === "error"
-                                ? "bg-red-500 shadow-md shadow-red-500/30"
-                                : m.type === "success"
-                                ? "bg-green-500 shadow-md shadow-green-500/30 animate-pulse"
-                                : m.type === "warning"
-                                ? "bg-yellow-500 shadow-md shadow-yellow-500/30"
-                                : m.type === "system"
-                                ? "bg-purple-500 shadow-md shadow-purple-500/30"
-                                : "bg-blue-500 shadow-md shadow-blue-500/30"
-                            }`}
-                          ></div>
-                          <p
-                            className={`flex-1 text-sm font-medium leading-relaxed ${
-                              m.type === "error"
-                                ? "text-red-700"
-                                : m.type === "success"
-                                ? "text-green-700"
-                                : m.type === "warning"
-                                ? "text-yellow-700"
-                                : m.type === "system"
-                                ? "text-purple-700"
-                                : "text-blue-700"
-                            }`}
-                          >
-                            {m.text}
-                          </p>
-                        </div>
-                      </div>
+                        {msg.text}
+                      </motion.div>
                     ))
                   )}
-                  <div ref={messagesEndRef}></div>
-                </div>
+                </AnimatePresence>
+                <div ref={messagesEndRef} />
               </div>
-            </div>
+            </motion.div>
           </div>
         </div>
       </div>
 
-      {/* Custom Scrollbar Styles */}
       <style jsx>{`
         .custom-scrollbar::-webkit-scrollbar {
-          width: 8px;
+          width: 6px;
         }
         .custom-scrollbar::-webkit-scrollbar-track {
-          background: rgba(243, 244, 246, 0.8);
+          background: rgba(255, 255, 255, 0.05);
           border-radius: 10px;
         }
         .custom-scrollbar::-webkit-scrollbar-thumb {
-          background: linear-gradient(to bottom, #06b6d4, #3b82f6, #8b5cf6);
+          background: rgba(59, 130, 246, 0.3);
           border-radius: 10px;
         }
         .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-          background: linear-gradient(to bottom, #0891b2, #2563eb, #7c3aed);
-        }
-
-        @keyframes fadeIn {
-          from {
-            opacity: 0;
-          }
-          to {
-            opacity: 1;
-          }
-        }
-
-        .animate-fadeIn {
-          animation: fadeIn 0.3s ease-in-out;
+          background: rgba(59, 130, 246, 0.5);
         }
       `}</style>
     </div>
