@@ -19,7 +19,7 @@ export default function ResumeUpload() {
     formData.append("resume", file);
 
     try {
-      const res = await axiosClient.post("/resume/analyze", formData, {
+      const res = await axiosClient.post("resume/analyze", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
 
