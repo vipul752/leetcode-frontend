@@ -145,33 +145,13 @@ const HomePage = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2.5 sm:py-3">
           <div className="flex items-center justify-between gap-2 sm:gap-4 w-full">
             {/* Logo */}
-            <div className="flex items-center gap-1.5 sm:gap-2.5 flex-shrink-0">
-              <NavLink
-                to="/"
-                className="flex items-center gap-1.5 sm:gap-2 group flex-shrink-0"
-              >
-                <div className="w-9 h-9 sm:w-10 sm:h-10 bg-gradient-to-br from-purple-600 to-blue-600 rounded-lg sm:rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-lg shadow-purple-500/25 flex-shrink-0">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={2}
-                    stroke="currentColor"
-                    className="w-4.5 h-4.5 sm:w-5.5 sm:h-5.5 text-white"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M17.25 6.75 22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3-4.5 16.5"
-                    />
-                  </svg>
-                </div>
-                <span className="text-lg sm:text-xl lg:text-2xl font-black bg-gradient-to-r from-gray-900 via-purple-600 to-blue-600 bg-clip-text text-transparent group-hover:from-purple-600 group-hover:to-blue-600 transition-all duration-300">
-                  CodeArena
-                </span>
-              </NavLink>
-            </div>
-
+             <div className="flex items-center gap-2 group cursor-pointer hover:scale-105 transition-transform">
+                <img
+                  src="/src/assets/Screenshot 2025-11-21 at 1.17.34 PM.png"
+                  alt="CodeArena Logo"
+                  className="h-15 w-22 rounded-md"
+                />
+              </div>
             {/* Desktop Navigation - Hidden on mobile */}
             <div className="hidden ml-72 md:flex items-center gap-1.5 lg:gap-2 flex-1 justify-center">
               {/* Features Dropdown */}
@@ -355,9 +335,6 @@ const HomePage = () => {
               </div>
 
               {/* Enhanced Quick Stats - Desktop only */}
-             
-
-             
 
               {user && user.role === "admin" && (
                 <button
@@ -815,13 +792,10 @@ const HomePage = () => {
             <div className="max-w-7xl mx-auto mb-8 sm:mb-12">
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
                 {/* Overall Progress Card - Responsive */}
-                
 
                 {/* Streak Card - Responsive */}
-              
 
                 {/* Achievement Card - Responsive */}
-               
               </div>
 
               {/* Detailed Stats Panel (Toggleable) - Responsive */}

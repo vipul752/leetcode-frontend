@@ -63,25 +63,16 @@ export default function ResumeUpload() {
               onClick={() => navigate("/home")}
               className="flex items-center gap-1.5 sm:gap-2 group flex-shrink-0 hover:opacity-80 transition-opacity"
             >
-              <div className="w-9 h-9 sm:w-10 sm:h-10 bg-gradient-to-br from-purple-600 to-blue-600 rounded-lg sm:rounded-xl flex items-center justify-center shadow-lg shadow-purple-500/25">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={2}
-                  stroke="currentColor"
-                  className="w-4.5 h-4.5 sm:w-5.5 sm:h-5.5 text-white"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M17.25 6.75 22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3-4.5 16.5"
+              
+              <div className="w-10 h-10 bg-gradient-to-br from-purple-600 to-pink-600 rounded-lg flex items-center justify-center shadow-md">
+                <div className="flex items-center gap-2 group cursor-pointer hover:scale-105 transition-transform">
+                  <img
+                    src="/src/assets/Screenshot 2025-11-21 at 1.17.46 PM.png"
+                    alt="CodeArena Logo"
+                    className="h-10 w-22 rounded-md"
                   />
-                </svg>
+                </div>
               </div>
-              <span className="text-lg sm:text-xl lg:text-2xl font-black bg-gradient-to-r from-gray-900 via-purple-600 to-blue-600 bg-clip-text text-transparent">
-                CodeArena
-              </span>
             </button>
 
             <div className="flex items-center gap-3">

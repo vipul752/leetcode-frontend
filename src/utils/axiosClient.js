@@ -6,7 +6,7 @@ const axiosClient = axios.create({
 
   baseURL:
     import.meta.env.MODE === "production"
-      ? "https://codearena-qoaq.onrender.com/"
+      ? "https://codearena-qoaq.onrender.com"
       : // ? "https://api.codearena.digital"
         "http://localhost:3000",
   withCredentials: true,

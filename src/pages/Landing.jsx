@@ -93,10 +93,11 @@ const Landing = () => {
             <div className="flex items-center gap-8">
               {/* Logo */}
               <div className="flex items-center gap-2 group cursor-pointer hover:scale-105 transition-transform">
-                <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-500 rounded-lg flex items-center justify-center shadow-lg">
-                  <Code2 className="w-5 h-5 text-white" />
-                </div>
-                <span className="text-lg font-bold text-white">CodeArena</span>
+                <img
+                  src="/src/assets/Screenshot 2025-11-21 at 1.17.34 PM.png"
+                  alt="CodeArena Logo"
+                  className="h-26 w-30 rounded-md"
+                />
               </div>
 
               {/* Navigation Links */}

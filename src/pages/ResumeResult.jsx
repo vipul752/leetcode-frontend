@@ -74,9 +74,13 @@ export default function ResumeResult() {
                   />
                 </svg>
               </div>
-              <span className="text-lg sm:text-xl lg:text-2xl font-black bg-gradient-to-r from-gray-900 via-purple-600 to-blue-600 bg-clip-text text-transparent">
-                CodeArena
-              </span>
+               <div className="flex items-center gap-2 group cursor-pointer hover:scale-105 transition-transform">
+                <img
+                  src="/src/assets/Screenshot 2025-11-21 at 1.17.34 PM.png"
+                  alt="CodeArena Logo"
+                  className="h-26 w-30 rounded-md"
+                />
+              </div>
             </button>
 
             <div className="flex items-center gap-3">
