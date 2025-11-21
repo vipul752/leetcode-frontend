@@ -131,7 +131,7 @@ export default function Contests() {
               <div className="w-10 h-10 bg-gradient-to-br from-purple-600 to-pink-600 rounded-lg flex items-center justify-center shadow-md">
                 <div className="flex items-center gap-2 group cursor-pointer hover:scale-105 transition-transform">
                 <img
-                  src="/src/assets/Screenshot 2025-11-21 at 1.17.46 PM.png"
+                  src="/src/assets/codeArenaArrow.png"
                   alt="CodeArena Logo"
                   className="h-10 w-22 rounded-md"
                 />

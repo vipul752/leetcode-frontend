@@ -145,13 +145,13 @@ const HomePage = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2.5 sm:py-3">
           <div className="flex items-center justify-between gap-2 sm:gap-4 w-full">
             {/* Logo */}
-             <div className="flex items-center gap-2 group cursor-pointer hover:scale-105 transition-transform">
-                <img
-                  src="/src/assets/Screenshot 2025-11-21 at 1.17.34 PM.png"
-                  alt="CodeArena Logo"
-                  className="h-15 w-22 rounded-md"
-                />
-              </div>
+            <div className="flex items-center gap-2 group cursor-pointer hover:scale-105 transition-transform">
+              <img
+                src="/src/assets/codeArena.png"
+                alt="CodeArena Logo"
+                className="h-15 w-22 rounded-md"
+              />
+            </div>
             {/* Desktop Navigation - Hidden on mobile */}
             <div className="hidden ml-72 md:flex items-center gap-1.5 lg:gap-2 flex-1 justify-center">
               {/* Features Dropdown */}

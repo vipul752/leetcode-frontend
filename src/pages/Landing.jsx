@@ -94,9 +94,9 @@ const Landing = () => {
               {/* Logo */}
               <div className="flex items-center gap-2 group cursor-pointer hover:scale-105 transition-transform">
                 <img
-                  src="/src/assets/Screenshot 2025-11-21 at 1.17.34 PM.png"
+                  src="/src/assets/codeArena.png"
                   alt="CodeArena Logo"
-                  className="h-26 w-30 rounded-md"
+                  className="w-22 h-15 object-contain rounded-lg shadow-lg"
                 />
               </div>
 
