@@ -145,15 +145,15 @@ const HomePage = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2.5 sm:py-3">
           <div className="flex items-center justify-between gap-2 sm:gap-4 w-full">
             {/* Logo */}
-            <div className="flex items-center gap-2 group cursor-pointer hover:scale-105 transition-transform">
+            <div className="flex items-center gap-2 group cursor-pointer hover:scale-105 transition-transform flex-shrink-0">
               <img
                 src="/codeArena.png"
                 alt="CodeArena Logo"
-                className="h-15 w-22 rounded-md"
+                className="h-10 w-auto rounded-md"
               />
             </div>
             {/* Desktop Navigation - Hidden on mobile */}
-            <div className="hidden ml-72 md:flex items-center gap-1.5 lg:gap-2 flex-1 justify-center">
+            <div className="hidden md:flex  items-center gap-2 lg:gap-3 flex-1 justify-end">
               {/* Features Dropdown */}
               <div className="relative group">
                 <button
@@ -334,19 +334,8 @@ const HomePage = () => {
                 )}
               </div>
 
-              {/* Enhanced Quick Stats - Desktop only */}
-
-              {user && user.role === "admin" && (
-                <button
-                  onClick={() => navigate("/admin")}
-                  className="hidden ml-72 md:flex px-3 py-1.5 sm:px-4 sm:py-2 bg-gray-900 text-white rounded-lg sm:rounded-xl text-xs sm:text-sm font-medium transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-red-500/30 items-center space-x-2"
-                >
-                  <span>Admin</span>
-                </button>
-              )}
-
               {/* User Dropdown - Responsive */}
-              <div className="relative group hidden md:block">
+              <div className="relative group">
                 <button className="flex items-center space-x-2 sm:space-x-3 bg-white/80 hover:bg-white rounded-lg sm:rounded-xl px-2 sm:px-4 py-1.5 sm:py-2 border border-gray-200 hover:border-purple-300 transition-all duration-300 shadow-sm">
                   <div className="w-6 h-6 sm:w-8 sm:h-8 bg-gradient-to-r from-purple-500 to-blue-500 rounded-md sm:rounded-lg flex items-center justify-center">
                     <span className="text-white font-semibold text-sm">
@@ -436,6 +425,30 @@ const HomePage = () => {
                 </div>
               </div>
             </div>
+
+            {/* Admin Button - Desktop Only */}
+            {user && user.role === "admin" && (
+              <button
+                onClick={() => navigate("/admin")}
+                className="hidden md:flex px-3 py-1.5 sm:px-4 sm:py-2 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white rounded-lg sm:rounded-xl text-xs sm:text-sm font-medium transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-red-500/30 items-center space-x-2 flex-shrink-0"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={2}
+                  stroke="currentColor"
+                  className="w-4 h-4"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 0 1 1.37.49l1.296 2.247a1.125 1.125 0 0 1-.26 1.431l-1.003.827c-.293.241-.438.613-.43.992a7.723 7.723 0 0 1 0 .255c-.008.378.137.75.43.991l1.004.827c.424.35.534.955.26 1.43l-1.298 2.247a1.125 1.125 0 0 1-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.47 6.47 0 0 1-.22.128c-.331.183-.581.495-.644.869l-.213 1.281c-.09.543-.56.94-1.11.94h-2.594c-.55 0-1.019-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 0 1-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 0 1-1.369-.49l-1.297-2.247a1.125 1.125 0 0 1 .26-1.431l1.004-.827c.292-.24.437-.613.43-.991a6.932 6.932 0 0 1 0-.255c.007-.38-.138-.751-.43-.992l-1.004-.827a1.125 1.125 0 0 1-.26-1.43l1.297-2.247a1.125 1.125 0 0 1 1.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.086.22-.128.332-.183.582-.495.644-.869l.214-1.28Z"
+                  />
+                </svg>
+                <span>Admin</span>
+              </button>
+            )}
 
             {/* Mobile Menu Button */}
             <button
