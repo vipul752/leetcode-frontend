@@ -63,11 +63,10 @@ export default function ResumeUpload() {
               onClick={() => navigate("/home")}
               className="flex items-center gap-1.5 sm:gap-2 group flex-shrink-0 hover:opacity-80 transition-opacity"
             >
-              
               <div className="w-10 h-10 bg-gradient-to-br from-purple-600 to-pink-600 rounded-lg flex items-center justify-center shadow-md">
                 <div className="flex items-center gap-2 group cursor-pointer hover:scale-105 transition-transform">
                   <img
-                    src="/src/assets/codeArenaArrow.png"
+                    src="src/images/codeArenaArrow.png"
                     alt="CodeArena Logo"
                     className="h-10 w-22 rounded-md"
                   />

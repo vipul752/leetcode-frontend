@@ -147,7 +147,7 @@ const HomePage = () => {
             {/* Logo */}
             <div className="flex items-center gap-2 group cursor-pointer hover:scale-105 transition-transform">
               <img
-                src="/src/assets/codeArena.png"
+                src="src/images/codeArena.png"
                 alt="CodeArena Logo"
                 className="h-15 w-22 rounded-md"
               />
