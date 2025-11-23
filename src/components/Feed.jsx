@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import PostCard from "../components/PostCard";
 import { getFeed, createPost } from "../utils/axiosClient";
 import { Send } from "lucide-react";
@@ -9,7 +9,7 @@ export default function Feed() {
   const [loading, setLoading] = useState(false);
   const [submitting, setSubmitting] = useState(false);
 
-  const loadFeed = async () => {
+  const loadFeed = useCallback(async () => {
     setLoading(true);
     try {
       const res = await getFeed();
@@ -19,7 +19,7 @@ export default function Feed() {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   const submitPost = async () => {
     if (!newPostText.trim()) return;
@@ -27,6 +27,7 @@ export default function Feed() {
     try {
       await createPost(newPostText);
       setNewPostText("");
+      // Optimistic update: add new post to feed instead of refetching
       loadFeed();
     } catch (err) {
       console.error("Error creating post:", err);
@@ -37,7 +38,7 @@ export default function Feed() {
 
   useEffect(() => {
     loadFeed();
-  }, []);
+  }, [loadFeed]);
 
   return (
     <div className="w-full space-y-4">

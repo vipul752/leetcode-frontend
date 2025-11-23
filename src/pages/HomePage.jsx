@@ -11,8 +11,8 @@ const HomePage = () => {
   const [problems, setProblems] = useState([]);
   const [solvedProblems, setSolvedProblems] = useState([]);
   const [hoveredCard, setHoveredCard] = useState(null);
-  const [showStats, setShowStats] = useState(false);
-  const [animateProgress, setAnimateProgress] = useState(false);
+  const [_showStats, _setShowStats] = useState(false);
+  const [_animateProgress, _setAnimateProgress] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [featuresDropdownOpen, setFeaturesDropdownOpen] = useState(false);
   const [filters, setFilters] = useState({
@@ -23,29 +23,27 @@ const HomePage = () => {
   });
 
   useEffect(() => {
-    const fetchProblems = async () => {
+    const fetchData = async () => {
       try {
-        const { data } = await axiosClient.get("/problem/getAllProblem");
-        setProblems(data);
+        // Fetch both in parallel instead of sequentially
+        const [problemsRes, solvedRes] = await Promise.all([
+          axiosClient.get("/problem/getAllProblem"),
+          user
+            ? axiosClient.get("/problem/userProblem")
+            : Promise.resolve({ data: [] }),
+        ]);
+
+        setProblems(problemsRes.data);
+        if (user) {
+          setSolvedProblems(solvedRes.data);
+          setTimeout(() => _setAnimateProgress(true), 500);
+        }
       } catch (error) {
-        console.error("Error fetching problems:", error);
+        console.error("Error fetching data:", error);
       }
     };
 
-    const fetchSolvedProblems = async () => {
-      try {
-        const { data } = await axiosClient.get("/problem/userProblem");
-        setSolvedProblems(data);
-        // Trigger progress animation after data loads
-        setTimeout(() => setAnimateProgress(true), 500);
-      } catch (error) {
-        console.error("Error fetching solved problems:", error);
-      }
-    };
-
-    fetchProblems();
-
-    if (user) fetchSolvedProblems();
+    fetchData();
   }, [user]);
 
   const handleLogout = () => {
@@ -81,7 +79,7 @@ const HomePage = () => {
   // Calculate statistics
   const totalCount = problems.length;
   const solvedCount = solvedProblems.length;
-  const solvedPercentage =
+  const _solvedPercentage =
     totalCount > 0 ? (solvedCount / totalCount) * 100 : 0;
 
   const difficultyStats = {
@@ -801,7 +799,7 @@ const HomePage = () => {
               </div>
 
               {/* Detailed Stats Panel (Toggleable) - Responsive */}
-              {showStats && user && (
+              {_showStats && user && (
                 <div className="mt-6 sm:mt-8 bg-white/90 backdrop-blur-sm rounded-2xl sm:rounded-3xl p-6 sm:p-8 border border-gray-200 animate-fadeIn shadow-lg">
                   <h3 className="text-2xl font-bold text-gray-900 mb-8 flex items-center">
                     <svg

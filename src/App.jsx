@@ -1,28 +1,43 @@
 import { Routes, Route, Navigate } from "react-router";
-import SignUp from "./pages/SignUp";
-import HomePage from "./pages/HomePage";
-import Login from "./pages/Login";
+import { lazy, Suspense } from "react";
 import { checkAuth } from "./authSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import AdminPanel from "./pages/AdminPanel";
-import ProblemPage from "./pages/ProblemPage";
-import Admin from "./pages/Admin";
-import AdminPanelDelete from "./pages/AdminPanelDelete";
-import AdminPanelUpdate from "./pages/AdminPanelUpdate";
-import AdminVideo from "./pages/AdminVideo";
-import Profile from "./components/Profile";
-import ContestPage from "./pages/ContestPage";
-import ContestProblems from "./pages/ContestProblemPage";
-import Contests from "./pages/Contest";
-import MyContest from "./pages/MyContest";
-import ChallengePage from "./pages/Challenge";
-import AiInterviewVideo from "./pages/AiInterview";
+
+// Eagerly load auth-critical pages (kept on initial bundle)
+import SignUp from "./pages/SignUp";
+import Login from "./pages/Login";
 import Landing from "./pages/Landing";
-import ResumeUpload from "./pages/ResumeUpload";
-import ResumeResult from "./pages/ResumeResult";
-import Social from "./pages/Social";
-import UserProfile from "./pages/UserProfile";
+
+// Lazy load other pages for faster initial load
+const HomePage = lazy(() => import("./pages/HomePage"));
+const AdminPanel = lazy(() => import("./pages/AdminPanel"));
+const ProblemPage = lazy(() => import("./pages/ProblemPage"));
+const Admin = lazy(() => import("./pages/Admin"));
+const AdminPanelDelete = lazy(() => import("./pages/AdminPanelDelete"));
+const AdminPanelUpdate = lazy(() => import("./pages/AdminPanelUpdate"));
+const AdminVideo = lazy(() => import("./pages/AdminVideo"));
+const Profile = lazy(() => import("./components/Profile"));
+const ContestPage = lazy(() => import("./pages/ContestPage"));
+const ContestProblems = lazy(() => import("./pages/ContestProblemPage"));
+const Contests = lazy(() => import("./pages/Contest"));
+const MyContest = lazy(() => import("./pages/MyContest"));
+const ChallengePage = lazy(() => import("./pages/Challenge"));
+const AiInterviewVideo = lazy(() => import("./pages/AiInterview"));
+const ResumeUpload = lazy(() => import("./pages/ResumeUpload"));
+const ResumeResult = lazy(() => import("./pages/ResumeResult"));
+const Social = lazy(() => import("./pages/Social"));
+const UserProfile = lazy(() => import("./pages/UserProfile"));
+
+// Loading fallback component
+const LoadingFallback = () => (
+  <div className="flex justify-center items-center min-h-screen bg-black text-gray-200">
+    <div className="flex flex-col items-center">
+      <div className="w-12 h-12 border-3 border-cyan-500/30 border-t-cyan-500 rounded-full animate-spin"></div>
+      <p className="mt-3 text-sm text-gray-400 animate-pulse">Loading...</p>
+    </div>
+  </div>
+);
 
 function App() {
   const { isAuthenticated, loading } = useSelector((state) => state.auth);
@@ -50,7 +65,15 @@ function App() {
         <Route path="/" element={<Landing />} />
         <Route
           path="/home"
-          element={isAuthenticated ? <HomePage /> : <Navigate to="/login" />}
+          element={
+            isAuthenticated ? (
+              <Suspense fallback={<LoadingFallback />}>
+                <HomePage />
+              </Suspense>
+            ) : (
+              <Navigate to="/login" />
+            )
+          }
         />
         <Route
           path="/login"
@@ -60,35 +83,101 @@ function App() {
           path="/signup"
           element={isAuthenticated ? <Navigate to="/home" /> : <SignUp />}
         />
-        {/* <Route
+        <Route
           path="/admin"
           element={
-            isAuthenticated && user.role == "admin" ? (
-              <AdminPanel />
-            ) : (
-              <Navigate to="/" />
-            )
+            <Suspense fallback={<LoadingFallback />}>
+              <Admin />
+            </Suspense>
           }
-        /> */}
-        <Route path="/admin" element={<Admin />} />
-        <Route path="/admin/create" element={<AdminPanel />} />
-        <Route path="/problem/:problemId" element={<ProblemPage />} />
-        <Route path="/admin/delete" element={<AdminPanelDelete />} />
-        <Route path="/admin/update" element={<AdminPanelUpdate />} />
-        <Route path="/admin/video" element={<AdminVideo />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/contest" element={<Contests />} />
-        <Route path="/contest/:contestId" element={<ContestPage />} />
+        />
+        <Route
+          path="/admin/create"
+          element={
+            <Suspense fallback={<LoadingFallback />}>
+              <AdminPanel />
+            </Suspense>
+          }
+        />
+        <Route
+          path="/problem/:problemId"
+          element={
+            <Suspense fallback={<LoadingFallback />}>
+              <ProblemPage />
+            </Suspense>
+          }
+        />
+        <Route
+          path="/admin/delete"
+          element={
+            <Suspense fallback={<LoadingFallback />}>
+              <AdminPanelDelete />
+            </Suspense>
+          }
+        />
+        <Route
+          path="/admin/update"
+          element={
+            <Suspense fallback={<LoadingFallback />}>
+              <AdminPanelUpdate />
+            </Suspense>
+          }
+        />
+        <Route
+          path="/admin/video"
+          element={
+            <Suspense fallback={<LoadingFallback />}>
+              <AdminVideo />
+            </Suspense>
+          }
+        />
+        <Route
+          path="/profile"
+          element={
+            <Suspense fallback={<LoadingFallback />}>
+              <Profile />
+            </Suspense>
+          }
+        />
+        <Route
+          path="/contest"
+          element={
+            <Suspense fallback={<LoadingFallback />}>
+              <Contests />
+            </Suspense>
+          }
+        />
+        <Route
+          path="/contest/:contestId"
+          element={
+            <Suspense fallback={<LoadingFallback />}>
+              <ContestPage />
+            </Suspense>
+          }
+        />
         <Route
           path="/contest/:contestId/problems"
-          element={<ContestProblems />}
+          element={
+            <Suspense fallback={<LoadingFallback />}>
+              <ContestProblems />
+            </Suspense>
+          }
         />
-        <Route path="my-contests" element={<MyContest />} />
+        <Route
+          path="my-contests"
+          element={
+            <Suspense fallback={<LoadingFallback />}>
+              <MyContest />
+            </Suspense>
+          }
+        />
         <Route
           path="/challenge"
           element={
             isAuthenticated ? (
-              user?._id && <ChallengePage userId={user._id} />
+              <Suspense fallback={<LoadingFallback />}>
+                {user?._id && <ChallengePage userId={user._id} />}
+              </Suspense>
             ) : (
               <Navigate to="/login" />
             )
@@ -97,28 +186,62 @@ function App() {
         <Route
           path="/ai-interview"
           element={
-            isAuthenticated ? <AiInterviewVideo /> : <Navigate to="/login" />
+            isAuthenticated ? (
+              <Suspense fallback={<LoadingFallback />}>
+                <AiInterviewVideo />
+              </Suspense>
+            ) : (
+              <Navigate to="/login" />
+            )
           }
         />
         <Route
           path="/resume"
           element={
-            isAuthenticated ? <ResumeUpload /> : <Navigate to="/login" />
+            isAuthenticated ? (
+              <Suspense fallback={<LoadingFallback />}>
+                <ResumeUpload />
+              </Suspense>
+            ) : (
+              <Navigate to="/login" />
+            )
           }
         />
         <Route
           path="/resume-result"
           element={
-            isAuthenticated ? <ResumeResult /> : <Navigate to="/login" />
+            isAuthenticated ? (
+              <Suspense fallback={<LoadingFallback />}>
+                <ResumeResult />
+              </Suspense>
+            ) : (
+              <Navigate to="/login" />
+            )
           }
         />
         <Route
           path="/social"
-          element={isAuthenticated ? <Social /> : <Navigate to="/login" />}
+          element={
+            isAuthenticated ? (
+              <Suspense fallback={<LoadingFallback />}>
+                <Social />
+              </Suspense>
+            ) : (
+              <Navigate to="/login" />
+            )
+          }
         />
         <Route
           path="/userprofile/:firstName"
-          element={isAuthenticated ? <UserProfile /> : <Navigate to="/login" />}
+          element={
+            isAuthenticated ? (
+              <Suspense fallback={<LoadingFallback />}>
+                <UserProfile />
+              </Suspense>
+            ) : (
+              <Navigate to="/login" />
+            )
+          }
         />
       </Routes>
     </div>

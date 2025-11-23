@@ -1,9 +1,9 @@
-import { useState } from "react";
+import { useState, memo } from "react";
 import { Heart } from "lucide-react";
 import { likePost, unlikePost } from "../utils/axiosClient";
 import { useSelector } from "react-redux";
 
-export default function PostCard({ post, refreshFeed }) {
+const PostCard = memo(function PostCard({ post, refreshFeed }) {
   const authUser = useSelector((state) => state.auth.user);
   const currentUserId = authUser?._id;
   const [liked, setLiked] = useState(
@@ -65,4 +65,6 @@ export default function PostCard({ post, refreshFeed }) {
       </div>
     </div>
   );
-}
+});
+
+export default PostCard;

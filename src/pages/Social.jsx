@@ -74,8 +74,12 @@ const Social = () => {
     }
   };
 
+  // Debounced search: only search after 500ms of no typing
   useEffect(() => {
-    handleSearch();
+    const debounceTimer = setTimeout(() => {
+      if (searchTerm.trim()) handleSearch();
+    }, 500);
+    return () => clearTimeout(debounceTimer);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchTerm, sortBy]);
 
@@ -156,7 +160,6 @@ const Social = () => {
                       className="w-28 h-28 rounded-full object-cover border-2 border-cyan-500 mb-4 shadow-lg"
                     />
 
-                   
                     {/* Bio */}
                     {authUser?.bio && (
                       <p className="text-slate-300 text-sm mt-3">
