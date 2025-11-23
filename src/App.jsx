@@ -21,6 +21,8 @@ import AiInterviewVideo from "./pages/AiInterview";
 import Landing from "./pages/Landing";
 import ResumeUpload from "./pages/ResumeUpload";
 import ResumeResult from "./pages/ResumeResult";
+import Social from "./pages/Social";
+import UserProfile from "./pages/UserProfile";
 
 function App() {
   const { isAuthenticated, loading } = useSelector((state) => state.auth);
@@ -109,6 +111,14 @@ function App() {
           element={
             isAuthenticated ? <ResumeResult /> : <Navigate to="/login" />
           }
+        />
+        <Route
+          path="/social"
+          element={isAuthenticated ? <Social /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="/userprofile/:firstName"
+          element={isAuthenticated ? <UserProfile /> : <Navigate to="/login" />}
         />
       </Routes>
     </div>

@@ -105,39 +105,6 @@ const HomePage = () => {
     },
   };
 
-  const getStreakInfo = () => {
-    // Simple streak calculation (you can enhance this based on actual solve dates)
-    return Math.min(solvedCount, 7); // Mock streak for demo
-  };
-
-  const getRankInfo = () => {
-    if (solvedPercentage >= 80)
-      return {
-        rank: "Expert",
-        color: "from-purple-500 to-pink-500",
-        icon: "👑",
-      };
-    if (solvedPercentage >= 60)
-      return {
-        rank: "Advanced",
-        color: "from-blue-500 to-cyan-500",
-        icon: "🚀",
-      };
-    if (solvedPercentage >= 40)
-      return {
-        rank: "Intermediate",
-        color: "from-green-500 to-emerald-500",
-        icon: "⭐",
-      };
-    if (solvedPercentage >= 20)
-      return {
-        rank: "Beginner",
-        color: "from-yellow-500 to-orange-500",
-        icon: "🌟",
-      };
-    return { rank: "Newbie", color: "from-gray-500 to-gray-600", icon: "🔥" };
-  };
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-white via-gray-50 to-blue-50">
       {/* Enhanced Navigation - Responsive */}
@@ -333,6 +300,28 @@ const HomePage = () => {
                   </div>
                 )}
               </div>
+
+              {/* Explore Button */}
+              <button
+                onClick={() => navigate("/social")}
+                className="flex items-center gap-2 px-4 py-2 lg:px-6 lg:py-2.5 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white rounded-lg lg:rounded-xl text-sm font-semibold transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-cyan-500/30"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={2}
+                  stroke="currentColor"
+                  className="w-5 h-5"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M18 18.72a9.094 9.094 0 003.741-10.332A9 9 0 0018 2.25h-.5a8.997 8.997 0 00-8.268 4.26m0 0c.75 1.078 1.187 2.378 1.187 3.74 0 .514-.1 1.005-.29 1.463m0 0a8.968 8.968 0 00-2.968 6.22m10.832 0c.18.305.283.631.283.979 0 1.317-.67 2.487-1.684 3.178m15.108-10.272a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0z"
+                  />
+                </svg>
+                <span>Explore</span>
+              </button>
 
               {/* User Dropdown - Responsive */}
               <div className="relative group">
