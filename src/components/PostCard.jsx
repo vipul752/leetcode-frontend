@@ -1,67 +1,130 @@
 import { useState, memo } from "react";
-import { Heart } from "lucide-react";
-import { likePost, unlikePost } from "../utils/axiosClient";
+import {
+  MessageCircle,
+  Eye,
+  Heart,
+  MoreHorizontal,
+  Share2,
+} from "lucide-react";
+import axiosClient from "../utils/axiosClient";
 import { useSelector } from "react-redux";
 
-const PostCard = memo(function PostCard({ post, refreshFeed }) {
+const timeAgo = (date) => {
+  const seconds = Math.floor((new Date() - new Date(date)) / 1000);
+  const intervals = {
+    year: 31536000,
+    month: 2592000,
+    day: 86400,
+    hour: 3600,
+    minute: 60,
+  };
+
+  for (let key in intervals) {
+    const val = Math.floor(seconds / intervals[key]);
+    if (val >= 1) return `${val} ${key}${val > 1 ? "s" : ""} ago`;
+  }
+  return "just now";
+};
+
+const PostCard = memo(function PostCard({ post }) {
   const authUser = useSelector((state) => state.auth.user);
-  const currentUserId = authUser?._id;
   const [liked, setLiked] = useState(
-    Array.isArray(post.likes) ? post.likes.includes(currentUserId) : false
+    Array.isArray(post.likes) ? post.likes.includes(authUser?._id) : false
   );
-  const [loading, setLoading] = useState(false);
+  const [likesCount, setLikesCount] = useState(
+    post.likes
+      ? Array.isArray(post.likes)
+        ? post.likes.length
+        : post.likes
+      : 0
+  );
 
   const handleLike = async () => {
-    if (!currentUserId) return;
-    setLoading(true);
     try {
       if (liked) {
-        await unlikePost(post._id);
+        // If already liked, unlike it
+        const res = await axiosClient.post(`/social/unlike/${post._id}`);
         setLiked(false);
+        setLikesCount(res.data.likes || likesCount - 1);
       } else {
-        await likePost(post._id);
+        // If not liked, like it
+        const res = await axiosClient.post(`/social/like/${post._id}`);
         setLiked(true);
+        setLikesCount(res.data.likes || likesCount + 1);
       }
-      refreshFeed();
     } catch (err) {
-      console.error("Like toggle error:", err);
-    } finally {
-      setLoading(false);
+      console.error(err);
     }
   };
 
   return (
-    <div className="bg-slate-800/60 border border-slate-700/60 rounded-lg p-5 mb-4">
-      {/* User */}
-      <div className="flex items-center gap-3 text-slate-200">
-        <div className="w-10 h-10 rounded-full bg-slate-700 flex items-center justify-center text-sm">
-          {post.owner?.firstName?.[0] || "U"}
+    <div className="bg-black cursor-pointer backdrop-blur-md border border-slate-800 rounded-2xl p-6  relative overflow-hidden">
+      <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/0 to-blue-500/0 group-hover:from-cyan-500/5 group-hover:to-blue-500/5 transition-all pointer-events-none"></div>
+
+      {/* HEADER */}
+      <div className="flex items-start gap-4 relative z-10">
+        <img
+          src={post.owner?.avatar || "https://via.placeholder.com/48"}
+          alt="user"
+          className="w-12 h-12 rounded-full object-cover border-2 border-slate-800"
+        />
+
+        <div className="flex-1">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="font-bold text-white text-lg group-hover:text-amber-400 transition">
+                {post.owner?.firstName || "Anonymous"}
+              </p>
+              <p className="text-xs text-slate-400 flex items-center gap-1">
+                {timeAgo(post.createdAt)}
+              </p>
+            </div>
+
+       
+          </div>
         </div>
-        <h4 className="font-semibold">
-          {post.owner.firstName} {post.owner.lastName}
-        </h4>
       </div>
 
-      {/* Content */}
-      <p className="mt-3 text-slate-200">{post.text}</p>
+      {/* BODY */}
+      <div className="mt-4 pl-16">
+        {post.title && (
+          <h2 className="text-xl font-bold text-slate-100 mb-2 leading-tight">
+            {post.title}
+          </h2>
+        )}
 
-      {/* Actions */}
-      <div className="flex items-center gap-5 mt-4">
+        <p className="text-slate-300 text-base leading-relaxed whitespace-pre-wrap">
+          {post.description}
+        </p>
+      </div>
+
+      {/* FOOTER */}
+      <div className="flex items-center gap-6 mt-6 pl-16 border-t border-slate-800/50 pt-4">
+        {/* LIKE */}
         <button
           onClick={handleLike}
-          disabled={loading}
-          className="flex items-center gap-2 text-sm text-slate-200"
+          className={`flex items-center gap-2 px-3 py-1.5 rounded-full transition font-medium ${
+            liked
+              ? "text-red-500 bg-red-500/10 hover:bg-red-500/20"
+              : "text-slate-400 hover:text-red-400 hover:bg-red-500/10"
+          }`}
         >
-          <Heart
-            size={22}
-            className={`${
-              liked ? "text-red-500 fill-red-500" : "text-slate-300"
-            }`}
-          />
-          <span className={`${liked ? "text-red-400" : "text-slate-300"}`}>
-            {Array.isArray(post.likes) ? post.likes.length : 0}
-          </span>
+          <Heart className={`w-5 h-5 ${liked ? "fill-red-500" : ""}`} />
+          <span>{likesCount}</span>
         </button>
+
+        {/* COMMENTS */}
+        <div className="flex items-center gap-2 px-3 py-1.5 text-slate-400 hover:text-cyan-400 hover:bg-cyan-500/10 rounded-full transition">
+          <MessageCircle className="w-5 h-5" />
+          <span>{post.comments}</span>
+        </div>
+
+        {/* VIEWS */}
+        <div className="flex items-center gap-2 ml-auto text-slate-500">
+          <Eye className="w-4 h-4" />
+          <span>{post.views}</span>
+        </div>
+
       </div>
     </div>
   );

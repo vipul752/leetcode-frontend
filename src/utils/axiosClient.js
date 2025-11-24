@@ -27,7 +27,7 @@ const axiosClient = axios.create({
     import.meta.env.MODE === "production"
       ? "https://codearena-qoaq.onrender.com"
       : // "https://api.codearena.digital"
-        "https://codearena-qoaq.onrender.com",
+        "http://localhost:3000",
   withCredentials: true,
   headers: {
     "Content-Type": "application/json",
