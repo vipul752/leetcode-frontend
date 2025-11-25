@@ -10,6 +10,7 @@ import { useState, useRef, useEffect } from "react";
 
 const Editorial = ({ secureUrl, thumbnailUrl, duration }) => {
   const videoRef = useRef(null);
+  const hideControlsTimeoutRef = useRef(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [isHovering, setIsHovering] = useState(false);
@@ -20,8 +21,6 @@ const Editorial = ({ secureUrl, thumbnailUrl, duration }) => {
   const [showSettings, setShowSettings] = useState(false);
   const [playbackSpeed, setPlaybackSpeed] = useState(1);
   const [selectedQuality, setSelectedQuality] = useState("auto");
-
-  let hideControlsTimeout;
 
   const formatTime = (time) => {
     if (!time || isNaN(time)) return "00:00";
@@ -60,8 +59,8 @@ const Editorial = ({ secureUrl, thumbnailUrl, duration }) => {
 
   const handleMouseMove = () => {
     setShowControls(true);
-    clearTimeout(hideControlsTimeout);
-    hideControlsTimeout = setTimeout(() => {
+    clearTimeout(hideControlsTimeoutRef.current);
+    hideControlsTimeoutRef.current = setTimeout(() => {
       if (isPlaying) {
         setShowControls(false);
       }
@@ -122,7 +121,7 @@ const Editorial = ({ secureUrl, thumbnailUrl, duration }) => {
         video.removeEventListener("playing", handlePlaying);
         video.removeEventListener("pause", handlePause);
         video.removeEventListener("play", handlePlay);
-        clearTimeout(hideControlsTimeout);
+        clearTimeout(hideControlsTimeoutRef.current);
       };
     }
   }, []);

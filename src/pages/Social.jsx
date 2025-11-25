@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 import { useSelector } from "react-redux";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion"; // eslint-disable-line no-unused-vars
+import FollowersModal from "../components/FollowersModal";
 import {
   Heart,
   MessageCircle,
@@ -23,10 +24,35 @@ const Social = () => {
   const authUser = useSelector((state) => state.auth.user);
   const [profile, setProfile] = useState(null);
   const [activeTab, setActiveTab] = useState("feed"); // feed or explore
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalType, setModalType] = useState(null); // "followers" or "following"
+  const [listData, setListData] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [sortBy, setSortBy] = useState("popular");
+
+  // Modal functions
+  const loadFollowers = async () => {
+    try {
+      const res = await axiosClient.get(`/social/followers/${authUser._id}`);
+      setListData(res.data);
+      setModalType("followers");
+      setModalOpen(true);
+    } catch (err) {
+      console.error("Error loading followers:", err);
+    }
+  };
+
+  const loadFollowing = async () => {
+    try {
+      const res = await axiosClient.get(`/social/following/${authUser._id}`);
+      setListData(res.data);
+      setModalType("following");
+      setModalOpen(true);
+    } catch (err) {
+      console.error("Error loading following:", err);
+    }
+  };
 
   useEffect(() => {
     const loadProfile = async () => {
@@ -52,20 +78,10 @@ const Social = () => {
       const response = await axiosClient.get(`/social/search/${searchTerm}`);
       let sortedUsers = response.data;
 
-      // Sorting Logic
-      if (sortBy === "followers") {
-        sortedUsers.sort(
-          (a, b) => (b.followers?.length || 0) - (a.followers?.length || 0)
-        );
-      } else if (sortBy === "recent") {
-        sortedUsers.sort(
-          (a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0)
-        );
-      } else {
-        sortedUsers.sort(
-          (a, b) => (b.posts?.length || 0) - (a.posts?.length || 0)
-        );
-      }
+      // Sort by popular (posts count)
+      sortedUsers.sort(
+        (a, b) => (b.posts?.length || 0) - (a.posts?.length || 0)
+      );
 
       setUsers(sortedUsers);
     } catch (err) {
@@ -81,7 +97,7 @@ const Social = () => {
     }, 500);
     return () => clearTimeout(debounceTimer);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchTerm, sortBy]);
+  }, [searchTerm]);
 
   if (authUser === undefined) {
     return <div className="text-white">Loading...</div>;
@@ -89,7 +105,6 @@ const Social = () => {
 
   return (
     <div className="min-h-screen bg-black text-slate-200 font-sans ">
-
       <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
         <div className="absolute top-0 right-0 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl animate-pulse"></div>
         <div className="absolute bottom-0 left-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
@@ -144,7 +159,7 @@ const Social = () => {
                 {activeTab === "explore" && (
                   <motion.div
                     layoutId="activeTab"
-                    className="absolute inset-0 bg-gradient-to-r from-cyan-600 to-blue-600 rounded-lg shadow-lg shadow-cyan-500/20"
+                    className="absolute inset-0 bg-amber-400 rounded-lg shadow-lg shadow-cyan-500/20"
                     transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
                   />
                 )}
@@ -202,7 +217,6 @@ const Social = () => {
                       <h2 className="text-xl font-bold mt-4 text-white">
                         {authUser?.firstName} {authUser?.lastName}
                       </h2>
-                      
 
                       {authUser?.bio && (
                         <p className="text-slate-400 text-sm mt-3 line-clamp-2 px-2">
@@ -215,23 +229,29 @@ const Social = () => {
                           <span className="font-bold text-white text-lg">
                             {profile?.stats?.posts || 0}
                           </span>
-                          <span className="text-xs text-slate-500 uppercase tracking-wider font-semibold">
+                          <span className="text-xs mr-2 text-slate-500 uppercase tracking-wider font-semibold">
                             Posts
                           </span>
                         </div>
-                        <div className="flex flex-col items-center p-2 rounded-xl hover:bg-slate-800/50 transition-colors cursor-pointer">
-                          <span className="font-bold text-white text-lg">
+                        <div
+                          onClick={loadFollowers}
+                          className="flex flex-col items-center p-2 rounded-xl  hover:bg-amber-500/10 hover:border border-amber-400/30 transition-all cursor-pointer group"
+                        >
+                          <span className="font-bold text-white text-lg group-hover:text-amber-400 transition-colors">
                             {profile?.stats?.followers || 0}
                           </span>
-                          <span className="text-xs text-slate-500 uppercase tracking-wider font-semibold">
+                          <span className="text-xs mr-4 text-slate-500 group-hover:text-amber-400 uppercase tracking-wider font-semibold transition-colors">
                             Followers
                           </span>
                         </div>
-                        <div className="flex flex-col items-center p-2 rounded-xl hover:bg-slate-800/50 transition-colors cursor-pointer">
-                          <span className="font-bold text-white text-lg">
+                        <div
+                          onClick={loadFollowing}
+                          className="flex flex-col items-center p-2 rounded-xl hover:bg-amber-500/10 hover:border border-amber-400/30 transition-all cursor-pointer group"
+                        >
+                          <span className="font-bold text-white text-lg group-hover:text-amber-400 transition-colors">
                             {profile?.stats?.following || 0}
                           </span>
-                          <span className="text-xs ml-4 text-slate-500 uppercase tracking-wider font-semibold">
+                          <span className="text-xs text-slate-500 group-hover:text-amber-400 uppercase tracking-wider font-semibold transition-colors">
                             Following
                           </span>
                         </div>
@@ -293,8 +313,8 @@ const Social = () => {
               className="space-y-8"
             >
               {/* Search and Filter Box */}
-              <div className="bg-slate-900/60 backdrop-blur-md rounded-2xl border border-slate-800 p-6 shadow-xl">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="bg-black backdrop-blur-md rounded-2xl border border-slate-800 p-6 shadow-xl">
+                <div className="grid grid-cols-1 md:grid-cols-6 gap-4">
                   {/* Search Input */}
                   <div className="md:col-span-2 relative group">
                     <div className="absolute inset-0 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-xl blur opacity-20 group-hover:opacity-40 transition duration-500"></div>
@@ -307,34 +327,6 @@ const Social = () => {
                         onChange={(e) => setSearchTerm(e.target.value)}
                         className="w-full px-4 py-3 bg-transparent text-white placeholder-slate-500 focus:outline-none"
                       />
-                    </div>
-                  </div>
-
-                  {/* Sort Dropdown */}
-                  <div className="relative">
-                    <select
-                      value={sortBy}
-                      onChange={(e) => setSortBy(e.target.value)}
-                      className="w-full px-4 py-3 bg-slate-900 border border-slate-700 rounded-xl text-slate-200 focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/50 transition-all cursor-pointer appearance-none"
-                    >
-                      <option value="popular">Most Popular</option>
-                      <option value="recent">Most Recent</option>
-                      <option value="followers">Most Followers</option>
-                    </select>
-                    <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400">
-                      <svg
-                        className="w-4 h-4"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
-                          d="M19 9l-7 7-7-7"
-                        ></path>
-                      </svg>
                     </div>
                   </div>
                 </div>
@@ -375,37 +367,50 @@ const Social = () => {
                         hidden: { opacity: 0, y: 20 },
                         show: { opacity: 1, y: 0 },
                       }}
-                      className="group relative bg-slate-900/40 backdrop-blur-sm rounded-2xl border border-slate-800 p-6 hover:border-cyan-500/30 transition-all duration-300 hover:shadow-2xl hover:shadow-cyan-500/10 overflow-hidden"
+                      className="group relative bg-black backdrop-blur-sm rounded-2xl border border-slate-800 p-6 hover:border-amber-400/50 transition-all duration-300 hover:shadow-2xl hover:shadow-amber-400/20 overflow-hidden"
                     >
+                      {/* Amber accent top border */}
+                      <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-amber-400/0 via-amber-400 to-amber-400/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+
                       <div className="relative z-10">
                         {/* User Avatar */}
                         <div className="flex flex-col items-center mb-5">
                           <div className="relative mb-4 group-hover:scale-105 transition-transform duration-300">
-                            <div className="absolute -inset-1 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full blur opacity-0 group-hover:opacity-50 transition duration-500"></div>
+                            <div className="absolute -inset-1 bg-gradient-to-r from-amber-400/30 to-amber-500/30 rounded-full blur opacity-0 group-hover:opacity-75 transition duration-500"></div>
                             <img
                               src={
                                 user.avatar || "https://via.placeholder.com/100"
                               }
                               alt={user.firstName}
-                              className="relative w-24 h-24 rounded-full border-2 border-slate-700 object-cover shadow-lg group-hover:border-cyan-400 transition-colors"
+                              className="relative w-24 h-24 rounded-full border-2 border-slate-700 object-cover shadow-lg group-hover:border-amber-400 transition-colors"
                             />
                             {user.isFollowing && (
-                              <div className="absolute bottom-0 right-0 w-6 h-6 bg-green-500 rounded-full border-2 border-slate-900 flex items-center justify-center z-10">
-                                <div className="w-2 h-2 bg-white rounded-full"></div>
+                              <div className="absolute bottom-0 right-0 w-6 h-6 bg-gradient-to-br from-amber-400 to-amber-500 rounded-full border-2 border-slate-900 flex items-center justify-center z-10 shadow-lg shadow-amber-400/50">
+                                <svg
+                                  className="w-3 h-3 text-white"
+                                  fill="currentColor"
+                                  viewBox="0 0 20 20"
+                                >
+                                  <path
+                                    fillRule="evenodd"
+                                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                    clipRule="evenodd"
+                                  />
+                                </svg>
                               </div>
                             )}
                           </div>
-                          <h3 className="font-bold text-lg text-white group-hover:text-cyan-400 transition-colors">
+                          <h3 className="font-bold text-lg text-white group-hover:text-amber-400 transition-colors">
                             {user.firstName} {user.lastName}
                           </h3>
-                          <p className="text-sm text-cyan-400/70 group-hover:text-cyan-400 transition-colors">
+                          <p className="text-sm text-amber-400/60 group-hover:text-amber-400 transition-colors font-medium">
                             @{user.username}
                           </p>
                         </div>
 
                         {/* User Bio */}
                         {user.bio && (
-                          <p className="text-slate-400 text-center text-sm mb-4 leading-relaxed line-clamp-2 h-10">
+                          <p className="text-slate-400 text-center text-sm mb-4 leading-relaxed line-clamp-2 h-10 group-hover:text-slate-300 transition-colors">
                             {user.bio}
                           </p>
                         )}
@@ -416,13 +421,13 @@ const Social = () => {
                             {user.skills.slice(0, 3).map((skill, idx) => (
                               <span
                                 key={idx}
-                                className="px-3 py-1 bg-cyan-500/20 border border-cyan-500/30 rounded-full text-xs text-cyan-300 hover:bg-cyan-500/30 transition-colors"
+                                className="px-3 py-1 bg-amber-500/20 border border-amber-400/40 rounded-full text-xs text-amber-300 hover:bg-amber-500/30 hover:border-amber-400/60 transition-colors"
                               >
                                 {skill}
                               </span>
                             ))}
                             {user.skills.length > 3 && (
-                              <span className="px-3 py-1 bg-blue-500/20 border border-blue-500/30 rounded-full text-xs text-blue-300">
+                              <span className="px-3 py-1 bg-amber-600/20 border border-amber-500/30 rounded-full text-xs text-amber-300 hover:bg-amber-600/30 transition-colors">
                                 +{user.skills.length - 3}
                               </span>
                             )}
@@ -430,25 +435,25 @@ const Social = () => {
                         )}
 
                         {/* Stats */}
-                        <div className="grid grid-cols-3 gap-3 py-4 border-t border-b border-slate-700/50">
-                          <div className="text-center">
-                            <p className="font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">
+                        <div className="grid grid-cols-3 gap-3 py-4 border-t border-b border-slate-700/50 group-hover:border-amber-400/30 transition-colors">
+                          <div className="text-center hover:bg-slate-800/50 p-2 rounded-lg transition-colors cursor-pointer">
+                            <p className="font-bold text-transparent bg-clip-text bg-gradient-to-r from-amber-300 to-amber-500">
                               {Array.isArray(user.followers)
-                                ? user.followers.length
+                                ? user?.followers?.length
                                 : 0}
                             </p>
                             <p className="text-xs text-slate-400">Followers</p>
                           </div>
-                          <div className="text-center">
-                            <p className="font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">
+                          <div className="text-center hover:bg-slate-800/50 p-2 rounded-lg transition-colors cursor-pointer">
+                            <p className="font-bold text-transparent bg-clip-text bg-gradient-to-r from-amber-300 to-amber-500">
                               {Array.isArray(user.following)
                                 ? user.following.length
                                 : 0}
                             </p>
                             <p className="text-xs text-slate-400">Following</p>
                           </div>
-                          <div className="text-center">
-                            <p className="font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">
+                          <div className="text-center hover:bg-slate-800/50 p-2 rounded-lg transition-colors cursor-pointer">
+                            <p className="font-bold text-transparent bg-clip-text bg-gradient-to-r from-amber-300 to-amber-500">
                               {Array.isArray(user.posts)
                                 ? user.posts.length
                                 : 0}
@@ -461,9 +466,16 @@ const Social = () => {
                         <div className="mt-4">
                           <FollowButton
                             userId={user._id}
-                            isFollowing={user.isFollowing || false}
-                            reload={() => {
-                              handleSearch();
+                            isFollowing={user.isFollowing}
+                            reload={handleSearch}
+                            reloadProfile={() => {
+                              const loadProfile = async () => {
+                                const res = await axiosClient.get(
+                                  `/social/profile/${authUser.firstName}`
+                                );
+                                setProfile(res.data);
+                              };
+                              loadProfile();
                             }}
                           />
                         </div>
@@ -473,9 +485,24 @@ const Social = () => {
                           onClick={() =>
                             navigate(`/userprofile/${user.firstName}`)
                           }
-                          className="w-full mt-3 px-4 py-2 bg-slate-800/50 hover:bg-gradient-to-r hover:from-cyan-600/30 hover:to-blue-600/30 text-slate-200 hover:text-cyan-300 rounded-lg font-medium transition-all duration-300 border border-slate-700/50 hover:border-cyan-500/50"
+                          className="w-full mt-3 px-4 py-2 bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 hover:text-amber-200 rounded-lg font-medium transition-all duration-300 border border-amber-500/30 hover:border-amber-400/60 shadow-lg shadow-amber-500/10 hover:shadow-amber-400/20 group/btn"
                         >
-                          View Profile →
+                          <span className="flex items-center justify-center gap-2">
+                            View Profile
+                            <svg
+                              className="w-4 h-4 transform group-hover/btn:translate-x-1 transition-transform"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke="currentColor"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M9 5l7 7-7 7"
+                              />
+                            </svg>
+                          </span>
                         </button>
                       </div>
                     </motion.div>
@@ -492,18 +519,23 @@ const Social = () => {
                   </p>
                 </div>
               ) : (
-                <div className="text-center py-16 bg-gradient-to-br from-slate-800/50 to-slate-900/50 rounded-2xl border border-slate-700/50 backdrop-blur-sm">
-                  <Sparkles className="w-16 h-16 text-cyan-400/50 mx-auto mb-4" />
-                  <p className="text-slate-300 text-lg mb-2">Start Exploring</p>
-                  <p className="text-slate-400 text-sm">
-                    Search for developers to discover talented coders
-                  </p>
-                </div>
+                <div></div>
               )}
             </motion.div>
           )}
         </AnimatePresence>
       </div>
+
+      {/* Followers/Following Modal */}
+      <FollowersModal
+        open={modalOpen}
+        onClose={() => setModalOpen(false)}
+        users={listData}
+        reload={() => {
+          if (modalType === "followers") loadFollowers();
+          if (modalType === "following") loadFollowing();
+        }}
+      />
     </div>
   );
 };

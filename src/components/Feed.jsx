@@ -1,15 +1,13 @@
 import { useEffect, useState, useCallback } from "react";
 import PostCard from "../components/PostCard";
-import { getFeed, createPost } from "../utils/axiosClient";
+import { getFeed } from "../utils/axiosClient";
 import { Send, Sparkles } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion"; // eslint-disable-line no-unused-vars
 import { useNavigate } from "react-router";
 
 export default function Feed() {
   const [posts, setPosts] = useState([]);
-  const [newPostText, setNewPostText] = useState("");
   const [loading, setLoading] = useState(false);
-  const [submitting, setSubmitting] = useState(false);
 
   const loadFeed = useCallback(async () => {
     setLoading(true);
@@ -22,21 +20,6 @@ export default function Feed() {
       setLoading(false);
     }
   }, []);
-
-  const submitPost = async () => {
-    if (!newPostText.trim()) return;
-    setSubmitting(true);
-    try {
-      await createPost(newPostText);
-      setNewPostText("");
-      // Optimistic update: add new post to feed instead of refetching
-      loadFeed();
-    } catch (err) {
-      console.error("Error creating post:", err);
-    } finally {
-      setSubmitting(false);
-    }
-  };
 
   useEffect(() => {
     loadFeed();
