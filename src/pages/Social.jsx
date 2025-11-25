@@ -75,7 +75,6 @@ const Social = () => {
     }
   };
 
-  // Debounced search: only search after 500ms of no typing
   useEffect(() => {
     const debounceTimer = setTimeout(() => {
       if (searchTerm.trim()) handleSearch();
@@ -84,9 +83,13 @@ const Social = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchTerm, sortBy]);
 
+  if (authUser === undefined) {
+    return <div className="text-white">Loading...</div>;
+  }
+
   return (
     <div className="min-h-screen bg-black text-slate-200 font-sans ">
-      {/* Animated background gradient */}
+
       <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
         <div className="absolute top-0 right-0 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl animate-pulse"></div>
         <div className="absolute bottom-0 left-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
@@ -199,9 +202,7 @@ const Social = () => {
                       <h2 className="text-xl font-bold mt-4 text-white">
                         {authUser?.firstName} {authUser?.lastName}
                       </h2>
-                      <p className="text-cyan-400 text-sm font-medium">
-                        @{authUser?.username}
-                      </p>
+                      
 
                       {authUser?.bio && (
                         <p className="text-slate-400 text-sm mt-3 line-clamp-2 px-2">
@@ -376,8 +377,6 @@ const Social = () => {
                       }}
                       className="group relative bg-slate-900/40 backdrop-blur-sm rounded-2xl border border-slate-800 p-6 hover:border-cyan-500/30 transition-all duration-300 hover:shadow-2xl hover:shadow-cyan-500/10 overflow-hidden"
                     >
-             
-
                       <div className="relative z-10">
                         {/* User Avatar */}
                         <div className="flex flex-col items-center mb-5">

@@ -8,6 +8,8 @@ import { useEffect } from "react";
 import SignUp from "./pages/SignUp";
 import Login from "./pages/Login";
 import Landing from "./pages/Landing";
+import IndividualPost from "./components/IndividualPost";
+import CreatePost from "./components/CreatePost";
 
 // Lazy load other pages for faster initial load
 const HomePage = lazy(() => import("./pages/HomePage"));
@@ -45,7 +47,28 @@ function App() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(checkAuth());
+    // Set a timeout to force auth check to complete after 15 seconds
+    // This prevents infinite loading if the backend is not responding
+    const timeoutId = setTimeout(() => {
+      dispatch(checkAuth()).catch(() => {
+        console.warn("Auth check timeout or failed");
+      });
+    }, 500); // Start auth check immediately, but with timeout fallback
+
+    // If auth is still loading after 15 seconds, consider it failed
+    const fallbackTimeoutId = setTimeout(() => {
+      console.warn("Auth check taking too long, proceeding without auth");
+    }, 15000);
+
+    // Initial auth check dispatch
+    dispatch(checkAuth()).catch(() => {
+      console.warn("Auth check failed");
+    });
+
+    return () => {
+      clearTimeout(timeoutId);
+      clearTimeout(fallbackTimeoutId);
+    };
   }, [dispatch]);
 
   if (loading) {
@@ -54,6 +77,7 @@ function App() {
         <div className="flex flex-col items-center">
           <div className="w-16 h-16 border-4 border-blue-300 border-t-transparent rounded-full animate-spin"></div>
           <p className="mt-4 text-lg text-gray-400 animate-pulse">Loading...</p>
+          <p className="mt-2 text-xs text-gray-500">Please wait...</p>
         </div>
       </div>
     );
@@ -75,6 +99,8 @@ function App() {
             )
           }
         />
+        <Route path="/post/create" element={<CreatePost />} />
+
         <Route
           path="/login"
           element={isAuthenticated ? <Navigate to="/home" /> : <Login />}
@@ -222,13 +248,9 @@ function App() {
         <Route
           path="/social"
           element={
-            isAuthenticated ? (
-              <Suspense fallback={<LoadingFallback />}>
-                <Social />
-              </Suspense>
-            ) : (
-              <Navigate to="/login" />
-            )
+            <Suspense fallback={<LoadingFallback />}>
+              <Social />
+            </Suspense>
           }
         />
         <Route
@@ -243,6 +265,8 @@ function App() {
             )
           }
         />
+
+        <Route path="/post/:postId" element={<IndividualPost />} />
       </Routes>
     </div>
   );

@@ -3,6 +3,7 @@ import PostCard from "../components/PostCard";
 import { getFeed, createPost } from "../utils/axiosClient";
 import { Send, Sparkles } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useNavigate } from "react-router";
 
 export default function Feed() {
   const [posts, setPosts] = useState([]);
@@ -41,49 +42,20 @@ export default function Feed() {
     loadFeed();
   }, [loadFeed]);
 
+  const navigate = useNavigate();
+
   return (
     <div className="w-full space-y-6">
-      {/* New Post Box */}
-      <div className="bg-black backdrop-blur-md border border-slate-800 rounded-2xl p-6 shadow-xl relative overflow-hidden group">
-        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-cyan-500 to-blue-500 opacity-50 group-hover:opacity-100 transition-opacity"></div>
-
-        <div className="flex gap-4">
-          <div className="flex-1">
-            <textarea
-              className="w-full bg-slate-950/50 border border-slate-700/50 p-4 rounded-xl text-slate-200 placeholder-slate-500 focus:border-cyan-500/50 focus:ring-2 focus:ring-cyan-500/20 transition-all resize-none text-lg"
-              placeholder="Share your coding journey..."
-              value={newPostText}
-              onChange={(e) => setNewPostText(e.target.value)}
-              rows="3"
-            />
-          </div>
-        </div>
-
-        <div className="flex justify-between items-center mt-4">
-          <div className="flex gap-2 text-slate-400 text-sm">
-            <span className="flex items-center gap-1 hover:text-cyan-400 cursor-pointer transition-colors">
-            </span>
-          </div>
-
-          <div className="flex gap-3">
-            {newPostText && (
-              <button
-                onClick={() => setNewPostText("")}
-                className="px-4 py-2 text-slate-400 hover:text-white transition-colors"
-              >
-                Clear
-              </button>
-            )}
-            <button
-              onClick={submitPost}
-              disabled={!newPostText.trim() || submitting}
-              className="px-6 py-2 bg-amber-400 text-white rounded-xl font-medium flex items-center gap-2 hover:shadow-lg hover:shadow-cyan-500/20 transform hover:-translate-y-0.5 transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
-            >
-              <Send className="w-4 h-4" />
-              {submitting ? "Publishing..." : "Post"}
-            </button>
-          </div>
-        </div>
+      <div className="flex justify-end">
+        <button
+          onClick={() => navigate("/post/create")}
+          className="px-5 py-2 bg-amber-400 text-black rounded-xl font-semibold 
+                     hover:bg-amber-300 transition shadow 
+                     flex items-center gap-2"
+        >
+          <Send className="w-4 h-4" />
+          Create Post
+        </button>
       </div>
 
       {/* Loading state */}

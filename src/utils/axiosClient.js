@@ -29,6 +29,7 @@ const axiosClient = axios.create({
       : // "https://api.codearena.digital"
         "http://localhost:3000",
   withCredentials: true,
+  timeout: 10000, // 10 second timeout for all requests
   headers: {
     "Content-Type": "application/json",
   },
