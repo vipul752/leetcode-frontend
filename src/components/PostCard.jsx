@@ -199,7 +199,10 @@ const PostCard = memo(function PostCard({ post }) {
       </div>
       {/* COMMENTS SECTION */}
       {showComments && (
-        <div className="mt-6 pl-16 border-t border-slate-800/50 pt-4 space-y-4">
+        <div
+          className="mt-6 pl-16 border-t border-slate-800/50 pt-4 space-y-4"
+          onClick={(e) => e.stopPropagation()}
+        >
           {/* Add Comment */}
           <div className="flex gap-3">
             <div className="flex-1 flex gap-2">
