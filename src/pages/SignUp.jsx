@@ -9,7 +9,25 @@ import { useEffect, useState } from "react";
 const signupSchema = z.object({
   firstName: z.string().min(3, "Name should contain at least 3 characters"),
   email: z.string().email("Please enter a valid email"),
-  password: z.string().min(8, "Password should be at least 8 characters"),
+  password: z
+    .string()
+    .min(8, "Password must be at least 8 characters")
+    .refine(
+      (password) => /[A-Z]/.test(password),
+      "Password must contain at least one uppercase letter (A-Z)"
+    )
+    .refine(
+      (password) => /[a-z]/.test(password),
+      "Password must contain at least one lowercase letter (a-z)"
+    )
+    .refine(
+      (password) => /[0-9]/.test(password),
+      "Password must contain at least one number (0-9)"
+    )
+    .refine(
+      (password) => /[!@#$%^&*]/.test(password),
+      "Password must contain at least one special character (!@#$%^&*)"
+    ),
 });
 
 function SignUp() {
@@ -104,8 +122,12 @@ function SignUp() {
                 <input
                   {...register("password")}
                   type={showPassword ? "text" : "password"}
-                  placeholder="Johndoe@123"
-                  className="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg text-gray-900 placeholder-gray-400 focus:outline-none focus:border-gray-600 focus:ring-2 focus:ring-gray-200 transition-all"
+                  placeholder="Enter your password"
+                  className={`w-full px-4 py-3 bg-gray-50 border rounded-lg text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 transition-all ${
+                    errors.password
+                      ? "border-red-500 focus:border-red-500 focus:ring-red-200"
+                      : "border-gray-300 focus:border-gray-600 focus:ring-gray-200"
+                  }`}
                 />
                 <button
                   type="button"
@@ -115,36 +137,35 @@ function SignUp() {
                   {showPassword ? "Hide" : "Show"}
                 </button>
               </div>
-              {errors.password && (
-                <p className="text-red-600 text-sm mt-1">
-                  {errors.password.message}
-                </p>
-              )}
-            </div>
 
-            {/* Terms & Conditions */}
-            <div className="flex items-start gap-3 pt-2">
-              <input
-                type="checkbox"
-                id="terms"
-                className="mt-1 w-4 h-4 border border-gray-300 rounded"
-              />
-              <label htmlFor="terms" className="text-sm text-gray-600">
-                I agree to the{" "}
-                <button
-                  type="button"
-                  className="text-gray-900 hover:underline font-semibold"
-                >
-                  Terms of Service
-                </button>{" "}
-                and{" "}
-                <button
-                  type="button"
-                  className="text-gray-900 hover:underline font-semibold"
-                >
-                  Privacy Policy
-                </button>
-              </label>
+              {/* Password Requirements Hint */}
+              <div className="mt-2 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                <p className="text-xs font-semibold text-blue-900 mb-2">
+                  Password Requirements:
+                </p>
+                <ul className="text-xs text-blue-800 space-y-1">
+                  <li>✓ At least 8 characters</li>
+                  <li>✓ One uppercase letter (A-Z)</li>
+                  <li>✓ One lowercase letter (a-z)</li>
+                  <li>✓ One number (0-9)</li>
+                  <li>✓ One special character (!@#$%^&*)</li>
+                </ul>
+                <p className="text-xs text-blue-700 mt-2 font-medium">
+                  Example: <span className="font-bold">Vipul@123</span>
+                </p>
+              </div>
+
+              {/* Error Message */}
+              {errors.password && (
+                <div className="mt-3 p-3 bg-red-50 border border-red-300 rounded-lg">
+                  <p className="text-red-700 text-sm font-semibold">
+                    ❌ Password Error:
+                  </p>
+                  <p className="text-red-600 text-sm mt-1">
+                    {errors.password.message}
+                  </p>
+                </div>
+              )}
             </div>
 
             {/* Submit Button */}
