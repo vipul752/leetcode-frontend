@@ -104,7 +104,7 @@ function SignUp() {
                 <input
                   {...register("password")}
                   type={showPassword ? "text" : "password"}
-                  placeholder="Enter your password"
+                  placeholder="Johndoe@123"
                   className="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg text-gray-900 placeholder-gray-400 focus:outline-none focus:border-gray-600 focus:ring-2 focus:ring-gray-200 transition-all"
                 />
                 <button
