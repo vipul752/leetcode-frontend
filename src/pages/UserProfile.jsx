@@ -17,10 +17,11 @@ import FollowButton from "../components/FollowButton";
 import PostCard from "../components/PostCard";
 
 const UserProfile = () => {
-  const { firstName } = useParams();
+  const { username } = useParams();
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
   const [posts, setPosts] = useState([]);
+  const [problems, setProblems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("posts"); // posts, followers, following
   const [isFollowing, setIsFollowing] = useState(false);
@@ -28,17 +29,50 @@ const UserProfile = () => {
   useEffect(() => {
     fetchUserProfile();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [firstName]);
+  }, [username]);
 
   const fetchUserProfile = async () => {
     try {
       setLoading(true);
-      const response = await axiosClient.get(`/user/profile/${firstName}`);
+      const response = await axiosClient.get(
+        `/social/publicProfile/${username}`
+      );
       setUser(response.data);
 
-      // Fetch user's posts if available
-      if (response.data.posts && Array.isArray(response.data.posts)) {
-        setPosts(response.data.posts);
+      // Fetch user's posts using getUserPost endpoint
+      try {
+        const postsResponse = await axiosClient.get(
+          `/social/getUserPost/${response.data._id}`
+        );
+        setPosts(Array.isArray(postsResponse.data) ? postsResponse.data : []);
+      } catch (err) {
+        console.error("Error fetching user posts:", err);
+        setPosts([]);
+      }
+
+      // Fetch problem details if available
+      if (
+        response.data.problemSolved &&
+        Array.isArray(response.data.problemSolved)
+      ) {
+        try {
+          const problemDetails = await Promise.all(
+            response.data.problemSolved.map((problemId) =>
+              axiosClient.get(`/problem/getProblem/${problemId}`).catch(() => ({
+                data: { _id: problemId, title: "Unknown Problem" },
+              }))
+            )
+          );
+          setProblems(problemDetails.map((res) => res.data));
+        } catch (err) {
+          console.error("Error fetching problem details:", err);
+          setProblems(
+            response.data.problemSolved.map((id) => ({
+              _id: id,
+              title: "Unknown Problem",
+            }))
+          );
+        }
       }
     } catch (error) {
       console.error("Error fetching user profile:", error);
@@ -60,7 +94,7 @@ const UserProfile = () => {
 
   if (!user) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-black flex items-center justify-center">
+      <div className="min-h-screen bg-black flex items-center justify-center">
         <div className="text-center">
           <p className="text-slate-300 text-lg mb-4">User not found</p>
           <button
@@ -75,7 +109,7 @@ const UserProfile = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-black">
+    <div className="min-h-screen bg-black">
       {/* Animated background */}
       <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
         <div className="absolute top-0 right-0 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl"></div>
@@ -83,7 +117,7 @@ const UserProfile = () => {
       </div>
 
       {/* Header Navigation */}
-      <nav className="bg-slate-900/80 backdrop-blur-xl border-b border-slate-700/50 shadow-lg sticky top-0 z-50">
+      <nav className="bg-black backdrop-blur-xl border-b border-slate-700/50 shadow-lg sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
           <div className="flex items-center gap-4">
             <button
@@ -101,7 +135,7 @@ const UserProfile = () => {
       {/* Content */}
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Profile Header */}
-        <div className="bg-gradient-to-br from-slate-800/50 to-slate-900/50 rounded-3xl border border-slate-700/50 p-8 backdrop-blur-sm mb-8 shadow-xl">
+        <div className="bg-black rounded-3xl border border-slate-700/50 p-8 backdrop-blur-sm mb-8 shadow-xl">
           <div className="flex flex-col md:flex-row gap-8 items-start md:items-center">
             {/* Avatar */}
             <div className="flex-shrink-0">
@@ -117,7 +151,6 @@ const UserProfile = () => {
               <h1 className="text-4xl font-bold text-white mb-2">
                 {user.firstName} {user.lastName}
               </h1>
-              <p className="text-cyan-400 text-lg mb-4">@{user.username}</p>
 
               {user.bio && (
                 <p className="text-slate-300 text-base mb-4 leading-relaxed">
@@ -139,30 +172,36 @@ const UserProfile = () => {
               </div>
 
               {/* Stats */}
-              <div className="grid grid-cols-3 gap-4 mb-6">
+              <div className="grid grid-cols-4 gap-4 mb-6">
                 <div className="text-center">
                   <p className="font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500 text-xl">
-                    {user.stats?.posts || 0}
+                    {user.posts?.length || 0}
                   </p>
                   <p className="text-xs text-slate-400">Posts</p>
                 </div>
                 <div
-                  className="text-center cursor-pointer hover:opacity-80"
+                  className="text-center cursor-pointer hover:opacity-80 transition-opacity"
                   onClick={() => setActiveTab("followers")}
                 >
                   <p className="font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500 text-xl">
-                    {user.stats?.followers || 0}
+                    {user.followers?.length || 0}
                   </p>
                   <p className="text-xs text-slate-400">Followers</p>
                 </div>
                 <div
-                  className="text-center cursor-pointer hover:opacity-80"
+                  className="text-center cursor-pointer hover:opacity-80 transition-opacity"
                   onClick={() => setActiveTab("following")}
                 >
                   <p className="font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500 text-xl">
-                    {user.stats?.following || 0}
+                    {user.following?.length || 0}
                   </p>
                   <p className="text-xs text-slate-400">Following</p>
+                </div>
+                <div className="text-center">
+                  <p className="font-bold text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-orange-500 text-xl">
+                    {user.problemSolved?.length || 0}
+                  </p>
+                  <p className="text-xs text-slate-400">Problems Solved</p>
                 </div>
               </div>
 
@@ -182,10 +221,10 @@ const UserProfile = () => {
         </div>
 
         {/* Tabs */}
-        <div className="flex gap-4 mb-8 border-b border-slate-700/50">
+        <div className="flex gap-4 mb-8 border-b border-slate-700/50 overflow-x-auto">
           <button
             onClick={() => setActiveTab("posts")}
-            className={`px-6 py-3 font-medium transition-all duration-300 border-b-2 ${
+            className={`px-6 py-3 font-medium transition-all duration-300 border-b-2 whitespace-nowrap ${
               activeTab === "posts"
                 ? "border-cyan-500 text-cyan-400"
                 : "border-transparent text-slate-400 hover:text-slate-300"
@@ -193,12 +232,12 @@ const UserProfile = () => {
           >
             <div className="flex items-center gap-2">
               <Code2 className="w-4 h-4" />
-              Posts ({user.stats?.posts || 0})
+              Posts ({user.posts?.length || 0})
             </div>
           </button>
           <button
             onClick={() => setActiveTab("followers")}
-            className={`px-6 py-3 font-medium transition-all duration-300 border-b-2 ${
+            className={`px-6 py-3 font-medium transition-all duration-300 border-b-2 whitespace-nowrap ${
               activeTab === "followers"
                 ? "border-cyan-500 text-cyan-400"
                 : "border-transparent text-slate-400 hover:text-slate-300"
@@ -206,12 +245,12 @@ const UserProfile = () => {
           >
             <div className="flex items-center gap-2">
               <Users className="w-4 h-4" />
-              Followers ({user.stats?.followers || 0})
+              Followers ({user.followers?.length || 0})
             </div>
           </button>
           <button
             onClick={() => setActiveTab("following")}
-            className={`px-6 py-3 font-medium transition-all duration-300 border-b-2 ${
+            className={`px-6 py-3 font-medium transition-all duration-300 border-b-2 whitespace-nowrap ${
               activeTab === "following"
                 ? "border-cyan-500 text-cyan-400"
                 : "border-transparent text-slate-400 hover:text-slate-300"
@@ -219,7 +258,20 @@ const UserProfile = () => {
           >
             <div className="flex items-center gap-2">
               <Users className="w-4 h-4" />
-              Following ({user.stats?.following || 0})
+              Following ({user.following?.length || 0})
+            </div>
+          </button>
+          <button
+            onClick={() => setActiveTab("problems")}
+            className={`px-6 py-3 font-medium transition-all duration-300 border-b-2 whitespace-nowrap ${
+              activeTab === "problems"
+                ? "border-amber-500 text-amber-400"
+                : "border-transparent text-slate-400 hover:text-slate-300"
+            }`}
+          >
+            <div className="flex items-center gap-2">
+              <Award className="w-4 h-4" />
+              Problems Solved ({user.problemSolved?.length || 0})
             </div>
           </button>
         </div>
@@ -264,9 +316,7 @@ const UserProfile = () => {
                     @{follower.username}
                   </p>
                   <button
-                    onClick={() =>
-                      navigate(`/userprofile/${follower.firstName}`)
-                    }
+                    onClick={() => navigate(`/userprofile/${follower._id}`)}
                     className="w-full px-4 py-2 bg-slate-800/50 hover:bg-gradient-to-r hover:from-cyan-600/30 hover:to-blue-600/30 text-slate-200 hover:text-cyan-300 rounded-lg font-medium transition-all duration-300 border border-slate-700/50 hover:border-cyan-500/50"
                   >
                     View Profile
@@ -304,9 +354,7 @@ const UserProfile = () => {
                     @{followedUser.username}
                   </p>
                   <button
-                    onClick={() =>
-                      navigate(`/userprofile/${followedUser.firstName}`)
-                    }
+                    onClick={() => navigate(`/userprofile/${followedUser._id}`)}
                     className="w-full px-4 py-2 bg-slate-800/50 hover:bg-gradient-to-r hover:from-cyan-600/30 hover:to-blue-600/30 text-slate-200 hover:text-cyan-300 rounded-lg font-medium transition-all duration-300 border border-slate-700/50 hover:border-cyan-500/50"
                   >
                     View Profile
@@ -317,6 +365,51 @@ const UserProfile = () => {
               <div className="col-span-full text-center py-12 bg-gradient-to-br from-slate-800/50 to-slate-900/50 rounded-2xl border border-slate-700/50">
                 <Users className="w-16 h-16 text-slate-600 mx-auto mb-4" />
                 <p className="text-slate-300">Not following anyone yet</p>
+              </div>
+            )}
+          </div>
+        )}
+
+        {activeTab === "problems" && (
+          <div className="space-y-4">
+            {problems && problems.length > 0 ? (
+              problems.map((problem) => (
+                <div
+                  key={problem._id}
+                  onClick={() => navigate(`/problem/${problem._id}`)}
+                  className="bg-gradient-to-r from-slate-800/50 to-slate-900/50 rounded-xl border border-amber-700/30 p-4 hover:border-amber-500/50 hover:shadow-lg hover:shadow-amber-500/10 transition-all cursor-pointer flex items-center justify-between group"
+                >
+                  <div className="flex items-center gap-4 flex-1 min-w-0">
+                    <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-gradient-to-br from-amber-400 to-orange-600 flex items-center justify-center group-hover:scale-110 transition-transform">
+                      <Award className="w-5 h-5 text-white" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-slate-100 font-semibold group-hover:text-amber-300 transition-colors truncate">
+                        {problem.title || "Unknown Problem"}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-3 flex-shrink-0 ml-4">
+                    <span
+                      className={`px-3 py-1 rounded-full text-xs font-semibold whitespace-nowrap ${
+                        problem.difficulty === "Easy"
+                          ? "bg-green-500/20 text-green-300 border border-green-500/30"
+                          : problem.difficulty === "Medium"
+                          ? "bg-amber-500/20 text-amber-300 border border-amber-500/30"
+                          : problem.difficulty === "Hard"
+                          ? "bg-red-500/20 text-red-300 border border-red-500/30"
+                          : "bg-slate-600/20 text-slate-300 border border-slate-600/30"
+                      }`}
+                    >
+                      {problem.difficulty || "N/A"}
+                    </span>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <div className="text-center py-12 bg-gradient-to-br from-slate-800/50 to-slate-900/50 rounded-2xl border border-slate-700/50">
+                <Award className="w-16 h-16 text-slate-600 mx-auto mb-4" />
+                <p className="text-slate-300">No problems solved yet</p>
               </div>
             )}
           </div>

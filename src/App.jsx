@@ -254,15 +254,11 @@ function App() {
           }
         />
         <Route
-          path="/userprofile/:firstName"
+          path="/userprofile/:username"
           element={
-            isAuthenticated ? (
-              <Suspense fallback={<LoadingFallback />}>
-                <UserProfile />
-              </Suspense>
-            ) : (
-              <Navigate to="/login" />
-            )
+            <Suspense fallback={<LoadingFallback />}>
+              <UserProfile />
+            </Suspense>
           }
         />
 

@@ -258,9 +258,7 @@ const Social = () => {
                       </div>
 
                       <button
-                        onClick={() =>
-                          navigate(`/userprofile/${authUser?.firstName}`)
-                        }
+                        onClick={() => navigate(`/profile`)}
                         className="w-full mt-6 py-2.5 bg-amber-500 hover:bg-slate-700 text-white rounded-xl font-medium transition-all duration-300 border border-slate-700 hover:border-cyan-500/50 flex items-center justify-center gap-2 group-hover:shadow-lg group-hover:shadow-cyan-500/10"
                       >
                         <span>View Full Profile</span>
@@ -482,9 +480,7 @@ const Social = () => {
 
                         {/* View Profile */}
                         <button
-                          onClick={() =>
-                            navigate(`/userprofile/${user.firstName}`)
-                          }
+                          onClick={() => navigate(`/userprofile/${user?._id}`)}
                           className="w-full mt-3 px-4 py-2 bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 hover:text-amber-200 rounded-lg font-medium transition-all duration-300 border border-amber-500/30 hover:border-amber-400/60 shadow-lg shadow-amber-500/10 hover:shadow-amber-400/20 group/btn"
                         >
                           <span className="flex items-center justify-center gap-2">
