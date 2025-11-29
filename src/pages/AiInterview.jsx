@@ -10,21 +10,23 @@ import {
   Bot,
   Mic,
   Video,
-  X,
 } from "lucide-react";
 import axiosClient from "../utils/axiosClient";
+import { useSpeechToText } from "../hooks/useSpeechToText";
+import { useTextToSpeech } from "../hooks/useTextToSpeech";
 
 const AiInterviewVideo = () => {
   const [session, setSession] = useState(null);
   const [messages, setMessages] = useState([]);
   const [answer, setAnswer] = useState("");
   const [loading, setLoading] = useState(false);
-  const [timeLeft, setTimeLeft] = useState(15 * 60);
+  const [timeLeft, setTimeLeft] = useState(15 * 60 * 1000);
   const [interviewEnded, setInterviewEnded] = useState(false);
-  const [isListening, setIsListening] = useState(false);
+  const [mode, setMode] = useState("mixed");
+  const [evaluation, setEvaluation] = useState(null);
+
   const messagesEndRef = useRef(null);
   const timerRef = useRef(null);
-  const recognitionRef = useRef(null);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -34,24 +36,58 @@ const AiInterviewVideo = () => {
     scrollToBottom();
   }, [messages]);
 
+  // Handler for speech recognition result
+  const handleSpeechResult = useCallback((transcript) => {
+    console.log("🎤 User said:", transcript);
+    // Just store the transcript, let sendAnswer handle the rest
+    setAnswer(transcript);
+  }, []);
+
+  const handleSpeechError = useCallback((errorMsg) => {
+    console.error("Speech error:", errorMsg);
+    setMessages((prev) => [
+      ...prev,
+      {
+        role: "system",
+        text: `⚠️ ${errorMsg}`,
+        timestamp: new Date(),
+      },
+    ]);
+  }, []);
+
+  const { speak } = useTextToSpeech();
+  const { startListening: startSpeechRecognition, isListening } =
+    useSpeechToText(handleSpeechResult, handleSpeechError);
+
   const handleEndInterview = useCallback(async () => {
     try {
       if (session?.sessionId) {
-        await axiosClient.post("/ai-interview/end", {
+        const res = await axiosClient.post("/ai-interview/end", {
           sessionId: session.sessionId,
         });
+        setEvaluation(res.data.evaluation);
+        setMessages((prev) => [
+          ...prev,
+          {
+            role: "system",
+            text: `✅ ${res.data.message}`,
+            timestamp: new Date(),
+          },
+        ]);
       }
       setInterviewEnded(true);
+    } catch (err) {
+      console.error("Error ending interview:", err);
       setMessages((prev) => [
         ...prev,
         {
           role: "system",
-          text: "Interview ended. Thank you for participating!",
+          text: `❌ Error ending interview: ${
+            err.response?.data?.error || err.message
+          }`,
           timestamp: new Date(),
         },
       ]);
-    } catch (err) {
-      console.error(err);
     }
   }, [session]);
 
@@ -79,111 +115,33 @@ const AiInterviewVideo = () => {
     return `${String(mins).padStart(2, "0")}:${String(secs).padStart(2, "0")}`;
   };
 
-  const speak = (text) => {
-    // Cancel any ongoing speech
-    if (window.speechSynthesis.speaking) {
-      window.speechSynthesis.cancel();
-    }
-
-    const naturalText = text
-      .replace(/\./g, ". ")
-      .replace(/,/g, ", ")
-      .replace(/\?/g, "? ")
-      .replace(/:/g, ": ")
-      .replace(/  +/g, " ");
-
-    const msg = new SpeechSynthesisUtterance(naturalText);
-    msg.lang = "en-US";
-    msg.volume = 1;
-    msg.pitch = 1.1; // Slightly higher pitch for female voice
-    msg.rate = 0.85; // Slower for clarity
-
-    const setOptimalVoice = () => {
-      const voices = window.speechSynthesis.getVoices();
-      if (voices.length === 0) return;
-
-      // Priority 1: Google voices (most natural)
-      let selectedVoice = voices.find(
-        (v) =>
-          v.name.toLowerCase().includes("google") &&
-          v.lang === "en-US" &&
-          v.name.toLowerCase().includes("female")
-      );
-
-      // Priority 2: macOS Samantha or Victoria
-      if (!selectedVoice) {
-        selectedVoice = voices.find(
-          (v) =>
-            (v.name === "Samantha" || v.name === "Victoria") &&
-            v.lang === "en-US"
-        );
-      }
-
-      // Priority 3: Other natural female voices
-      if (!selectedVoice) {
-        const femaleVoiceNames = [
-          "Karen",
-          "Moira",
-          "Tessa",
-          "Fiona",
-          "Joanna",
-          "Salli",
-          "Zira",
-          "Susan",
-        ];
-        selectedVoice = voices.find((v) =>
-          femaleVoiceNames.some((name) => v.name.includes(name))
-        );
-      }
-
-      // Priority 4: Any female voice
-      if (!selectedVoice) {
-        selectedVoice = voices.find(
-          (v) =>
-            v.name.toLowerCase().includes("female") && v.lang.includes("en")
-        );
-      }
-
-      if (selectedVoice) {
-        msg.voice = selectedVoice;
-        console.log("🎙️ Using voice:", selectedVoice.name);
-
-        // Adjust pitch and rate based on selected voice
-        if (selectedVoice.name.includes("Google")) {
-          msg.pitch = 1.2;
-          msg.rate = 0.85;
-        } else if (selectedVoice.name === "Samantha") {
-          msg.pitch = 1.0;
-          msg.rate = 0.9;
-        }
-      }
-    };
-
-    // Wait for voices to load if needed
-    if (window.speechSynthesis.getVoices().length === 0) {
-      window.speechSynthesis.onvoiceschanged = () => {
-        setOptimalVoice();
-        window.speechSynthesis.speak(msg);
-        window.speechSynthesis.onvoiceschanged = null;
-      };
-    } else {
-      setOptimalVoice();
-      window.speechSynthesis.speak(msg);
-    }
-  };
-
   const startInterview = async () => {
     try {
       setLoading(true);
-      const res = await axiosClient.post("/ai-interview/start");
-      setSession(res.data);
+      const res = await axiosClient.post("/ai-interview/start", { mode });
+      setSession({
+        sessionId: res.data.sessionId,
+        videoRoom: res.data.videoRoom,
+      });
       setMessages([
-        { role: "ai", text: res.data.question, timestamp: new Date() },
+        {
+          role: "ai",
+          text: res.data.question,
+          timestamp: new Date(),
+        },
       ]);
-      speak(res.data.question);
+      setTimeLeft(res.data.timeRemaining || 15 * 60 * 1000);
+      // AI speaks first question, then mic auto-opens
+      speak(res.data.question, () => {
+        console.log("✅ AI finished speaking, starting mic...");
+        startSpeechRecognition();
+      });
     } catch (err) {
-      console.error(err);
-      alert("Error starting interview");
+      console.error("Error starting interview:", err);
+      alert(
+        err.response?.data?.error ||
+          "Error starting interview. Please try again."
+      );
     } finally {
       setLoading(false);
     }
@@ -203,94 +161,53 @@ const AiInterviewVideo = () => {
         answer: userMsg.text,
       });
 
-      const aiMsg = {
-        role: "ai",
-        text: res.data.question,
-        timestamp: new Date(),
-      };
-      setMessages((prev) => [...prev, aiMsg]);
-      speak(res.data.question);
+      // If evaluation is provided, show it
+      if (res.data.evaluation) {
+        setEvaluation(res.data.evaluation);
+        const evalMsg = {
+          role: "system",
+          text: `📊 Feedback: ${res.data.evaluation}`,
+          timestamp: new Date(),
+        };
+        setMessages((prev) => [...prev, evalMsg]);
+      }
 
+      // If interview ended, show completion
       if (res.data.ended) {
         setInterviewEnded(true);
+        const endMsg = {
+          role: "system",
+          text: "✅ Interview completed! Thank you for participating.",
+          timestamp: new Date(),
+        };
+        setMessages((prev) => [...prev, endMsg]);
+      } else {
+        // Continue with next question
+        const aiMsg = {
+          role: "ai",
+          text: res.data.question,
+          timestamp: new Date(),
+        };
+        setMessages((prev) => [...prev, aiMsg]);
+        setTimeLeft(res.data.timeRemaining || timeLeft);
+        // AI speaks next question, then mic auto-opens
+        speak(res.data.question, () => {
+          console.log("✅ AI finished speaking, starting mic...");
+          startSpeechRecognition();
+        });
       }
     } catch (err) {
-      console.error(err);
-      setMessages((prev) => [
-        ...prev,
-        {
-          role: "system",
-          text: "Error: Failed to get response.",
-          timestamp: new Date(),
-        },
-      ]);
+      console.error("Error sending answer:", err);
+      const errorMsg = {
+        role: "system",
+        text: `❌ Error: ${
+          err.response?.data?.error || "Failed to get response."
+        }`,
+        timestamp: new Date(),
+      };
+      setMessages((prev) => [...prev, errorMsg]);
     } finally {
       setLoading(false);
-    }
-  };
-
-  const startListening = () => {
-    const SpeechRecognition =
-      window.SpeechRecognition || window.webkitSpeechRecognition;
-    if (!SpeechRecognition) {
-      alert("Speech recognition not supported in this browser");
-      return;
-    }
-
-    recognitionRef.current = new SpeechRecognition();
-    recognitionRef.current.lang = "en-US";
-    recognitionRef.current.interimResults = false;
-    recognitionRef.current.continuous = true; // Keep listening
-
-    recognitionRef.current.onstart = () => {
-      setIsListening(true);
-      console.log("🎙️ Listening started...");
-    };
-
-    recognitionRef.current.onend = () => {
-      setIsListening(false);
-      console.log("⏹️ Listening stopped");
-    };
-
-    recognitionRef.current.onresult = (event) => {
-      let interimTranscript = "";
-      let finalTranscript = "";
-
-      for (let i = event.resultIndex; i < event.results.length; i++) {
-        const transcript = event.results[i][0].transcript;
-        if (event.results[i].isFinal) {
-          finalTranscript += transcript;
-        } else {
-          interimTranscript += transcript;
-        }
-      }
-
-      // Update answer in real-time
-      if (finalTranscript) {
-        setAnswer((prev) => prev + (prev ? " " : "") + finalTranscript);
-      } else if (interimTranscript) {
-        console.log("Interim:", interimTranscript);
-      }
-    };
-
-    recognitionRef.current.onerror = (event) => {
-      console.error("Speech recognition error:", event.error);
-    };
-
-    recognitionRef.current.start();
-  };
-
-  const stopListening = () => {
-    if (recognitionRef.current) {
-      recognitionRef.current.stop();
-      setIsListening(false);
-      // Auto-send answer after a short delay to let state update
-      setTimeout(() => {
-        if (answer.trim()) {
-          console.log("Auto-sending answer:", answer);
-          sendAnswer();
-        }
-      }, 300);
     }
   };
 
@@ -396,6 +313,33 @@ const AiInterviewVideo = () => {
                       <span>15-minute timed technical interview</span>
                     </li>
                   </ul>
+                </div>
+
+                <div className="bg-white/5 backdrop-blur-lg border border-white/10 rounded-xl p-4">
+                  <label className="text-sm font-bold text-blue-400 mb-3 block">
+                    Select Interview Mode
+                  </label>
+                  <div className="grid grid-cols-2 gap-3">
+                    {["webdev", "dsa", "systemdesign", "mixed"].map((m) => (
+                      <button
+                        key={m}
+                        onClick={() => setMode(m)}
+                        className={`py-2 px-3 rounded-lg font-semibold transition-all duration-200 text-sm ${
+                          mode === m
+                            ? "bg-blue-600 text-white shadow-lg shadow-blue-500/30"
+                            : "bg-white/10 text-gray-300 hover:bg-white/20"
+                        }`}
+                      >
+                        {m === "webdev"
+                          ? "Web Dev"
+                          : m === "dsa"
+                          ? "DSA"
+                          : m === "systemdesign"
+                          ? "System Design"
+                          : "Mixed"}
+                      </button>
+                    ))}
+                  </div>
                 </div>
 
                 <button
@@ -544,7 +488,7 @@ const AiInterviewVideo = () => {
                         placeholder="Type your answer..."
                         disabled={loading || interviewEnded}
                         className="flex-1 bg-white/10 border border-white/20 text-white rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-400/30 transition-all placeholder-gray-500 resize-none disabled:opacity-50 backdrop-blur"
-                        rows="2"
+                        rows={2}
                       />
                       <button
                         onClick={sendAnswer}
@@ -554,31 +498,35 @@ const AiInterviewVideo = () => {
                         <Send className="w-5 h-5" />
                       </button>
                     </div>
-                    <button
-                      onClick={isListening ? stopListening : startListening}
-                      disabled={loading}
-                      className={`w-full ${
-                        isListening
-                          ? "bg-red-600 hover:bg-red-700 ring-2 ring-red-400/50"
-                          : "bg-blue-600 hover:bg-blue-700"
-                      } text-white py-3 rounded-lg transition-all duration-300 font-semibold flex items-center justify-center gap-2 ${
-                        isListening ? "animate-pulse" : ""
-                      } disabled:opacity-50`}
-                    >
-                      <Mic
-                        className={`w-4 h-4 ${
-                          isListening ? "animate-pulse" : ""
-                        }`}
-                      />
-                      <span>
-                        {isListening ? "Stop & Send" : "🎙️ Speak Answer"}
-                      </span>
-                    </button>
+                    <div className="flex gap-2">
+                      <button
+                        onClick={startSpeechRecognition}
+                        disabled={loading || isListening}
+                        className={`flex-1 py-3 rounded-lg transition-all duration-300 font-semibold flex items-center justify-center gap-2 ${
+                          isListening
+                            ? "bg-red-600 hover:bg-red-700 ring-2 ring-red-400/50 animate-pulse"
+                            : "bg-green-600 hover:bg-green-700"
+                        } text-white disabled:opacity-50`}
+                      >
+                        <Mic
+                          className={`w-4 h-4 ${
+                            isListening ? "animate-bounce" : ""
+                          }`}
+                        />
+                        <span>
+                          {isListening ? "🎤 Listening..." : "🎤 Speak Answer"}
+                        </span>
+                      </button>
+                    </div>
+                    <p className="text-xs text-gray-400 mt-2">
+                      💡 Tip: Press Enter to send, Shift+Enter for new line, or
+                      click 🎤 to speak
+                    </p>
                   </div>
                 )}
 
                 {interviewEnded && (
-                  <div className="border-t border-white/10 p-4 bg-white/5">
+                  <div className="border-t border-white/10 p-4 bg-white/5 space-y-4">
                     <div className="text-center">
                       <div className="inline-flex items-center gap-2 text-green-400 mb-2">
                         <CheckCircle className="w-5 h-5" />
@@ -588,6 +536,31 @@ const AiInterviewVideo = () => {
                         Thank you for participating!
                       </p>
                     </div>
+
+                    {evaluation && (
+                      <div className="bg-gradient-to-br from-blue-500/20 to-purple-500/20 border border-blue-400/30 rounded-lg p-4">
+                        <div className="flex items-start gap-3">
+                          <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center flex-shrink-0 mt-1">
+                            <Bot className="w-4 h-4 text-white" />
+                          </div>
+                          <div className="flex-1">
+                            <h4 className="font-bold text-blue-300 text-sm mb-2">
+                              Final Evaluation
+                            </h4>
+                            <p className="text-gray-200 text-xs leading-relaxed">
+                              {evaluation}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    <button
+                      onClick={() => (window.location.href = "/")}
+                      className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white py-2 rounded-lg font-semibold transition-all duration-300 text-sm"
+                    >
+                      Back to Home
+                    </button>
                   </div>
                 )}
               </div>
