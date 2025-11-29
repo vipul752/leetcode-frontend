@@ -84,7 +84,6 @@ const Landing = () => {
           style={{ animationDelay: "1s" }}
         ></div>
       </div>
-
       {/* Minimal Navbar */}
       <header className="relative z-20 border-b border-white/5 bg-black/40 backdrop-blur-md">
         <div className="px-6 py-4 max-w-7xl mx-auto">
@@ -165,7 +164,6 @@ const Landing = () => {
           </nav>
         </div>
       </header>
-
       {/* Hero Section */}
       <section className="relative z-10 px-6 py-24 max-w-7xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
@@ -316,7 +314,6 @@ const Landing = () => {
           </div>
         </div>
       </section>
-
       {/* Feature Overview Bar */}
       <section className="relative z-10 px-6 py-8 max-w-7xl mx-auto">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -340,7 +337,6 @@ const Landing = () => {
           ))}
         </div>
       </section>
-
       {/* Core Features Section */}
       <section className="relative z-10 px-6 py-20 max-w-7xl mx-auto">
         <div
@@ -410,7 +406,6 @@ const Landing = () => {
           ))}
         </div>
       </section>
-
       {/* Stats Section */}
       <section className="relative z-10 px-6 py-20 max-w-7xl mx-auto">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
@@ -436,8 +431,84 @@ const Landing = () => {
           ))}
         </div>
       </section>
+      <section className="px-6 py-24 max-w-5xl mx-auto">
+        <h2 className="text-4xl font-bold text-center mb-6">
+          Simple, transparent pricing
+        </h2>
+        <p className="text-gray-400 text-center mb-16">
+          Start free, upgrade only if you want premium features.
+        </p>
 
-      {/* Testimonials Section */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="p-8 bg-white/5 border border-white/10 rounded-2xl">
+            <h3 className="text-2xl font-bold mb-4">Free Plan</h3>
+            <p className="text-4xl font-bold mb-2">$0</p>
+            <p className="text-gray-400 text-sm mb-8">
+              Forever free — all core features
+            </p>
+            <ul className="space-y-3 mb-8">
+              <li className="flex items-center gap-2 text-gray-300">
+                <CheckCircle className="w-5 h-5 text-green-400" /> Unlimited
+                Problems
+              </li>
+              <li className="flex items-center gap-2 text-gray-300">
+                <CheckCircle className="w-5 h-5 text-green-400" /> Contests
+              </li>
+              <li className="flex items-center gap-2 text-gray-300">
+                <CheckCircle className="w-5 h-5 text-green-400" /> Resume
+                Analyzer
+              </li>
+              <li className="flex items-center gap-2 text-gray-300">
+                <CheckCircle className="w-5 h-5 text-green-400" /> Leaderboards
+              </li>
+            </ul>
+            <button
+              onClick={() => navigate("/signup")}
+              className="w-full py-3 bg-white/10 hover:bg-white/20 rounded-lg font-semibold transition-all"
+            >
+              Get Started
+            </button>
+          </div>
+
+          <div className="p-8 bg-gradient-to-br from-blue-600/30 to-purple-600/30 border border-blue-400/50 rounded-2xl scale-105 shadow-xl">
+            <div className="inline-block px-3 py-1 bg-blue-600 rounded-full text-xs font-bold mb-4">
+              RECOMMENDED
+            </div>
+            <h3 className="text-2xl font-bold mb-4">Pro Plan</h3>
+            <p className="text-4xl font-bold mb-2">
+              $4.99<span className="text-lg text-gray-400">/mo</span>
+            </p>
+            <p className="text-gray-300 text-sm mb-8">
+              For serious interview prep
+            </p>
+            <ul className="space-y-3 mb-8">
+              <li className="flex items-center gap-2 text-gray-200">
+                <CheckCircle className="w-5 h-5 text-green-400" /> Everything in
+                Free
+              </li>
+              <li className="flex items-center gap-2 text-gray-200">
+                <CheckCircle className="w-5 h-5 text-green-400" /> AI Voice
+                Interviews
+              </li>
+              <li className="flex items-center gap-2 text-gray-200">
+                <CheckCircle className="w-5 h-5 text-green-400" /> Interview
+                Feedback
+              </li>
+              <li className="flex items-center gap-2 text-gray-200">
+                <CheckCircle className="w-5 h-5 text-green-400" /> Priority
+                Execution
+              </li>
+            </ul>
+            <button
+              onClick={() => navigate("/signup")}
+              className="w-full py-3 bg-blue-600 hover:bg-blue-700 rounded-lg font-semibold text-white transition-all"
+            >
+              Upgrade to Pro
+            </button>
+          </div>
+        </div>
+      </section>
+      ;{/* Testimonials Section */}
       <section className="relative z-10 px-6 py-20 max-w-7xl mx-auto">
         <div
           id="testimonials-header"
@@ -512,7 +583,6 @@ const Landing = () => {
           ))}
         </div>
       </section>
-
       {/* Who is this for? Section */}
       <section className="relative z-10 px-6 py-20 max-w-7xl mx-auto">
         <div
@@ -613,7 +683,6 @@ const Landing = () => {
           })}
         </div>
       </section>
-
       {/* Learning Roadmap Section */}
       <section className="relative z-10 px-6 py-20 max-w-7xl mx-auto">
         <div
@@ -713,7 +782,6 @@ const Landing = () => {
           </div>
         </div>
       </section>
-
       {/* Final CTA Section */}
       <section className="relative z-10 px-6 py-20 max-w-5xl mx-auto text-center">
         <div
@@ -747,7 +815,6 @@ const Landing = () => {
           </div>
         </div>
       </section>
-
       {/* Footer */}
       <footer className="relative z-10 px-6 py-12 max-w-7xl mx-auto border-t border-white/10 mt-20">
         <div className="flex flex-col md:flex-row items-center justify-between">
