@@ -32,6 +32,8 @@ const ChallengePage = ({ userId }) => {
   const [opponent, setOpponent] = useState(null);
   const [copied, setCopied] = useState(false);
   const [winner, setWinner] = useState(null);
+  const [testResults, setTestResults] = useState(null);
+  const [submissionResult, setSubmissionResult] = useState(null);
   const messagesEndRef = useRef(null);
 
   // Setup socket
@@ -190,6 +192,51 @@ const ChallengePage = ({ userId }) => {
     setMessages((prev) => [...prev, { text, type, id: Date.now() }]);
   };
 
+  const runCode = async () => {
+    if (!problem?._id) return addMessage("⚠️ Problem not loaded", "warning");
+    setIsRunning(true);
+    addMessage("🏃 Running code...", "info");
+    try {
+      const res = await axiosClient.post(`/submission/run/${problem._id}`, {
+        code,
+        language,
+      });
+      setTestResults(res.data);
+      addMessage("✅ Tests executed", "success");
+    } catch (error) {
+      addMessage("❌ Error running code", "error");
+    } finally {
+      setIsRunning(false);
+    }
+  };
+
+  const submitCode = async () => {
+    if (!problem?._id) return addMessage("⚠️ Problem not loaded", "warning");
+    setIsSubmitting(true);
+    addMessage("🚀 Submitting solution...", "info");
+    try {
+      const res = await axiosClient.post(`/submission/submit/${problem._id}`, {
+        code,
+        language,
+      });
+      setSubmissionResult(res.data);
+      if (res.data.accepted) {
+        addMessage("🎉 Solution accepted!", "success");
+        socket.emit("submitCode", {
+          roomId: joinedRoom,
+          userId,
+          status: "accepted",
+        });
+      } else {
+        addMessage("❌ Solution rejected", "error");
+      }
+    } catch (error) {
+      addMessage("❌ Error submitting code", "error");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   const createRoom = async () => {
     try {
       const res = await axiosClient.post("/challenge/create/room", {
@@ -321,7 +368,7 @@ const ChallengePage = ({ userId }) => {
               <div className="w-10 h-10 bg-gradient-to-br from-purple-600 to-pink-600 rounded-lg flex items-center justify-center shadow-md">
                 <div className="flex items-center gap-2 group cursor-pointer hover:scale-105 transition-transform">
                   <img
-                     src="/codeArenaArrow.png"
+                    src="/codeArenaArrow.png"
                     alt="CodeArena Logo"
                     className="h-10 w-22 rounded-md"
                   />
@@ -369,7 +416,9 @@ const ChallengePage = ({ userId }) => {
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-xl p-6 shadow-lg hover:border-white/20 transition-all"
+                className={`bg-white/5 backdrop-blur-xl border border-white/10 rounded-xl p-6 shadow-lg hover:border-white/20 transition-all ${
+                  roomState === "waiting" ? "blur-sm opacity-60" : ""
+                }`}
               >
                 <div className="flex items-start gap-4 mb-4">
                   <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center flex-shrink-0">
@@ -447,7 +496,11 @@ const ChallengePage = ({ userId }) => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 }}
-                className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-xl p-6 shadow-lg"
+                className={`bg-white/5 backdrop-blur-xl border border-white/10 rounded-xl p-6 shadow-lg transition-all ${
+                  roomState === "waiting"
+                    ? "blur-sm opacity-60 pointer-events-none"
+                    : ""
+                }`}
               >
                 <div className="flex justify-between items-center mb-4">
                   <div className="flex items-center gap-2">
@@ -493,22 +546,22 @@ const ChallengePage = ({ userId }) => {
                   <motion.button
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
-                    onClick={() => {}}
+                    onClick={runCode}
                     disabled={isRunning}
                     className="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-bold transition-all disabled:opacity-50 flex items-center justify-center gap-2"
                   >
                     <Play className="w-4 h-4" />
-                    Run Code
+                    {isRunning ? "Running..." : "Run Code"}
                   </motion.button>
                   <motion.button
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
-                    onClick={() => {}}
+                    onClick={submitCode}
                     disabled={isSubmitting}
                     className="flex-1 bg-green-600 hover:bg-green-700 text-white py-3 rounded-lg font-bold transition-all disabled:opacity-50 flex items-center justify-center gap-2"
                   >
                     <Send className="w-4 h-4" />
-                    Submit
+                    {isSubmitting ? "Submitting..." : "Submit"}
                   </motion.button>
                 </div>
               </motion.div>

@@ -18,6 +18,7 @@ const ProblemPage = () => {
   const [initialLoading, setInitialLoading] = useState(true);
   const [submissions, setSubmissions] = useState([]);
   const [solutionsLoading, setSolutionsLoading] = useState(false);
+  const [selectedSubmissionCode, setSelectedSubmissionCode] = useState(null);
 
   const editorRef = useRef(null);
   let { problemId } = useParams();
@@ -885,11 +886,13 @@ const ProblemPage = () => {
                             </div>
 
                             {/* Action Button */}
-                            <div className=" group inline-block">
+                            <div className="inline-block">
                               {/* Eye Button */}
                               <button
-                                className="opacity-0  
-    p-2 rounded-lg"
+                                onClick={() =>
+                                  setSelectedSubmissionCode(submission.code)
+                                }
+                                className="p-2 rounded-lg hover:bg-gray-200 transition-all"
                               >
                                 <svg
                                   className="w-4 h-4"
@@ -911,17 +914,6 @@ const ProblemPage = () => {
                                   />
                                 </svg>
                               </button>
-
-                              {/* Hover Code Preview */}
-                              <div
-                                className="absolute left-0 mt-2 hidden group-hover:block z-50 
-    bg-gray-50 text-gray-800 p-4 rounded-lg shadow-lg border border-gray-200
-    max-w-md w-[400px] overflow-x-auto"
-                              >
-                                <pre className="text-sm">
-                                  <code>{submission.code}</code>
-                                </pre>
-                              </div>
                             </div>
                           </div>
                         </div>
@@ -1291,40 +1283,7 @@ const ProblemPage = () => {
                     )}
 
                     {/* Summary */}
-                    {runResult.testCases && (
-                      <div className="bg-white/80 rounded-xl p-5 border border-gray-200 shadow-sm">
-                        <h4 className="font-bold text-gray-900 mb-3 flex items-center">
-                          <span className="mr-2">📊</span>
-                          Summary
-                        </h4>
-                        <div className="grid grid-cols-3 gap-4 text-sm">
-                          <div className="text-center">
-                            <div className="text-gray-600">Total</div>
-                            <div className="text-lg font-bold text-gray-900">
-                              {runResult.testCases.length}
-                            </div>
-                          </div>
-                          <div className="text-center">
-                            <div className="text-gray-600">Passed</div>
-                            <div className="text-lg font-bold text-emerald-700">
-                              {
-                                runResult.testCases.filter((tc) => tc.passed)
-                                  .length
-                              }
-                            </div>
-                          </div>
-                          <div className="text-center">
-                            <div className="text-gray-600">Failed</div>
-                            <div className="text-lg font-bold text-rose-700">
-                              {
-                                runResult.testCases.filter((tc) => !tc.passed)
-                                  .length
-                              }
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    )}
+                    {runResult.testCases && <div></div>}
                   </div>
                 ) : (
                   <div className="text-center py-16">
@@ -1493,7 +1452,7 @@ const ProblemPage = () => {
                             <span className="text-gray-600">Runtime:</span>
                             <span className="text-gray-900">
                               {submitResult.runTime !== undefined
-                                ? `${submitResult.runTime}ms`
+                                ? `${submitResult.runTime.toFixed(3)}ms`
                                 : "N/A"}
                             </span>
                           </div>
@@ -1548,6 +1507,56 @@ const ProblemPage = () => {
           </div>
         </div>
       </div>
+
+      {/* Code Viewer Modal */}
+      {selectedSubmissionCode && (
+        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50">
+          <div className="bg-white rounded-2xl p-6 w-11/12 max-w-3xl max-h-[80vh] flex flex-col border border-gray-200 shadow-2xl">
+            {/* Header */}
+            <div className="flex items-center justify-between mb-4 border-b border-gray-200 pb-4">
+              <h2 className="text-2xl font-bold text-gray-900 flex items-center">
+                <span className="mr-2">📄</span>
+                Submission Code
+              </h2>
+              <button
+                onClick={() => setSelectedSubmissionCode(null)}
+                className="p-2 hover:bg-gray-100 rounded-lg transition-all"
+              >
+                <svg
+                  className="w-6 h-6 text-gray-600"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              </button>
+            </div>
+
+            {/* Code */}
+            <div className="flex-1 bg-gray-50 rounded-lg border border-gray-200 overflow-auto">
+              <pre className="p-6 text-sm font-mono text-gray-800 whitespace-pre-wrap break-words">
+                <code>{selectedSubmissionCode}</code>
+              </pre>
+            </div>
+
+            {/* Footer */}
+            <div className="mt-4 flex justify-end">
+              <button
+                onClick={() => setSelectedSubmissionCode(null)}
+                className="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg font-medium transition-all"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Loading Overlay */}
       {(runLoading || submitLoading) && (
