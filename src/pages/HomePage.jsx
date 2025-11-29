@@ -257,8 +257,8 @@ const HomePage = () => {
                           <span className="text-xs text-gray-600">
                             Mock interviews
                           </span>
-                          <span className="bg-gradient-to-r from-yellow-400 to-orange-400 text-white text-[9px] font-black px-1.5 py-0 rounded-full">
-                            NEW
+                          <span className="bg-gradient-to-r from-yellow-400 to-orange-400 text-white text-[9px] font-black px-2 py-0 rounded-full">
+                            BETA
                           </span>
                         </div>
                       </div>
