@@ -5,10 +5,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import { loginUser } from "../authSlice";
 import { useEffect, useState } from "react";
+import axios from "axios";
 
 const loginSchema = z.object({
   email: z.string().email("Please enter a valid email"),
   password: z.string().min(8, "Password should be at least 8 characters"),
+});
+
+const forgetPasswordSchema = z.object({
+  email: z.string().email("Please enter a valid email"),
 });
 
 function Login() {
@@ -17,12 +22,22 @@ function Login() {
   const { isAuthenticated } = useSelector((state) => state.auth);
 
   const [showPassword, setShowPassword] = useState(false);
+  const [showForgetModal, setShowForgetModal] = useState(false);
+  const [forgetLoading, setForgetLoading] = useState(false);
+  const [forgetMessage, setForgetMessage] = useState("");
 
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm({ resolver: zodResolver(loginSchema) });
+
+  const {
+    register: registerForget,
+    handleSubmit: handleForgetSubmit,
+    formState: { errors: forgetErrors },
+    reset: resetForgetForm,
+  } = useForm({ resolver: zodResolver(forgetPasswordSchema) });
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -32,6 +47,33 @@ function Login() {
 
   const onSubmit = (data) => {
     dispatch(loginUser(data));
+  };
+
+  const onForgetPasswordSubmit = async (data) => {
+    setForgetLoading(true);
+    setForgetMessage("");
+    try {
+      const response = await axios.post(
+        `${
+          import.meta.env.MODE === "production"
+            ? "https://codearena-qoaq.onrender.com"
+            : "http://localhost:3000"
+        }/user/forgetPassword`,
+        { email: data.email }
+      );
+      setForgetMessage("✅ " + response.data.message);
+      resetForgetForm();
+      setTimeout(() => {
+        setShowForgetModal(false);
+        setForgetMessage("");
+      }, 2000);
+    } catch (error) {
+      setForgetMessage(
+        "❌ " + (error.response?.data?.message || "Failed to send reset link")
+      );
+    } finally {
+      setForgetLoading(false);
+    }
   };
 
   return (
@@ -205,12 +247,13 @@ function Login() {
 
             {/* Forgot Password Link */}
             <div className="flex justify-end pt-2">
-              <a
-                href="#"
+              <button
+                type="button"
+                onClick={() => setShowForgetModal(true)}
                 className="text-sm text-gray-600 hover:text-gray-900 font-medium"
               >
                 Forgot password?
-              </a>
+              </button>
             </div>
 
             {/* Submit Button */}
@@ -243,6 +286,80 @@ function Login() {
           </div>
         </div>
       </div>
+
+      {/* Forget Password Modal */}
+      {showForgetModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-lg shadow-2xl max-w-md w-full p-8 animate-in">
+            <div className="mb-6">
+              <h2 className="text-2xl font-bold text-gray-900">
+                Reset Password
+              </h2>
+              <p className="text-gray-600 text-sm mt-2">
+                Enter your email to receive a password reset link
+              </p>
+            </div>
+
+            <form
+              onSubmit={handleForgetSubmit(onForgetPasswordSubmit)}
+              className="space-y-4"
+            >
+              {/* Email Field */}
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  Email Address
+                </label>
+                <input
+                  {...registerForget("email")}
+                  type="email"
+                  placeholder="your.email@example.com"
+                  className="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg text-gray-900 placeholder-gray-400 focus:outline-none focus:border-gray-600 focus:ring-2 focus:ring-gray-200 transition-all"
+                />
+                {forgetErrors.email && (
+                  <p className="text-red-600 text-sm mt-1">
+                    {forgetErrors.email.message}
+                  </p>
+                )}
+              </div>
+
+              {/* Message */}
+              {forgetMessage && (
+                <div
+                  className={`p-3 rounded-lg text-sm font-medium text-center ${
+                    forgetMessage.startsWith("✅")
+                      ? "bg-green-50 text-green-700"
+                      : "bg-red-50 text-red-700"
+                  }`}
+                >
+                  {forgetMessage}
+                </div>
+              )}
+
+              {/* Buttons */}
+              <div className="flex gap-3 pt-4">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShowForgetModal(false);
+                    setForgetMessage("");
+                    resetForgetForm();
+                  }}
+                  className="flex-1 py-2.5 border border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-50 transition-all"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={forgetLoading}
+                  className="flex-1 py-2.5 bg-gray-900 text-white font-medium rounded-lg hover:bg-black transition-all disabled:opacity-50"
+                >
+                  {forgetLoading ? "Sending..." : "Send Link"}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -30,6 +30,7 @@ const ResumeUpload = lazy(() => import("./pages/ResumeUpload"));
 const ResumeResult = lazy(() => import("./pages/ResumeResult"));
 const Social = lazy(() => import("./pages/Social"));
 const UserProfile = lazy(() => import("./pages/UserProfile"));
+const ResetPassword = lazy(() => import("./pages/ResetPassword"));
 
 // Loading fallback component
 const LoadingFallback = () => (
@@ -104,6 +105,14 @@ function App() {
         <Route
           path="/login"
           element={isAuthenticated ? <Navigate to="/home" /> : <Login />}
+        />
+        <Route
+          path="/reset-password/:token"
+          element={
+            <Suspense fallback={<LoadingFallback />}>
+              <ResetPassword />
+            </Suspense>
+          }
         />
         <Route
           path="/signup"
