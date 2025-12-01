@@ -77,7 +77,7 @@ export default function ResumeUpload() {
             <div className="flex items-center gap-3">
               <button
                 onClick={() => navigate("/home")}
-                className="px-4 py-2 text-gray-600 hover:text-gray-900 font-medium transition-colors"
+                className="px-4 py-2 cursor-pointer text-gray-600 hover:text-gray-900 font-medium transition-colors"
               >
                 Back
               </button>
