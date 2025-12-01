@@ -25,6 +25,7 @@ const UserProfile = () => {
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("posts"); // posts, followers, following
   const [isFollowing, setIsFollowing] = useState(false);
+  const [isFollowedBy, setIsFollowedBy] = useState(false);
 
   useEffect(() => {
     fetchUserProfile();
@@ -38,6 +39,19 @@ const UserProfile = () => {
         `/social/publicProfile/${username}`
       );
       setUser(response.data);
+
+      // Check if current user is following this user
+      try {
+        const checkFollowResponse = await axiosClient.get(
+          `/social/checkFollow/${response.data._id}`
+        );
+        setIsFollowing(checkFollowResponse.data.isFollowing || false);
+        setIsFollowedBy(checkFollowResponse.data.isFollowedBy || false);
+      } catch (err) {
+        console.error("Error checking follow status:", err);
+        setIsFollowing(false);
+        setIsFollowedBy(false);
+      }
 
       // Fetch user's posts using getUserPost endpoint
       try {
@@ -392,22 +406,12 @@ const UserProfile = () => {
               </div>
 
               {/* Social Links */}
-              <div className="flex gap-2 mb-6 flex-wrap justify-center">
-                {user.email && (
-                  <a
-                    href={`mailto:${user.email}`}
-                    className="flex items-center gap-1 px-2 py-1 bg-slate-700/50 hover:bg-slate-700 border border-slate-600 rounded-full text-slate-300 hover:text-white transition-all text-xs"
-                  >
-                    <Mail className="w-3 h-3" />
-                    <span>Email</span>
-                  </a>
-                )}
-              </div>
 
               {/* Follow Button */}
               <FollowButton
                 userId={user._id}
                 isFollowing={isFollowing}
+                isFollowedBy={isFollowedBy}
                 reload={() => {
                   setIsFollowing(!isFollowing);
                   fetchUserProfile();

@@ -1,21 +1,20 @@
 import { motion, AnimatePresence } from "framer-motion"; // eslint-disable-line no-unused-vars
-import FollowButton from "./FollowButton";
 import axiosClient from "../utils/axiosClient";
 import { Users, X } from "lucide-react";
 import { useState } from "react";
 
-export default function FollowersModal({ open, onClose, users, reload }) {
-  const [confirmRemove, setConfirmRemove] = useState(null);
+export default function FollowingModel({ open, onClose, users, reload }) {
+  const [confirmUnfollow, setConfirmUnfollow] = useState(null);
 
   if (!open) return null;
 
-  const removeFollower = async (id) => {
+  const unfollowUser = async (id) => {
     try {
-      await axiosClient.delete(`/social/delete/${id}`);
-      setConfirmRemove(null);
+      await axiosClient.post(`/social/unfollow/${id}`);
+      setConfirmUnfollow(null);
       reload();
     } catch (err) {
-      console.error("Error removing follower:", err);
+      console.error("Error unfollowing user:", err);
     }
   };
 
@@ -37,9 +36,9 @@ export default function FollowersModal({ open, onClose, users, reload }) {
         >
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2">
-              <Users className="w-5 h-5 text-cyan-400" />
+              <Users className="w-5 h-5 text-amber-400" />
               <h2 className="text-xl font-bold text-white">
-                Followers ({users?.length || 0})
+                Following ({users?.length || 0})
               </h2>
             </div>
             <button
@@ -68,28 +67,19 @@ export default function FollowersModal({ open, onClose, users, reload }) {
                     <p className="text-white font-semibold text-sm truncate">
                       {u.firstName} {u.lastName}
                     </p>
+                    <p className="text-slate-400 text-xs">@{u.username}</p>
                   </div>
 
-                  {/* Follow/Following Button */}
-                  <div className="flex-shrink-0 w-32">
-                    <FollowButton
-                      userId={u._id}
-                      isFollowing={u.isFollowing}
-                      isFollowedBy={true}
-                      reload={reload}
-                    />
-                  </div>
-
-                  {/* Remove Button */}
+                  {/* Unfollow Button */}
                   <button
-                    onClick={() => setConfirmRemove(u._id)}
-                    className="text-red-400 hover:text-red-300 text-sm font-medium flex-shrink-0 px-2 py-1 rounded hover:bg-red-600/10 transition-all"
+                    onClick={() => setConfirmUnfollow(u._id)}
+                    className="px-3 py-1.5 bg-red-600/20 hover:bg-red-600/30 border border-red-600/50 text-red-400 hover:text-red-300 text-sm font-medium rounded-lg transition-all flex-shrink-0"
                   >
-                    Remove
+                    Unfollow
                   </button>
 
                   {/* Confirmation Dialog */}
-                  {confirmRemove === u._id && (
+                  {confirmUnfollow === u._id && (
                     <motion.div
                       initial={{ opacity: 0, scale: 0.9 }}
                       animate={{ opacity: 1, scale: 1 }}
@@ -97,7 +87,7 @@ export default function FollowersModal({ open, onClose, users, reload }) {
                       className="fixed inset-0 bg-black/70 flex justify-center items-center z-50"
                       onClick={(e) => {
                         e.stopPropagation();
-                        setConfirmRemove(null);
+                        setConfirmUnfollow(null);
                       }}
                     >
                       <motion.div
@@ -105,17 +95,17 @@ export default function FollowersModal({ open, onClose, users, reload }) {
                         className="bg-slate-800 rounded-xl p-4 border border-red-600/50 shadow-xl max-w-xs"
                       >
                         <p className="text-white font-semibold mb-4">
-                          Remove {u.firstName} from followers?
+                          Unfollow {u.firstName}?
                         </p>
                         <div className="flex gap-3">
                           <button
-                            onClick={() => removeFollower(u._id)}
+                            onClick={() => unfollowUser(u._id)}
                             className="flex-1 px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-medium transition-colors"
                           >
-                            Remove
+                            Unfollow
                           </button>
                           <button
-                            onClick={() => setConfirmRemove(null)}
+                            onClick={() => setConfirmUnfollow(null)}
                             className="flex-1 px-4 py-2 bg-slate-700 hover:bg-slate-600 text-white rounded-lg font-medium transition-colors"
                           >
                             Cancel
@@ -129,14 +119,14 @@ export default function FollowersModal({ open, onClose, users, reload }) {
             ) : (
               <div className="text-center py-8 text-slate-400">
                 <Users className="w-10 h-10 mx-auto mb-2 opacity-50" />
-                <p>No followers yet</p>
+                <p>Not following anyone yet</p>
               </div>
             )}
           </div>
 
           <button
             onClick={onClose}
-            className="w-full mt-80 py-2.5 bg-slate-800 hover:bg-slate-700 text-white rounded-lg font-medium transition-colors"
+            className="w-full mt-40 py-2.5 bg-slate-800 hover:bg-slate-700 text-white rounded-lg font-medium transition-colors"
           >
             Close
           </button>

@@ -3,6 +3,7 @@ import { useNavigate } from "react-router";
 import { useSelector } from "react-redux";
 import { motion, AnimatePresence } from "framer-motion"; // eslint-disable-line no-unused-vars
 import FollowersModal from "../components/FollowersModal";
+import FollowingModel from "../components/FollowingModel";
 import {
   Heart,
   MessageCircle,
@@ -24,20 +25,18 @@ const Social = () => {
   const authUser = useSelector((state) => state.auth.user);
   const [profile, setProfile] = useState(null);
   const [activeTab, setActiveTab] = useState("feed"); // feed or explore
-  const [modalOpen, setModalOpen] = useState(false);
-  const [modalType, setModalType] = useState(null); // "followers" or "following"
-  const [listData, setListData] = useState([]);
+  const [followersModalOpen, setFollowersModalOpen] = useState(false);
+  const [followingModalOpen, setFollowingModalOpen] = useState(false);
+  const [followersListData, setFollowersListData] = useState([]);
+  const [followingListData, setFollowingListData] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [users, setUsers] = useState([]);
-  const [loading, setLoading] = useState(false);
-
-  // Modal functions
+  const [loading, setLoading] = useState(false); // Modal functions
   const loadFollowers = async () => {
     try {
       const res = await axiosClient.get(`/social/followers/${authUser._id}`);
-      setListData(res.data);
-      setModalType("followers");
-      setModalOpen(true);
+      setFollowersListData(res.data);
+      setFollowersModalOpen(true);
     } catch (err) {
       console.error("Error loading followers:", err);
     }
@@ -46,9 +45,8 @@ const Social = () => {
   const loadFollowing = async () => {
     try {
       const res = await axiosClient.get(`/social/following/${authUser._id}`);
-      setListData(res.data);
-      setModalType("following");
-      setModalOpen(true);
+      setFollowingListData(res.data);
+      setFollowingModalOpen(true);
     } catch (err) {
       console.error("Error loading following:", err);
     }
@@ -66,6 +64,22 @@ const Social = () => {
 
     loadProfile();
   }, [authUser]);
+
+  // Update profile when followers/following data changes
+  useEffect(() => {
+    if (followersListData.length > 0 || followingListData.length > 0) {
+      const loadProfile = async () => {
+        if (!authUser?.firstName) return;
+
+        const res = await axiosClient.get(
+          `/social/profile/${authUser.firstName}`
+        );
+        setProfile(res.data);
+      };
+
+      loadProfile();
+    }
+  }, [followersListData, followingListData, authUser?.firstName]);
 
   const handleSearch = async () => {
     if (!searchTerm.trim()) {
@@ -484,7 +498,28 @@ const Social = () => {
                           className="w-full mt-3 px-4 py-2 bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 hover:text-amber-200 rounded-lg font-medium transition-all duration-300 border border-amber-500/30 hover:border-amber-400/60 shadow-lg shadow-amber-500/10 hover:shadow-amber-400/20 group/btn"
                         >
                           <span className="flex items-center justify-center gap-2">
-                            View Profile
+                            View Social Profile
+                            <svg
+                              className="w-4 h-4 transform group-hover/btn:translate-x-1 transition-transform"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke="currentColor"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M9 5l7 7-7 7"
+                              />
+                            </svg>
+                          </span>
+                        </button>
+                           <button
+                          onClick={() => navigate(`/userprofile/${user?._id}`)}
+                          className="w-full mt-3 px-4 py-2 bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 hover:text-amber-200 rounded-lg font-medium transition-all duration-300 border border-amber-500/30 hover:border-amber-400/60 shadow-lg shadow-amber-500/10 hover:shadow-amber-400/20 group/btn"
+                        >
+                          <span className="flex items-center justify-center gap-2">
+                            View Coding Profile
                             <svg
                               className="w-4 h-4 transform group-hover/btn:translate-x-1 transition-transform"
                               fill="none"
@@ -522,15 +557,20 @@ const Social = () => {
         </AnimatePresence>
       </div>
 
-      {/* Followers/Following Modal */}
+      {/* Followers Modal */}
       <FollowersModal
-        open={modalOpen}
-        onClose={() => setModalOpen(false)}
-        users={listData}
-        reload={() => {
-          if (modalType === "followers") loadFollowers();
-          if (modalType === "following") loadFollowing();
-        }}
+        open={followersModalOpen}
+        onClose={() => setFollowersModalOpen(false)}
+        users={followersListData}
+        reload={loadFollowers}
+      />
+
+      {/* Following Modal */}
+      <FollowingModel
+        open={followingModalOpen}
+        onClose={() => setFollowingModalOpen(false)}
+        users={followingListData}
+        reload={loadFollowing}
       />
     </div>
   );
