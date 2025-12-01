@@ -57,7 +57,7 @@ const Social = () => {
       if (!authUser?.firstName) return;
 
       const res = await axiosClient.get(
-        `/social/profile/${authUser.firstName}`
+        `/social/profile/${authUser._id}`
       );
       setProfile(res.data);
     };
@@ -65,7 +65,6 @@ const Social = () => {
     loadProfile();
   }, [authUser]);
 
-  // Update profile when followers/following data changes
   useEffect(() => {
     if (followersListData.length > 0 || followingListData.length > 0) {
       const loadProfile = async () => {
