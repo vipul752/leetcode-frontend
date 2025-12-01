@@ -16,9 +16,11 @@ import {
 } from "lucide-react";
 import axiosClient from "../utils/axiosClient";
 import { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 
 const Landing = () => {
   const navigate = useNavigate();
+  const { user, isAuthenticated } = useSelector((state) => state.auth);
 
   const [numberOfUsers, setNumberOfUsers] = useState(0);
   const [numberOfContests, setNumberOfContests] = useState(0);
@@ -148,18 +150,37 @@ const Landing = () => {
 
             {/* Right: Auth Buttons */}
             <div className="flex items-center gap-3">
-              <button
-                onClick={() => navigate("/login")}
-                className="px-5 py-2 text-gray-300 hover:text-white text-sm font-medium hover:scale-105 transition-all duration-300"
-              >
-                Login
-              </button>
-              <button
-                onClick={() => navigate("/signup")}
-                className="px-5 py-2 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-lg text-sm font-medium transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 transform"
-              >
-                Sign Up
-              </button>
+              {isAuthenticated && user ? (
+                <>
+                  <button
+                    onClick={() => navigate("/home")}
+                    className="px-5 py-2 text-gray-300 hover:text-white text-sm font-medium hover:scale-105 transition-all duration-300"
+                  >
+                    Home
+                  </button>
+                  <button
+                    onClick={() => navigate("/profile")}
+                    className="px-5 py-2 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-lg text-sm font-medium transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 transform"
+                  >
+                    {user.firstName || "Profile"}
+                  </button>
+                </>
+              ) : (
+                <>
+                  <button
+                    onClick={() => navigate("/login")}
+                    className="px-5 py-2 text-gray-300 hover:text-white text-sm font-medium hover:scale-105 transition-all duration-300"
+                  >
+                    Login
+                  </button>
+                  <button
+                    onClick={() => navigate("/signup")}
+                    className="px-5 py-2 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-lg text-sm font-medium transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 transform"
+                  >
+                    Sign Up
+                  </button>
+                </>
+              )}
             </div>
           </nav>
         </div>

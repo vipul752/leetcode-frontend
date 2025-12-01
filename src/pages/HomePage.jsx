@@ -323,7 +323,9 @@ const HomePage = () => {
 
               {/* User Dropdown - Responsive */}
               <div className="relative group">
-                <button className="flex items-center space-x-2 sm:space-x-3 bg-white/80 hover:bg-white rounded-lg sm:rounded-xl px-2 sm:px-4 py-1.5 sm:py-2 border border-gray-200 hover:border-purple-300 transition-all duration-300 shadow-sm">
+                <button 
+                onClick={()=>{navigate("/profile")}}
+                className="flex items-center space-x-2 sm:space-x-3 bg-white/80 hover:bg-white rounded-lg sm:rounded-xl px-2 sm:px-4 py-1.5 sm:py-2 border border-gray-200 hover:border-purple-300 transition-all duration-300 shadow-sm">
                   <div className="w-6 h-6 sm:w-8 sm:h-8 bg-gradient-to-r from-purple-500 to-blue-500 rounded-md sm:rounded-lg flex items-center justify-center">
                     <span className="text-white font-semibold text-sm">
                       {user?.firstName?.charAt(0) || "G"}
