@@ -47,7 +47,7 @@ function ResetPassword() {
           import.meta.env.MODE === "production"
             ? "https://codearena-qoaq.onrender.com"
             : "http://localhost:3000"
-        }/user/reset-password/${token}`,
+        }/auth/reset-password/${token}`,
         {
           newPassword: data.newPassword,
           confirmPassword: data.confirmPassword,

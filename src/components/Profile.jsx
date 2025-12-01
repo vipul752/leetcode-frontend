@@ -20,17 +20,21 @@ function Profile() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const { data: statsData } = await axiosClient.get("/problem/userStats");
-        setUserStats(statsData);
+        // Fetch both in parallel
+        const [statsResponse, profileResponse] = await Promise.all([
+          axiosClient.get("/problem/userStats"),
+          axiosClient.get("/user/dashboard"),
+        ]);
 
-        const { data } = await axiosClient.get("/user/dashboard");
-        setUserProfile(data);
+        setUserStats(statsResponse.data);
+        const profileData = profileResponse.data;
+        setUserProfile(profileData);
         setEditForm({
-          firstName: data.firstName || "",
-          lastName: data.lastName || "",
-          bio: data.bio || "",
-          location: data.location || "",
-          age: data.age || "",
+          firstName: profileData.firstName || "",
+          lastName: profileData.lastName || "",
+          bio: profileData.bio || "",
+          location: profileData.location || "",
+          age: profileData.age || "",
         });
       } catch (error) {
         console.error("Error fetching data:", error);

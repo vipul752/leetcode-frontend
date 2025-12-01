@@ -6,6 +6,7 @@ import { useNavigate } from "react-router";
 import { loginUser } from "../authSlice";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import axiosClient from "../utils/axiosClient";
 
 const loginSchema = z.object({
   email: z.string().email("Please enter a valid email"),
@@ -53,14 +54,9 @@ function Login() {
     setForgetLoading(true);
     setForgetMessage("");
     try {
-      const response = await axios.post(
-        `${
-          import.meta.env.MODE === "production"
-            ? "https://codearena-qoaq.onrender.com"
-            : "http://localhost:3000"
-        }/user/forgetPassword`,
-        { email: data.email }
-      );
+      const response = await axiosClient.post("/user/forgetPassword", {
+        email: data.email,
+      });
       setForgetMessage("✅ " + response.data.message);
       resetForgetForm();
       setTimeout(() => {

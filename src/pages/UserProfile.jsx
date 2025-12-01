@@ -40,58 +40,57 @@ const UserProfile = () => {
       );
       setUser(response.data);
 
-      // Check if current user is following this user
-      try {
-        const checkFollowResponse = await axiosClient.get(
-          `/social/checkFollow/${response.data._id}`
-        );
-        setIsFollowing(checkFollowResponse.data.isFollowing || false);
-        setIsFollowedBy(checkFollowResponse.data.isFollowedBy || false);
-      } catch (err) {
-        console.error("Error checking follow status:", err);
-        setIsFollowing(false);
-        setIsFollowedBy(false);
-      }
+      // Run follow check and posts fetch in parallel
+      const [checkFollowResponse, postsResponse] = await Promise.all([
+        axiosClient
+          .get(`/social/checkFollow/${response.data._id}`)
+          .catch(() => ({
+            data: { isFollowing: false, isFollowedBy: false },
+          })),
+        axiosClient
+          .get(`/social/getUserPost/${response.data._id}`)
+          .catch(() => ({
+            data: [],
+          })),
+      ]);
 
-      // Fetch user's posts using getUserPost endpoint
-      try {
-        const postsResponse = await axiosClient.get(
-          `/social/getUserPost/${response.data._id}`
-        );
-        setPosts(Array.isArray(postsResponse.data) ? postsResponse.data : []);
-      } catch (err) {
-        console.error("Error fetching user posts:", err);
-        setPosts([]);
-      }
+      setIsFollowing(checkFollowResponse.data.isFollowing || false);
+      setIsFollowedBy(checkFollowResponse.data.isFollowedBy || false);
+      setPosts(Array.isArray(postsResponse.data) ? postsResponse.data : []);
 
-      // Fetch problem details if available
+      // Lazy load problem details - don't block initial render
       if (
         response.data.problemSolved &&
         Array.isArray(response.data.problemSolved)
       ) {
-        try {
-          const problemDetails = await Promise.all(
-            response.data.problemSolved.map((problemId) =>
-              axiosClient.get(`/problem/getProblem/${problemId}`).catch(() => ({
-                data: { _id: problemId, title: "Unknown Problem" },
-              }))
-            )
-          );
-          setProblems(problemDetails.map((res) => res.data));
-        } catch (err) {
-          console.error("Error fetching problem details:", err);
-          setProblems(
-            response.data.problemSolved.map((id) => ({
-              _id: id,
-              title: "Unknown Problem",
-            }))
-          );
-        }
+        loadProblems(response.data.problemSolved);
       }
     } catch (error) {
       console.error("Error fetching user profile:", error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  // Lazy load problems without blocking
+  const loadProblems = async (problemIds) => {
+    try {
+      const problemDetails = await Promise.all(
+        problemIds.slice(0, 10).map((problemId) =>
+          axiosClient.get(`/problem/getProblem/${problemId}`).catch(() => ({
+            data: { _id: problemId, title: "Unknown Problem" },
+          }))
+        )
+      );
+      setProblems(problemDetails.map((res) => res.data));
+    } catch (err) {
+      console.error("Error fetching problem details:", err);
+      setProblems(
+        problemIds.slice(0, 10).map((id) => ({
+          _id: id,
+          title: "Unknown Problem",
+        }))
+      );
     }
   };
 
