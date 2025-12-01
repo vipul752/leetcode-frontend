@@ -104,7 +104,7 @@ const Landing = () => {
               {/* Navigation Links */}
               <div className="hidden md:flex items-center gap-8">
                 <button
-                  onClick={() => navigate("/challenge")}
+                  onClick={() => navigate("/home")}
                   className="text-gray-300 hover:text-white transition-colors text-sm font-medium relative group"
                 >
                   Problems

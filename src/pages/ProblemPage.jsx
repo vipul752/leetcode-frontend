@@ -4,6 +4,7 @@ import axiosClient from "../utils/axiosClient";
 import Editor from "@monaco-editor/react";
 import ChatAI from "../components/ChatAI.jsx";
 import Editorial from "../components/Editorial.jsx";
+import { useNavigate } from "react-router";
 
 const ProblemPage = () => {
   const [problem, setProblem] = useState(null);
@@ -19,6 +20,8 @@ const ProblemPage = () => {
   const [submissions, setSubmissions] = useState([]);
   const [solutionsLoading, setSolutionsLoading] = useState(false);
   const [selectedSubmissionCode, setSelectedSubmissionCode] = useState(null);
+
+  const navigate = useNavigate();
 
   const editorRef = useRef(null);
   let { problemId } = useParams();
@@ -289,8 +292,10 @@ const ProblemPage = () => {
       {/* Header */}
 
       {/* Main Content */}
+     
       <div className="flex h-screen ">
         {/* Left Panel - Problem Description */}
+
         <div className="w-1/2 border-r border-gray-200 flex flex-col bg-white/50 backdrop-blur-sm">
           <div className="bg-white/80 border-b border-gray-200 backdrop-blur-sm">
             <div className="flex">
@@ -300,6 +305,7 @@ const ProblemPage = () => {
                 { key: "editorial", label: "Editorial", icon: "📖" },
                 { key: "submissions", label: "Submissions", icon: "📊" },
                 { key: "chatAI", label: "Chat AI", icon: "🤖" },
+                
               ].map((tab) => (
                 <button
                   key={tab.key}
