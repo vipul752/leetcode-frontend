@@ -78,7 +78,6 @@ const Editorial = ({ secureUrl, thumbnailUrl, duration }) => {
     }
   };
 
-  // Close settings when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (showSettings && !event.target.closest(".settings-dropdown")) {

@@ -1,10 +1,3 @@
-// import React from "react";
-
-// const ViewProfile = () => {
-//   return <div>ViewProfile</div>;
-// };
-
-// export default ViewProfile;
 
 import { useParams } from "react-router";
 import { useEffect, useState, useCallback } from "react";

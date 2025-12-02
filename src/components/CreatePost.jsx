@@ -18,7 +18,7 @@ export default function CreatePost() {
         anonymous: false,
       });
 
-      navigate("/social"); // redirect to feed
+      navigate("/social"); 
     } catch (err) {
       console.error(err);
       alert("Failed to publish");

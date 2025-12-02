@@ -21,7 +21,6 @@ function Profile() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Fetch both in parallel
         const [statsResponse, profileResponse] = await Promise.all([
           axiosClient.get("/problem/userStats"),
           axiosClient.get("/user/dashboard"),

@@ -55,12 +55,10 @@ const PostCard = memo(function PostCard({ post }) {
   const handleLike = async () => {
     try {
       if (liked) {
-        // If already liked, unlike it
         const res = await axiosClient.post(`/social/unlike/${post._id}`);
         setLiked(false);
         setLikesCount(res.data.likes || likesCount - 1);
       } else {
-        // If not liked, like it
         const res = await axiosClient.post(`/social/like/${post._id}`);
         setLiked(true);
         setLikesCount(res.data.likes || likesCount + 1);

@@ -36,11 +36,9 @@ export default function IndividualPost() {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // Like state
   const [liked, setLiked] = useState(false);
   const [likesCount, setLikesCount] = useState(0);
 
-  // Comment state
   const [comment, setComment] = useState("");
   const [comments, setComments] = useState([]);
   const [showComments, setShowComments] = useState(false);
@@ -49,7 +47,6 @@ export default function IndividualPost() {
     setLoading(true);
     setError(null);
     try {
-      // Increment views when post is viewed
       await axiosClient.post(`/social/incrementView/${postId}`);
 
       const res = await axiosClient.get(`/social/post/${postId}`);
@@ -57,7 +54,6 @@ export default function IndividualPost() {
       const postData = res.data.post || res.data;
       setPost(postData);
 
-      // Initialize like state
       setLiked(
         Array.isArray(postData.likes)
           ? postData.likes.includes(authUser?._id)
@@ -71,7 +67,6 @@ export default function IndividualPost() {
           : 0
       );
 
-      // Initialize comments
       setComments(postData.comments || []);
     } catch (err) {
       console.error("Error fetching post:", err);

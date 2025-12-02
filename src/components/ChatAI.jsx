@@ -131,18 +131,15 @@ const ChatAI = ({ problem }) => {
     }
   };
 
-  // Enhanced message formatting function
   const formatMessage = (text) => {
     if (!text) return "";
 
-    // Split by code blocks first
     const codeBlockRegex = /```(\w+)?\n?([\s\S]*?)```/g;
     const parts = [];
     let lastIndex = 0;
     let match;
 
     while ((match = codeBlockRegex.exec(text)) !== null) {
-      // Add text before code block
       if (match.index > lastIndex) {
         parts.push({
           type: "text",
@@ -150,7 +147,6 @@ const ChatAI = ({ problem }) => {
         });
       }
 
-      // Add code block
       parts.push({
         type: "code",
         language: match[1] || "text",
@@ -160,7 +156,6 @@ const ChatAI = ({ problem }) => {
       lastIndex = match.index + match[0].length;
     }
 
-    // Add remaining text
     if (lastIndex < text.length) {
       parts.push({
         type: "text",
@@ -172,7 +167,6 @@ const ChatAI = ({ problem }) => {
   };
 
   const formatTextContent = (text) => {
-    // Handle inline code
     const inlineCodeRegex = /`([^`]+)`/g;
     const boldRegex = /\*\*(.*?)\*\*/g;
     const italicRegex = /\*(.*?)\*/g;
@@ -180,7 +174,6 @@ const ChatAI = ({ problem }) => {
     return text.split("\n").map((line, lineIndex) => {
       if (line.trim() === "") return <br key={lineIndex} />;
 
-      // Check if it's a list item
       const isListItem =
         line.match(/^[\s]*[-*•]\s+(.+)/) || line.match(/^[\s]*\d+\.\s+(.+)/);
       const isNumberedList = line.match(/^[\s]*\d+\.\s+(.+)/);
