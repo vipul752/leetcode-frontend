@@ -4,6 +4,7 @@ import { z } from "zod";
 import { useParams, useNavigate } from "react-router";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import axiosClient from "../utils/axiosClient";
 
 const resetPasswordSchema = z
   .object({
@@ -42,17 +43,10 @@ function ResetPassword() {
     setIsLoading(true);
     setMessage("");
     try {
-      const response = await axios.post(
-        `${
-          import.meta.env.MODE === "production"
-            ? "https://codearena-qoaq.onrender.com"
-            : "http://localhost:3000"
-        }/auth/reset-password/${token}`,
-        {
-          newPassword: data.newPassword,
-          confirmPassword: data.confirmPassword,
-        }
-      );
+      const response = await axiosClient.post(`/user/reset-password/${token}`, {
+        newPassword: data.newPassword,
+        confirmPassword: data.confirmPassword,
+      });
       setMessage("✅ " + response.data.message);
       setTimeout(() => {
         navigate("/login");
